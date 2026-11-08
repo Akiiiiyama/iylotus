@@ -1,0 +1,15 @@
+{
+  "name": "@iylotus/figma-plugin",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Figma plugin that creates the IY Lotus variables, text styles and components from @iylotus/tokens.",
+  "type": "module",
+  "license": "MIT",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "test": "node --test test/*.test.mjs"
+  },
+  "dependencies": {
+    "@iylotus/tokens": "^0.1.0"
+  }
+}

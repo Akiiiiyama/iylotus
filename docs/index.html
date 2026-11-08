@@ -111,9 +111,10 @@ section > .in { max-width: 1120px; padding-left: max(48px, env(safe-area-inset-l
 .paper { background: var(--bg); color: var(--text); --line: var(--border); --sub: var(--text-2); box-shadow: inset 0 1px 0 var(--seam); }
 .surface { background: var(--surface); color: var(--text); --line: var(--border); --sub: var(--text-2); box-shadow: inset 0 1px 0 var(--seam); }
 .ink { background: #141414; color: #FFFFFF; --line: rgba(255,255,255,.13); --sub: #A8A8A8; --focus: #FFFFFF; color-scheme: dark; }
-.red { background: #C8102E; color: #FFFFFF; --line: rgba(255,255,255,.3); --sub: rgba(255,255,255,.8); --focus: #FFFFFF; color-scheme: dark; }
+.red { background: #C8102E; color: #FFFFFF; --line: rgba(255,255,255,.3); --sub: #FFFFFF; --focus: #FFFFFF; color-scheme: dark; }
 .grid-bg { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='192' height='192'%3E%3Cpath d='M0 0 H192 M0 0 V192' stroke='rgba(255,255,255,0.07)' stroke-width='1'/%3E%3Cpath d='M-7 0 H7 M0 -7 V7' stroke='rgba(255,255,255,0.4)' stroke-width='1.5'/%3E%3C/svg%3E"); }
 
+.red .labels, .red .family .mono, .red .dodont p { opacity: 1 !important; }
 .labels { display: flex; justify-content: space-between; gap: 16px; font: 400 12px var(--font-mono); letter-spacing: .1em; text-transform: uppercase; opacity: .8; margin-bottom: 40px; }
 .headline { font-size: clamp(48px, 7vw, 104px); font-weight: 300; }
 .headline b { font-weight: 700; }
@@ -225,6 +226,8 @@ section > .in { max-width: 1120px; padding-left: max(48px, env(safe-area-inset-l
 .c-grey .dot { color: #C8102E; }
 .c-ink { background: #141414; color: #FFFFFF; }
 .c-red { background: #C8102E; color: #FFFFFF; }
+/* No vermelho, só branco puro passa no AA (5,9:1); translúcido cai para cerca de 4,3:1. */
+.c-red .tag, .c-red .meta { opacity: 1; }
 .c-white { background: var(--surface-raised); color: var(--text); box-shadow: inset 0 0 0 1px var(--border); }
 .tok { display: flex; gap: 4px; }
 .tok i { width: 28px; height: 28px; border: 1px solid rgba(20,20,20,.12); }

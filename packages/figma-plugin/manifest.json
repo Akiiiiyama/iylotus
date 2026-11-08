@@ -1,0 +1,20 @@
+{
+  "name": "IY Lotus",
+  "id": "iylotus-design-system",
+  "api": "1.0.0",
+  "main": "dist/code.js",
+  "editorType": ["figma"],
+  "documentAccess": "dynamic-page",
+  "networkAccess": { "allowedDomains": ["none"] },
+  "menu": [
+    { "name": "Sync everything", "command": "all" },
+    { "separator": true },
+    { "name": "Variables", "command": "variables" },
+    { "name": "Text & effect styles", "command": "styles" },
+    { "name": "Foundation pages", "command": "pages" },
+    { "name": "Button component", "command": "button" },
+    { "name": "Inputs components", "command": "inputs" },
+    { "name": "Card component", "command": "card" },
+    { "name": "Support components", "command": "support" }
+  ]
+}
