@@ -1,0 +1,16 @@
+/* CardGroup · comportamento de um grupo de cards.
+   Spotlight: o card em foco fica em evidência e os outros se apagam. Usa filter (e não opacity) para conviver
+   com animações de entrada que mexem na opacidade. Vale para mouse e teclado. */
+.iy-card-group--spotlight > .iy-card {
+  transition: transform var(--duration-slow) var(--ease-out), box-shadow var(--duration-slow) var(--ease-out), filter var(--duration-slow) var(--ease-out);
+}
+/* no grupo, o destaque substitui o contorno de hover do card isolado */
+.iy-card-group--spotlight > .iy-card--rounded.iy-card--link:hover { box-shadow: inset 0 0 0 var(--border-hairline) var(--color-border); }
+.iy-card-group--spotlight > .iy-card--rounded:not(.iy-card--raised).iy-card--link:hover { box-shadow: none; }
+.iy-card-group--spotlight:has(> .iy-card--link:hover) > .iy-card:not(:hover),
+.iy-card-group--spotlight:has(> .iy-card--link:focus-visible) > .iy-card:not(:focus-visible) {
+  filter: opacity(0.35) saturate(0.6);
+}
+@media (prefers-reduced-motion: reduce) {
+  .iy-card-group--spotlight > .iy-card { transition: none; }
+}
