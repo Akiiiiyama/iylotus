@@ -75,7 +75,8 @@ function makeFigma({ maxModes = 4, command = 'all' } = {}) {
     loadAllPagesAsync: async () => {},
     createPage() { const p = node('PAGE', { loadAsync: async () => {} }); root.appendChild(p); return p; },
     createFrame: () => node('FRAME'),
-    createText: () => node('TEXT', { characters: '' }),
+    createText: () => node('TEXT', { characters: '', ranges: [], setRangeFontName(start, end, font) { this.ranges.push([start, end, font.style]); } }),
+    createVector: () => node('VECTOR', { vectorPaths: [] }),
     createComponent: () => node('COMPONENT'),
     combineAsVariants(components, parent) {
       const set = node('COMPONENT_SET');
@@ -166,4 +167,73 @@ test('rodar duas vezes atualiza em vez de duplicar', async () => {
   assert.deepEqual([env.variables.length, env.textStyles.length, env.collections.length], counts);
   const buttonPage = env.figma.root.children.find((p) => p.name === '🌸 Button');
   assert.equal(buttonPage.children.filter((n) => n.name === 'Button').length, 1);
+});
+
+// ---------- componentes além do Button ----------
+
+const setsOn = (figma, pageName) => {
+  const page = figma.root.children.find((p) => p.name === pageName);
+  assert.ok(page, `página ${pageName} não foi criada`);
+  return Object.fromEntries(page.children.map((n) => [n.name, n]));
+};
+const boundId = (paint) => paint && paint.boundVariables && paint.boundVariables.color.id;
+const varId = (variables, name) => variables.find((v) => v.name === name).id;
+
+test('Inputs: os 6 componentes com o número de variantes do React', async () => {
+  const { figma } = await runPlugin();
+  const sets = setsOn(figma, '🌸 Inputs');
+  const counts = Object.fromEntries(Object.entries(sets).map(([k, s]) => [k, s.children.length]));
+  same(counts, { TextField: 5, TextArea: 2, Select: 3, Checkbox: 6, Radio: 4, Switch: 4 });
+});
+
+test('TextField com erro: borda e mensagem ligadas a color/feedback/danger', async () => {
+  const { figma, variables } = await runPlugin();
+  const error = setsOn(figma, '🌸 Inputs').TextField.children.find((c) => c.name === 'state=error');
+  const control = error.children.find((n) => n.name === 'control');
+  const danger = variables.find((v) => v.name === 'color/feedback/danger' && v.variableCollectionId !== undefined).id;
+  assert.equal(boundId(control.strokes[0]), danger);
+  assert.equal(boundId(error.children[2].fills[0]), danger);
+});
+
+test('Switch ligado: bolinha com a cor de ação accent', async () => {
+  const { figma, variables } = await runPlugin();
+  const on = setsOn(figma, '🌸 Inputs').Switch.children.find((c) => c.name === 'checked=true, disabled=false');
+  const thumb = on.children.find((n) => n.name === 'track').children[0];
+  assert.equal(boundId(thumb.fills[0]), varId(variables, 'color/action/accent'));
+});
+
+test('Card: 8 variantes; raised usa o tema, red usa o Root fixo, título leve/negrito', async () => {
+  const { figma, variables } = await runPlugin();
+  const card = setsOn(figma, '🌸 Card').Card;
+  assert.equal(card.children.length, 8);
+  const raised = card.children.find((c) => c.name === 'tone=raised, shape=rounded');
+  const red = card.children.find((c) => c.name === 'tone=red, shape=tile');
+  assert.equal(boundId(raised.fills[0]), varId(variables, 'color/surface-raised'));
+  assert.equal(boundId(red.fills[0]), varId(variables, 'color/red/600'));
+  same(raised.children[1].ranges, [[0, 7, 'Light'], [7, 13, 'Bold']]);
+});
+
+test('Apoio: Tag, Badge (3), Avatar (3), Link e Divider (2)', async () => {
+  const { figma } = await runPlugin();
+  const sets = setsOn(figma, '🌸 Support');
+  same(Object.keys(sets).sort(), ['Avatar', 'Badge', 'Divider', 'Link', 'Tag']);
+  assert.equal(sets.Badge.children.length, 3);
+  assert.equal(sets.Avatar.children.length, 3);
+  assert.equal(sets.Divider.children.length, 2);
+  const lg = sets.Avatar.children.find((c) => c.name === 'size=lg');
+  assert.equal(lg.children.find((n) => n.name === 'dot').layoutPositioning, 'ABSOLUTE');
+});
+
+test('rodar de novo não duplica os componentes novos', async () => {
+  const env = makeFigma();
+  for (let run = 0; run < 2; run++) {
+    env.figma.closed = null;
+    vm.runInNewContext(code, { figma: env.figma, console });
+    for (let i = 0; i < 400 && env.figma.closed === null; i++) await new Promise((r) => setTimeout(r, 5));
+  }
+  for (const name of ['🌸 Inputs', '🌸 Card', '🌸 Support']) {
+    const page = env.figma.root.children.find((p) => p.name === name);
+    const names = page.children.map((n) => n.name);
+    assert.equal(names.length, new Set(names).size, `${name} tem duplicados: ${names}`);
+  }
 });

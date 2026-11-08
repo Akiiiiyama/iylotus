@@ -12,6 +12,9 @@
     { "name": "Variables", "command": "variables" },
     { "name": "Text & effect styles", "command": "styles" },
     { "name": "Foundation pages", "command": "pages" },
-    { "name": "Button component", "command": "button" }
+    { "name": "Button component", "command": "button" },
+    { "name": "Inputs components", "command": "inputs" },
+    { "name": "Card component", "command": "card" },
+    { "name": "Support components", "command": "support" }
   ]
 }

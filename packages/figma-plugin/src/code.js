@@ -349,6 +349,341 @@ async function syncButton() {
   report.push('Componente Button: ' + components.length + ' variantes (5 estilos × 3 tamanhos × 3 estados)');
 }
 
+// ---------- base para os outros componentes ----------
+
+// Todas as variáveis de tema (Light) e do Root, por nome.
+async function allVars() {
+  await loadState();
+  var theme = find(state.collections, function (c) { return c.name === NAMES.theme; });
+  var prim = find(state.collections, function (c) { return c.name === NAMES.primitives; });
+  if (!theme || !prim) throw new Error('Rode "Variables" antes.');
+  var T = {}, R = {};
+  state.variables.forEach(function (v) {
+    if (v.variableCollectionId === theme.id) T[v.name] = v;
+    if (v.variableCollectionId === prim.id) R[v.name] = v;
+  });
+  return { T: T, R: R };
+}
+
+function setPadding(n, top, right, bottom, left) {
+  n.paddingTop = top; n.paddingRight = right; n.paddingBottom = bottom; n.paddingLeft = left;
+}
+
+// Frame com auto layout. size: [largura, altura]; null numa posição = abraça o conteúdo.
+function box(kind, name, direction, gap, size) {
+  var n = kind === 'component' ? figma.createComponent() : figma.createFrame();
+  n.name = name;
+  n.fills = [];
+  n.layoutMode = direction;
+  n.itemSpacing = gap;
+  setPadding(n, 0, 0, 0, 0);
+  var w = size && size[0], h = size && size[1];
+  if (w || h) n.resize(w || 100, h || 100);
+  var horizontal = direction === 'HORIZONTAL';
+  n.primaryAxisSizingMode = (horizontal ? w : h) ? 'FIXED' : 'AUTO';
+  n.counterAxisSizingMode = (horizontal ? h : w) ? 'FIXED' : 'AUTO';
+  return n;
+}
+
+function stroke(n, variable, weight) {
+  n.strokes = [boundFill(variable)];
+  n.strokeWeight = weight;
+  n.strokeAlign = 'INSIDE';
+}
+
+// Texto com cor ligada a uma variável. opts: { mono, style, upper, tracking, underline }
+async function vtext(chars, size, variable, opts) {
+  opts = opts || {};
+  var t = figma.createText();
+  t.fontName = opts.mono ? await loadFont('JetBrains Mono', opts.style || 'Regular') : await loadFont('DM Sans', opts.style || 'Regular');
+  t.characters = chars;
+  t.fontSize = size;
+  t.fills = [boundFill(variable)];
+  if (opts.upper) t.textCase = 'UPPER';
+  if (opts.tracking !== undefined) t.letterSpacing = { unit: 'PERCENT', value: opts.tracking };
+  if (opts.underline) t.textDecoration = 'UNDERLINE';
+  return t;
+}
+
+// Junta variantes num component set, organizadas em grade, e empilha os sets na página.
+function combine(page, components, name, cols, cellW, cellH, description, cursor) {
+  components.forEach(function (c, i) {
+    c.x = (i % cols) * cellW;
+    c.y = Math.floor(i / cols) * cellH;
+    page.appendChild(c);
+  });
+  var set = components.length > 1 ? figma.combineAsVariants(components, page) : components[0];
+  set.name = name;
+  set.description = description;
+  set.x = 0;
+  set.y = cursor.y;
+  cursor.y += (set.height || cellH) + 120;
+  return set;
+}
+
+async function componentPage(name, setNames) {
+  var page = await getPage(name);
+  await page.loadAsync();
+  setNames.forEach(function (n) { clearByName(page, n); });
+  return page;
+}
+
+function chevron(variable) {
+  var v = figma.createVector();
+  v.name = 'chevron';
+  v.vectorPaths = [{ windingRule: 'NONE', data: 'M 0 0 L 6 6 L 12 0' }];
+  v.strokes = [boundFill(variable)];
+  v.strokeWeight = 1.5;
+  v.strokeCap = 'ROUND';
+  v.fills = [];
+  return v;
+}
+
+// ---------- Inputs ----------
+
+async function field(V, kind, st) {
+  var T = V.T;
+  var c = box('component', 'state=' + st, 'VERTICAL', 6, [320, null]);
+  c.appendChild(await vtext(kind === 'Select' ? 'Role' : kind === 'TextArea' ? 'Message' : 'Email', 14, T['color/text/primary'], { style: 'Medium' }));
+
+  var multi = kind === 'TextArea';
+  var control = box('frame', 'control', 'HORIZONTAL', 8, [320, multi ? 120 : 48]);
+  control.layoutAlign = 'STRETCH';
+  control.counterAxisAlignItems = multi ? 'MIN' : 'CENTER';
+  setPadding(control, multi ? 12 : 0, 16, multi ? 12 : 0, 16);
+  control.cornerRadius = 8;
+  control.fills = [boundFill(st === 'disabled' ? T['color/surface'] : T['color/surface-raised'])];
+  stroke(control, st === 'error' ? T['color/feedback/danger'] : st === 'focus' ? T['color/border-strong'] : T['color/border'], 1.5);
+  if (st === 'focus') control.effects = [{ type: 'DROP_SHADOW', visible: true, blendMode: 'NORMAL', color: { r: 0.08, g: 0.08, b: 0.08, a: 0.16 }, offset: { x: 0, y: 0 }, radius: 0, spread: 3 }];
+  if (st === 'disabled') control.opacity = 0.55;
+
+  var filled = st === 'filled' || st === 'error';
+  var valueText = kind === 'Select' ? 'Choose a role' : kind === 'TextArea' ? (filled ? 'Hi' : 'Tell me about the project') : (st === 'error' ? 'isabela@' : filled ? 'isabela@email.com' : 'you@email.com');
+  var value = await vtext(valueText, 15, filled ? T['color/text/primary'] : T['color/text/secondary']);
+  value.layoutGrow = 1;
+  control.appendChild(value);
+  if (kind === 'Select') control.appendChild(chevron(T['color/text/secondary']));
+  c.appendChild(control);
+
+  c.appendChild(st === 'error'
+    ? await vtext(kind === 'TextField' ? 'Add the domain, like isabela@email.com' : kind === 'Select' ? 'Choose a role to continue' : 'Write at least 20 characters', 13, T['color/feedback/danger'])
+    : await vtext(kind === 'Select' ? 'Native select on the web' : 'Only to reply to you', 13, T['color/text/secondary']));
+  return c;
+}
+
+async function choice(V, kind, checked, disabled) {
+  var T = V.T;
+  var c = box('component', 'checked=' + checked + ', disabled=' + disabled, 'HORIZONTAL', 12, null);
+  c.counterAxisAlignItems = 'CENTER';
+  var mark = box('frame', kind === 'Radio' ? 'circle' : 'box', 'HORIZONTAL', 0, [20, 20]);
+  mark.primaryAxisAlignItems = 'CENTER';
+  mark.counterAxisAlignItems = 'CENTER';
+  mark.cornerRadius = kind === 'Radio' ? 10 : 4;
+  var on = checked !== 'false';
+  stroke(mark, on ? T['color/action/primary'] : T['color/border-strong'], 1.5);
+  if (on) mark.fills = [boundFill(T['color/action/primary'])];
+  if (checked === 'true' && kind === 'Checkbox') {
+    var check = figma.createVector();
+    check.name = 'check';
+    check.vectorPaths = [{ windingRule: 'NONE', data: 'M 0 4 L 3.5 7.5 L 10 0' }];
+    check.strokes = [boundFill(T['color/text/inverse'])];
+    check.strokeWeight = 2;
+    check.fills = [];
+    mark.appendChild(check);
+  }
+  if (checked === 'indeterminate') {
+    var dash = box('frame', 'dash', 'HORIZONTAL', 0, [10, 2]);
+    dash.fills = [boundFill(T['color/text/inverse'])];
+    mark.appendChild(dash);
+  }
+  if (checked === 'true' && kind === 'Radio') {
+    var dot = box('frame', 'dot', 'HORIZONTAL', 0, [8, 8]);
+    dot.cornerRadius = 4;
+    dot.fills = [boundFill(T['color/text/inverse'])];
+    mark.appendChild(dot);
+  }
+  c.appendChild(mark);
+  c.appendChild(await vtext(kind === 'Radio' ? 'Design Engineer' : 'Design Systems', 15, T['color/text/primary']));
+  if (disabled) c.opacity = 0.45;
+  return c;
+}
+
+async function switchVariant(V, on, disabled) {
+  var c = box('component', 'checked=' + on + ', disabled=' + disabled, 'HORIZONTAL', 12, null);
+  c.counterAxisAlignItems = 'CENTER';
+  c.appendChild(await vtext('Dark mode', 15, V.T['color/text/primary']));
+  var track = box('frame', 'track', 'HORIZONTAL', 0, [56, 32]);
+  track.cornerRadius = 999;
+  track.counterAxisAlignItems = 'CENTER';
+  track.primaryAxisAlignItems = on ? 'MAX' : 'MIN';
+  setPadding(track, 4, 4, 4, 4);
+  track.fills = [boundFill(V.R['color/neutral/800'])];
+  var thumb = box('frame', 'thumb', 'HORIZONTAL', 0, [24, 24]);
+  thumb.cornerRadius = 12;
+  thumb.fills = [boundFill(on ? V.T['color/action/accent'] : V.R['color/neutral/0'])];
+  track.appendChild(thumb);
+  c.appendChild(track);
+  if (disabled) c.opacity = 0.45;
+  return c;
+}
+
+async function syncInputs() {
+  var V = await allVars();
+  var names = ['TextField', 'TextArea', 'Select', 'Checkbox', 'Radio', 'Switch'];
+  var page = await componentPage('🌸 Inputs', names);
+  var cursor = { y: 0 };
+  var i, list, total = 0;
+
+  list = [];
+  var fieldStates = { TextField: ['default', 'focus', 'filled', 'error', 'disabled'], TextArea: ['default', 'error'], Select: ['default', 'error', 'disabled'] };
+  var fieldDocs = {
+    TextField: 'React: <TextField label hint error prefix suffix showCount />. Label always visible; error sets aria-invalid.',
+    TextArea: 'React: <TextArea label hint error showCount />.',
+    Select: 'React: <Select label placeholder>…options</Select>. Native select on the web.',
+  };
+  var kinds = ['TextField', 'TextArea', 'Select'];
+  for (var k = 0; k < kinds.length; k++) {
+    list = [];
+    for (i = 0; i < fieldStates[kinds[k]].length; i++) list.push(await field(V, kinds[k], fieldStates[kinds[k]][i]));
+    combine(page, list, kinds[k], 5, 360, 200, fieldDocs[kinds[k]], cursor);
+    total += list.length;
+  }
+
+  list = [];
+  var checks = ['false', 'true', 'indeterminate'];
+  for (i = 0; i < 6; i++) list.push(await choice(V, 'Checkbox', checks[i % 3], i >= 3));
+  combine(page, list, 'Checkbox', 3, 240, 48, 'React: <Checkbox label hint indeterminate />. Native checkbox.', cursor);
+  total += list.length;
+
+  list = [];
+  for (i = 0; i < 4; i++) list.push(await choice(V, 'Radio', i % 2 ? 'true' : 'false', i >= 2));
+  combine(page, list, 'Radio', 2, 240, 48, 'React: <RadioGroup legend><Radio value label /></RadioGroup>.', cursor);
+  total += list.length;
+
+  list = [];
+  for (i = 0; i < 4; i++) list.push(await switchVariant(V, i % 2 === 1, i >= 2));
+  combine(page, list, 'Switch', 2, 240, 56, 'React: <Switch label checked onCheckedChange />. role="switch". For settings that apply right away.', cursor);
+  total += list.length;
+
+  report.push('Inputs: ' + total + ' variantes em 6 componentes');
+}
+
+// ---------- Card ----------
+
+var CARD_TONES = {
+  raised: ['T', 'color/surface-raised', 'color/text/primary', 'color/text/secondary'],
+  grey: ['R', 'color/neutral/100', 'color/neutral/950', 'color/neutral/600'],
+  ink: ['R', 'color/neutral/950', 'color/neutral/0', 'color/neutral/400'],
+  red: ['R', 'color/red/600', 'color/neutral/0', 'color/neutral/0'],
+};
+
+async function syncCard() {
+  var V = await allVars();
+  var page = await componentPage('🌸 Card', ['Card']);
+  var light = await loadFont('DM Sans', 'Light');
+  var bold = await loadFont('DM Sans', 'Bold');
+  var tones = ['raised', 'grey', 'ink', 'red'];
+  var shapes = ['rounded', 'tile'];
+  var list = [];
+
+  for (var s = 0; s < shapes.length; s++) {
+    for (var t = 0; t < tones.length; t++) {
+      var spec = CARD_TONES[tones[t]];
+      var src = V[spec[0]];
+      var tile = shapes[s] === 'tile';
+      var c = box('component', 'tone=' + tones[t] + ', shape=' + shapes[s], 'VERTICAL', 8, tile ? [240, 300] : [280, null]);
+      setPadding(c, 24, 24, 24, 24);
+      c.fills = [boundFill(src[spec[1]])];
+      if (tile) c.primaryAxisAlignItems = 'SPACE_BETWEEN';
+      else c.cornerRadius = 18;
+      if (tones[t] === 'raised') stroke(c, V.T['color/border'], 1);
+
+      c.appendChild(await vtext('Case', 11, src[spec[3]], { mono: true, upper: true, tracking: 10 }));
+      var title = await vtext('Design System', 26, src[spec[2]], { tracking: -3 });
+      title.setRangeFontName(0, 7, light);
+      title.setRangeFontName(7, 13, bold);
+      c.appendChild(title);
+      title.layoutAlign = 'STRETCH';
+      title.textAutoResize = 'HEIGHT';
+      c.appendChild(await vtext('Product · Design Engineering →', 12, src[spec[3]], { mono: true }));
+      list.push(c);
+    }
+  }
+  combine(page, list, 'Card', 4, 320, 340,
+    'React: <Card tone shape href><CardTag/><CardTitle/><CardMeta/></Card>. raised follows the theme; grey, ink and red are fixed scenes.', { y: 0 });
+  report.push('Card: ' + list.length + ' variantes (4 tons × 2 formatos)');
+}
+
+// ---------- Apoio ----------
+
+async function syncSupport() {
+  var V = await allVars();
+  var T = V.T;
+  var page = await componentPage('🌸 Support', ['Tag', 'Badge', 'Avatar', 'Link', 'Divider']);
+  var cursor = { y: 0 };
+  var total = 0, i, list;
+
+  var tag = box('component', 'Tag', 'HORIZONTAL', 8, null);
+  setPadding(tag, 6, 10, 6, 10);
+  stroke(tag, T['color/border-strong'], 1);
+  tag.appendChild(await vtext('Role 01 / 02', 12, T['color/text/primary'], { mono: true, upper: true, tracking: 10 }));
+  combine(page, [tag], 'Tag', 1, 200, 40, 'React: <Tag>. Mono label for categories and counters.', cursor);
+  total++;
+
+  list = [];
+  var tones = [['accent', 'color/action/accent', 'color/action/on-accent'], ['neutral', 'color/action/primary', 'color/text/inverse'], ['outline', null, 'color/text/primary']];
+  for (i = 0; i < tones.length; i++) {
+    var b = box('component', 'tone=' + tones[i][0], 'HORIZONTAL', 4, null);
+    setPadding(b, 5, 12, 5, 12);
+    b.cornerRadius = 999;
+    if (tones[i][1]) b.fills = [boundFill(T[tones[i][1]])];
+    else stroke(b, T['color/border-strong'], 1);
+    b.appendChild(await vtext('AA 5.9 : 1', 13, T[tones[i][2]], { style: 'Bold' }));
+    list.push(b);
+  }
+  combine(page, list, 'Badge', 3, 140, 40, 'React: <Badge tone>. Accent (red) for the one thing to notice.', cursor);
+  total += list.length;
+
+  list = [];
+  var sizes = [['sm', 32], ['md', 44], ['lg', 64]];
+  for (i = 0; i < sizes.length; i++) {
+    var d = sizes[i][1];
+    var a = box('component', 'size=' + sizes[i][0], 'HORIZONTAL', 0, [d, d]);
+    a.cornerRadius = d / 2;
+    a.primaryAxisAlignItems = 'CENTER';
+    a.counterAxisAlignItems = 'CENTER';
+    a.fills = [boundFill(T['color/action/primary'])];
+    a.appendChild(await vtext('IY', Math.round(d * 0.34), T['color/text/inverse'], { style: 'Bold', tracking: -2 }));
+    var dot = box('frame', 'dot', 'HORIZONTAL', 0, [Math.max(3, Math.round(d * 0.11)), Math.max(3, Math.round(d * 0.11))]);
+    dot.cornerRadius = 999;
+    dot.fills = [boundFill(V.R['color/red/600'])];
+    a.appendChild(dot);
+    dot.layoutPositioning = 'ABSOLUTE';
+    dot.x = Math.round(d * 0.71);
+    dot.y = Math.round(d * 0.64);
+    list.push(a);
+  }
+  combine(page, list, 'Avatar', 3, 100, 80, 'React: <Avatar name src size dot />. Initials with the red dot; photo when src loads.', cursor);
+  total += list.length;
+
+  var link = box('component', 'Link', 'HORIZONTAL', 4, null);
+  link.appendChild(await vtext('View on GitHub', 16, T['color/text/primary'], { underline: true }));
+  combine(page, [link], 'Link', 1, 200, 40, 'React: <Link href external />. Red underline in code; Figma underlines in the text color.', cursor);
+  total++;
+
+  list = [];
+  var weights = [['hairline', 1, 'color/border'], ['strong', 1.5, 'color/border-strong']];
+  for (i = 0; i < weights.length; i++) {
+    var line = box('component', 'weight=' + weights[i][0], 'HORIZONTAL', 0, [320, weights[i][1]]);
+    line.fills = [boundFill(T[weights[i][2]])];
+    list.push(line);
+  }
+  combine(page, list, 'Divider', 1, 360, 24, 'React: <Divider weight />. A real <hr>.', cursor);
+  total += list.length;
+
+  report.push('Apoio: ' + total + ' variantes em 5 componentes');
+}
+
 // ---------- comandos ----------
 
 async function run(command) {
@@ -356,6 +691,9 @@ async function run(command) {
   if (command === 'styles' || command === 'all') await syncStyles();
   if (command === 'pages' || command === 'all') await syncPages();
   if (command === 'button' || command === 'all') await syncButton();
+  if (command === 'inputs' || command === 'all') await syncInputs();
+  if (command === 'card' || command === 'all') await syncCard();
+  if (command === 'support' || command === 'all') await syncSupport();
 }
 
 run(figma.command || 'all').then(function () {
