@@ -1,0 +1,25 @@
+{
+  "name": "@iylotus/styles",
+  "version": "0.0.0",
+  "description": "IY Lotus CSS: tokens as custom properties, light and dark themes, type classes and base styles.",
+  "type": "module",
+  "license": "MIT",
+  "style": "./dist/iylotus.css",
+  "exports": {
+    ".": "./dist/iylotus.css",
+    "./tokens.css": "./dist/tokens.css",
+    "./base.css": "./dist/base.css"
+  },
+  "files": [
+    "dist"
+  ],
+  "sideEffects": [
+    "*.css"
+  ],
+  "scripts": {
+    "build": "node scripts/build.mjs"
+  },
+  "dependencies": {
+    "@iylotus/tokens": "0.0.0"
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "$description": "Stem, dark mode. Paper and surface sit one step above ink (#141414) so scene cuts stay visible.",
+  "color": {
+    "$type": "color",
+    "bg": { "$value": "{color.neutral.900}" },
+    "surface": { "$value": "{color.neutral.850}" },
+    "surface-raised": { "$value": "{color.neutral.800}" },
+    "border": { "$value": "{color.neutral.750}" },
+    "border-strong": { "$value": "{color.neutral.0}" },
+    "text": {
+      "primary": { "$value": "{color.neutral.0}" },
+      "secondary": { "$value": "{color.neutral.400}" },
+      "inverse": { "$value": "{color.neutral.950}" },
+      "accent": { "$value": "{color.red.300}" }
+    },
+    "action": {
+      "primary": { "$value": "{color.neutral.0}" },
+      "primary-hover": { "$value": "{color.neutral.200}" },
+      "accent": { "$value": "{color.red.600}" },
+      "accent-hover": { "$value": "{color.red.700}" },
+      "on-accent": { "$value": "{color.neutral.0}" }
+    },
+    "feedback": {
+      "danger": { "$value": "{color.red.300}" }
+    },
+    "icon": {
+      "muted": { "$value": "{color.neutral.500}" }
+    },
+    "focus": { "$value": "{color.neutral.0}" }
+  }
+}

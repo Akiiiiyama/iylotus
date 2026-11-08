@@ -1,0 +1,50 @@
+/* @iylotus/styles · base: o mínimo para uma página IY Lotus. */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--color-bg);
+  color: var(--color-text-primary);
+  font-family: var(--font-family-sans);
+  font-size: 16px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Par leve/negrito: sempre em palavras inteiras. */
+.iy-lt { font-weight: var(--font-weight-light); }
+.iy-bd { font-weight: var(--font-weight-bold); }
+.iy-mono { font-family: var(--font-family-mono); letter-spacing: 0.04em; }
+
+/* Máscara: o texto sobe de dentro dela. O padding evita cortar descendentes e tracking apertado. */
+.iy-mask {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: top;
+  padding: 0 0.08em 0.18em;
+  margin: 0 -0.08em -0.18em;
+}
+.iy-mask > * { display: inline-block; }
+
+/* O ponto vermelho da marca. */
+.iy-dot { color: var(--color-text-accent); }
+
+:focus-visible {
+  outline: var(--border-focus) solid var(--color-focus);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0s !important;
+    transition-duration: 0s !important;
+    scroll-behavior: auto !important;
+  }
+}

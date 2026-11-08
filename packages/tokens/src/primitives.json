@@ -1,0 +1,100 @@
+{
+  "$description": "Root: raw values. Components never use these directly; they go through a theme token.",
+  "color": {
+    "$type": "color",
+    "neutral": {
+      "0": { "$value": "#FFFFFF" },
+      "50": { "$value": "#F7F7F7" },
+      "100": { "$value": "#F2F2F2" },
+      "200": { "$value": "#E4E4E4" },
+      "300": { "$value": "#CFCFCF" },
+      "400": { "$value": "#A8A8A8" },
+      "500": { "$value": "#8A8A8A" },
+      "600": { "$value": "#6B6B6B" },
+      "700": { "$value": "#444444" },
+      "750": { "$value": "#363636" },
+      "800": { "$value": "#2A2A2A" },
+      "850": { "$value": "#232323" },
+      "900": { "$value": "#1C1C1C" },
+      "950": { "$value": "#141414" }
+    },
+    "red": {
+      "50": { "$value": "#FDEBEE" },
+      "100": { "$value": "#F9CCD3" },
+      "300": { "$value": "#E4637A" },
+      "600": { "$value": "#C8102E", "$description": "Brand red. White text on it: 5.9:1." },
+      "700": { "$value": "#A80D27" },
+      "800": { "$value": "#8C0A20" }
+    }
+  },
+  "space": {
+    "$type": "dimension",
+    "$description": "4 px base. The name counts units of 4: space/4 = 16 px.",
+    "0": { "$value": "0px" },
+    "0-5": { "$value": "2px" },
+    "1": { "$value": "4px" },
+    "2": { "$value": "8px" },
+    "3": { "$value": "12px" },
+    "4": { "$value": "16px" },
+    "6": { "$value": "24px" },
+    "8": { "$value": "32px" },
+    "12": { "$value": "48px" },
+    "16": { "$value": "64px" },
+    "24": { "$value": "96px" },
+    "32": { "$value": "128px" }
+  },
+  "radius": {
+    "$type": "dimension",
+    "none": { "$value": "0px" },
+    "sm": { "$value": "4px" },
+    "md": { "$value": "8px" },
+    "lg": { "$value": "18px" },
+    "xl": { "$value": "40px" },
+    "pill": { "$value": "999px" }
+  },
+  "border": {
+    "$type": "dimension",
+    "hairline": { "$value": "1px" },
+    "strong": { "$value": "1.5px" },
+    "focus": { "$value": "2px" }
+  },
+  "shadow": {
+    "$type": "shadow",
+    "1": { "$value": { "color": "#0000002E", "offsetX": "0px", "offsetY": "1px", "blur": "2px", "spread": "0px" } },
+    "2": { "$value": { "color": "#00000038", "offsetX": "0px", "offsetY": "6px", "blur": "16px", "spread": "0px" } },
+    "3": { "$value": { "color": "#00000052", "offsetX": "0px", "offsetY": "18px", "blur": "40px", "spread": "0px" } }
+  },
+  "duration": {
+    "$type": "duration",
+    "fast": { "$value": "150ms" },
+    "base": { "$value": "300ms" },
+    "slow": { "$value": "500ms" },
+    "scene": { "$value": "800ms" }
+  },
+  "ease": {
+    "$type": "cubicBezier",
+    "out": { "$value": [0.16, 1, 0.3, 1], "$description": "Brand curve: enters fast, settles slowly." },
+    "in-out": { "$value": [0.7, 0, 0.2, 1], "$description": "Scene changes." }
+  },
+  "font": {
+    "family": {
+      "$type": "fontFamily",
+      "sans": { "$value": ["DM Sans", "system-ui", "-apple-system", "Segoe UI", "sans-serif"] },
+      "mono": { "$value": ["JetBrains Mono", "ui-monospace", "SF Mono", "Menlo", "monospace"] }
+    },
+    "weight": {
+      "$type": "fontWeight",
+      "light": { "$value": 300 },
+      "regular": { "$value": 400 },
+      "medium": { "$value": 500 },
+      "bold": { "$value": 700 }
+    }
+  },
+  "breakpoint": {
+    "$type": "dimension",
+    "sm": { "$value": "390px" },
+    "md": { "$value": "768px" },
+    "lg": { "$value": "1024px" },
+    "xl": { "$value": "1440px" }
+  }
+}

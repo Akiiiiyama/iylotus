@@ -1,0 +1,25 @@
+{
+  "name": "@iylotus/tokens",
+  "version": "0.0.0",
+  "description": "IY Lotus design tokens in the W3C DTCG format, resolved to JSON and JavaScript.",
+  "type": "module",
+  "license": "MIT",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./tokens.json": "./dist/tokens.json",
+    "./src/*": "./src/*"
+  },
+  "files": [
+    "dist",
+    "src"
+  ],
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "test": "node --test test/*.test.mjs"
+  }
+}

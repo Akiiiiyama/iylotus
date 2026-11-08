@@ -1,0 +1,31 @@
+{
+  "$description": "Stem, light mode: meaning on top of primitives.",
+  "color": {
+    "$type": "color",
+    "bg": { "$value": "{color.neutral.0}" },
+    "surface": { "$value": "{color.neutral.100}" },
+    "surface-raised": { "$value": "{color.neutral.0}" },
+    "border": { "$value": "{color.neutral.200}" },
+    "border-strong": { "$value": "{color.neutral.950}" },
+    "text": {
+      "primary": { "$value": "{color.neutral.950}" },
+      "secondary": { "$value": "{color.neutral.600}" },
+      "inverse": { "$value": "{color.neutral.0}" },
+      "accent": { "$value": "{color.red.600}" }
+    },
+    "action": {
+      "primary": { "$value": "{color.neutral.950}" },
+      "primary-hover": { "$value": "{color.neutral.800}" },
+      "accent": { "$value": "{color.red.600}" },
+      "accent-hover": { "$value": "{color.red.700}" },
+      "on-accent": { "$value": "{color.neutral.0}" }
+    },
+    "feedback": {
+      "danger": { "$value": "{color.red.700}" }
+    },
+    "icon": {
+      "muted": { "$value": "{color.neutral.500}", "$description": "Icons and details only: 3.4:1 on white is below AA for text." }
+    },
+    "focus": { "$value": "{color.neutral.950}" }
+  }
+}

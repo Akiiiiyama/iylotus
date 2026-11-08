@@ -1,0 +1,752 @@
+<title>IY Lotus Docs</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,700&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: documentação com barra lateral fixa (preta, como a abertura do reel) e conteúdo rolando à direita.
+   Cada seção é uma cena com cor própria e rótulos mono nos cantos. "paper" e "surface" seguem o tema; "ink" e "red" são fixas. */
+:root {
+  --neutral-0:#FFFFFF; --neutral-50:#F7F7F7; --neutral-100:#F2F2F2; --neutral-200:#E4E4E4; --neutral-300:#CFCFCF;
+  --neutral-400:#A8A8A8; --neutral-500:#8A8A8A; --neutral-600:#6B6B6B; --neutral-700:#444444; --neutral-750:#363636;
+  --neutral-800:#2A2A2A; --neutral-850:#232323; --neutral-900:#1C1C1C; --neutral-950:#141414;
+  --red-50:#FDEBEE; --red-100:#F9CCD3; --red-300:#E4637A; --red-600:#C8102E; --red-700:#A80D27; --red-800:#8C0A20;
+
+  --seam: transparent;
+  --bg: var(--neutral-0);
+  --surface: var(--neutral-100);
+  --surface-raised: var(--neutral-0);
+  --border: var(--neutral-200);
+  --border-strong: var(--neutral-950);
+  --text: var(--neutral-950);
+  --text-2: var(--neutral-600);
+  --text-inverse: var(--neutral-0);
+  --action-primary: var(--neutral-950);
+  --action-primary-hover: var(--neutral-800);
+  --action-accent: var(--red-600);
+  --action-accent-hover: var(--red-700);
+  --accent-text: var(--red-600);
+  --danger: var(--red-700);
+  --focus: var(--neutral-950);
+
+  --font-sans: 'DM Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+  --ease-out: cubic-bezier(.16, 1, .3, 1);
+  --ease-in-out: cubic-bezier(.7, 0, .2, 1);
+  --side: 264px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --seam: rgba(255,255,255,.07);
+    --bg: var(--neutral-900); --surface: var(--neutral-850); --surface-raised: var(--neutral-800);
+    --border: var(--neutral-750); --border-strong: var(--neutral-0);
+    --text: var(--neutral-0); --text-2: var(--neutral-400); --text-inverse: var(--neutral-950);
+    --action-primary: var(--neutral-0); --action-primary-hover: var(--neutral-200);
+    --accent-text: var(--red-300); --danger: var(--red-300); --focus: var(--neutral-0);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --seam: rgba(255,255,255,.07);
+  --bg: var(--neutral-900); --surface: var(--neutral-850); --surface-raised: var(--neutral-800);
+  --border: var(--neutral-750); --border-strong: var(--neutral-0);
+  --text: var(--neutral-0); --text-2: var(--neutral-400); --text-inverse: var(--neutral-950);
+  --action-primary: var(--neutral-0); --action-primary-hover: var(--neutral-200);
+  --accent-text: var(--red-300); --danger: var(--red-300); --focus: var(--neutral-0);
+  color-scheme: dark;
+}
+/* forçar um modo dentro de um bloco (comparação lado a lado na seção Theme) */
+.force-light { --bg:#FFFFFF; --surface:#F2F2F2; --surface-raised:#FFFFFF; --border:#E4E4E4; --border-strong:#141414; --text:#141414; --text-2:#6B6B6B; --text-inverse:#FFFFFF; --action-primary:#141414; --action-primary-hover:#2A2A2A; --accent-text:#C8102E; --danger:#A80D27; --focus:#141414; color-scheme: light; }
+.force-dark { --bg:#1C1C1C; --surface:#232323; --surface-raised:#2A2A2A; --border:#363636; --border-strong:#FFFFFF; --text:#FFFFFF; --text-2:#A8A8A8; --text-inverse:#141414; --action-primary:#FFFFFF; --action-primary-hover:#E4E4E4; --accent-text:#E4637A; --danger:#E4637A; --focus:#FFFFFF; color-scheme: dark; }
+
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+body { background: var(--bg); color: var(--text); font-family: var(--font-sans); font-size: 16px; line-height: 1.55; -webkit-font-smoothing: antialiased; }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 30; background: #141414; }
+.lt { font-weight: 300; } .bd { font-weight: 700; }
+.mono { font-family: var(--font-mono); letter-spacing: .04em; }
+h1, h2, h3, h4 { margin: 0; text-wrap: balance; letter-spacing: -0.035em; line-height: 1.02; }
+p { margin: 0; max-width: 64ch; }
+code { font-family: var(--font-mono); font-size: .86em; }
+
+.shell { display: grid; grid-template-columns: var(--side) minmax(0, 1fr); min-height: 100%; }
+
+/* ---------- barra lateral ---------- */
+.side { position: sticky; top: env(safe-area-inset-top, 0px); height: calc(100vh - env(safe-area-inset-top, 0px)); overflow-y: auto; background: #141414; color: #FFFFFF; display: flex; flex-direction: column; gap: 32px; padding: 28px 20px 24px max(20px, env(safe-area-inset-left, 0px)); color-scheme: dark; }
+.brand { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 18px; letter-spacing: -0.02em; color: #FFFFFF; text-decoration: none; }
+.brand small { display: block; font: 400 11px var(--font-mono); letter-spacing: .12em; color: #A8A8A8; text-transform: uppercase; margin-top: 2px; }
+.nav { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 2px; }
+.nav > li > a { display: grid; grid-template-columns: 28px minmax(0, 1fr) 10px; align-items: center; gap: 8px; padding: 10px 10px; color: #CFCFCF; text-decoration: none; font-size: 15px; font-weight: 500; border-radius: 8px; }
+.nav > li > a .n { font: 400 12px var(--font-mono); color: #8A8A8A; }
+.nav > li > a::after { content: ""; width: 7px; height: 7px; border-radius: 50%; background: #C8102E; opacity: 0; transform: scale(.4); transition: opacity .3s var(--ease-out), transform .3s var(--ease-out); }
+.nav > li > a:hover { background: #1C1C1C; color: #FFFFFF; }
+.nav > li > a[aria-current="true"] { color: #FFFFFF; background: #1C1C1C; }
+.nav > li > a[aria-current="true"] .n { color: #E4637A; }
+.nav > li > a[aria-current="true"]::after { opacity: 1; transform: none; }
+.nav a:focus-visible { outline: 2px solid #FFFFFF; outline-offset: 2px; }
+.sub { list-style: none; margin: 2px 0 8px 36px; padding: 0 0 0 12px; border-left: 1px solid #2A2A2A; display: flex; flex-direction: column; }
+.sub a { display: block; padding: 5px 8px; font-size: 13px; color: #A8A8A8; text-decoration: none; border-radius: 6px; }
+.sub a:hover { color: #FFFFFF; }
+.side-foot { margin-top: auto; display: flex; flex-direction: column; gap: 14px; padding-top: 20px; border-top: 1px solid #2A2A2A; }
+.theme-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; font: 400 12px var(--font-mono); color: #A8A8A8; }
+.side-foot .ver { font: 400 11px var(--font-mono); color: #6B6B6B; letter-spacing: .06em; }
+
+@media (max-width: 900px) {
+  .shell { grid-template-columns: 1fr; }
+  .side { height: auto; position: sticky; z-index: 20; flex-direction: row; align-items: center; gap: 16px; padding: 12px max(16px, env(safe-area-inset-right, 0px)) 12px max(16px, env(safe-area-inset-left, 0px)); overflow-x: auto; overflow-y: hidden; }
+  .brand small, .sub, .side-foot .ver { display: none; }
+  .nav { flex-direction: row; gap: 4px; }
+  .nav > li > a { grid-template-columns: auto auto; white-space: nowrap; padding: 8px 10px; font-size: 14px; }
+  .nav > li > a::after { display: none; }
+  .side-foot { margin-top: 0; padding-top: 0; border-top: 0; flex: none; }
+  .theme-row span { display: none; }
+  section { scroll-margin-top: 64px; }
+}
+
+/* ---------- cenas ---------- */
+section { position: relative; padding-block: 64px 88px; }
+section > .in { max-width: 1120px; padding-left: max(48px, env(safe-area-inset-left, 0px)); padding-right: max(48px, env(safe-area-inset-right, 0px)); }
+@media (max-width: 900px) { section > .in { padding-left: max(24px, env(safe-area-inset-left, 0px)); padding-right: max(24px, env(safe-area-inset-right, 0px)); } }
+@media (max-width: 480px) { section > .in { padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); } }
+.paper { background: var(--bg); color: var(--text); --line: var(--border); --sub: var(--text-2); box-shadow: inset 0 1px 0 var(--seam); }
+.surface { background: var(--surface); color: var(--text); --line: var(--border); --sub: var(--text-2); box-shadow: inset 0 1px 0 var(--seam); }
+.ink { background: #141414; color: #FFFFFF; --line: rgba(255,255,255,.13); --sub: #A8A8A8; --focus: #FFFFFF; color-scheme: dark; }
+.red { background: #C8102E; color: #FFFFFF; --line: rgba(255,255,255,.3); --sub: rgba(255,255,255,.8); --focus: #FFFFFF; color-scheme: dark; }
+.grid-bg { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='192' height='192'%3E%3Cpath d='M0 0 H192 M0 0 V192' stroke='rgba(255,255,255,0.07)' stroke-width='1'/%3E%3Cpath d='M-7 0 H7 M0 -7 V7' stroke='rgba(255,255,255,0.4)' stroke-width='1.5'/%3E%3C/svg%3E"); }
+
+.labels { display: flex; justify-content: space-between; gap: 16px; font: 400 12px var(--font-mono); letter-spacing: .1em; text-transform: uppercase; opacity: .8; margin-bottom: 40px; }
+.headline { font-size: clamp(48px, 7vw, 104px); font-weight: 300; }
+.headline b { font-weight: 700; }
+.lede { margin-top: 20px; font-size: 18px; color: var(--sub); }
+.dot { color: #C8102E; }
+.paper .dot, .surface .dot { color: var(--accent-text); }
+.red .dot { color: #141414; }
+.block { margin-top: 64px; scroll-margin-top: 24px; }
+.block-head { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; flex-wrap: wrap; padding-bottom: 14px; margin-bottom: 28px; border-bottom: 1.5px solid currentColor; }
+.block-head h3 { font-size: clamp(28px, 3.4vw, 44px); font-weight: 300; }
+.block-head h3 b { font-weight: 700; }
+.block-head code { font-size: 12.5px; color: var(--sub); }
+.small { font-size: 14px; color: var(--sub); }
+
+/* ---------- primitives ---------- */
+.swatches { display: grid; grid-template-columns: repeat(14, minmax(0, 1fr)); }
+.swatches.reds { grid-template-columns: repeat(6, minmax(0, 1fr)); margin-top: 2px; }
+.sw { aspect-ratio: 1 / 1.5; max-width: 100%; display: flex; flex-direction: column; justify-content: flex-end; padding: 8px; font: 400 10.5px/1.4 var(--font-mono); min-width: 0; overflow: hidden; }
+.sw b { font-weight: 500; }
+.swatches.reds .sw { aspect-ratio: 2 / 1.3; }
+@media (max-width: 1100px) { .swatches { grid-template-columns: repeat(7, minmax(0, 1fr)); } }
+@media (max-width: 560px) { .swatches { grid-template-columns: repeat(4, minmax(0, 1fr)); } .swatches.reds { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.cols3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 40px; }
+.cols2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 40px; }
+@media (max-width: 1000px) { .cols3 { grid-template-columns: 1fr; } }
+@media (max-width: 760px) { .cols2 { grid-template-columns: 1fr; } }
+.cols3 > div, .cols2 > div { display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+.space-row { display: grid; grid-template-columns: 104px minmax(0, 1fr); gap: 12px; align-items: center; font: 400 12px var(--font-mono); color: var(--sub); }
+.space-row i { display: block; height: 8px; background: #C8102E; }
+.radii { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.radii div { aspect-ratio: 1.5; max-width: 100%; border: 1.5px solid currentColor; display: flex; align-items: flex-end; padding: 8px; font: 400 11px var(--font-mono); }
+.borders { display: grid; gap: 12px; }
+.borders div { height: 40px; display: flex; align-items: center; padding: 0 12px; font: 400 11px var(--font-mono); }
+.elev { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+.elev div { aspect-ratio: 1.3; max-width: 100%; background: #FFFFFF; color: #141414; border-radius: 12px; display: flex; align-items: flex-end; padding: 10px; font: 400 11px var(--font-mono); }
+.track { position: relative; height: 30px; border-bottom: 1px solid var(--line); }
+.track .ball { position: absolute; left: 0; top: 5px; width: 20px; height: 20px; border-radius: 50%; background: #C8102E; }
+.track.go .ball { transform: translateX(calc(var(--w, 200px) - 20px)); }
+.track.e-out .ball { transition: transform .8s var(--ease-out); }
+.track.e-io .ball { transition: transform .8s var(--ease-in-out); }
+.track.e-lin .ball { transition: transform .8s linear; }
+.track-label { display: flex; justify-content: space-between; font: 400 11px var(--font-mono); color: var(--sub); margin-top: 6px; }
+.dur { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; font: 400 11px var(--font-mono); color: var(--sub); }
+.dur i { display: block; height: 4px; background: currentColor; margin-bottom: 6px; color: #FFFFFF; }
+
+/* ---------- buttons ---------- */
+.matrix-scroll { overflow-x: auto; padding-bottom: 8px; }
+.matrix { display: grid; grid-template-columns: 96px repeat(6, max-content); gap: 18px 18px; align-items: center; }
+.matrix .h { font: 400 11px var(--font-mono); color: var(--sub); letter-spacing: .08em; text-transform: uppercase; }
+.btn { --h: 44px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: var(--h); padding: 0 calc(var(--h) * .5); border-radius: 999px; border: 1.5px solid transparent; font: 700 15px/1 var(--font-sans); letter-spacing: -0.01em; cursor: pointer; transition: background .15s var(--ease-out), transform .15s var(--ease-out); white-space: nowrap; }
+.btn.sm { --h: 32px; font-size: 13px; } .btn.lg { --h: 56px; font-size: 17px; }
+.btn.primary { background: var(--action-primary); color: var(--text-inverse); }
+.btn.primary:hover, .btn.primary.is-hover { background: var(--action-primary-hover); }
+.btn.accent { background: var(--action-accent); color: #FFFFFF; }
+.btn.accent:hover, .btn.accent.is-hover { background: var(--action-accent-hover); }
+.btn.secondary { background: transparent; color: var(--text); border-color: var(--border-strong); }
+.btn.secondary:hover, .btn.secondary.is-hover { background: color-mix(in srgb, var(--text) 8%, transparent); }
+.btn.ghost { background: transparent; color: var(--text); }
+.btn.ghost:hover, .btn.ghost.is-hover { background: color-mix(in srgb, var(--text) 8%, transparent); }
+.btn.link { background: transparent; color: var(--text); padding: 0 2px; text-decoration: underline; text-decoration-color: var(--action-accent); text-underline-offset: 5px; text-decoration-thickness: 2px; border-radius: 4px; }
+.btn:active, .btn.is-pressed { transform: scale(.97); }
+.btn:focus-visible, .btn.is-focus { outline: 2px solid var(--focus); outline-offset: 3px; }
+.btn[disabled] { opacity: .38; cursor: not-allowed; transform: none; }
+.btn .spin { width: 14px; height: 14px; border-radius: 50%; border: 2px solid currentColor; border-right-color: transparent; animation: spin .8s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.row { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; margin-top: 28px; }
+
+/* ---------- inputs ---------- */
+.fields { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 28px 24px; }
+.field { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.field label { font-size: 14px; font-weight: 500; }
+.field .state { font: 400 11px var(--font-mono); color: var(--sub); letter-spacing: .08em; }
+.control { display: flex; align-items: center; gap: 8px; height: 48px; padding: 0 16px; border: 1.5px solid var(--border); border-radius: 8px; background: var(--surface-raised); transition: border-color .15s var(--ease-out), box-shadow .15s var(--ease-out); }
+.control input, .control select { all: unset; flex: 1; min-width: 0; font: 400 15px var(--font-sans); color: var(--text); }
+.control input::placeholder { color: var(--text-2); }
+.control:hover { border-color: var(--text-2); }
+.control:focus-within, .control.is-focus { border-color: var(--border-strong); box-shadow: 0 0 0 3px color-mix(in srgb, var(--focus) 16%, transparent); }
+.control.is-error { border-color: var(--danger); }
+.control.is-disabled { background: var(--surface); opacity: .55; }
+.control .affix { font: 400 12px var(--font-mono); color: var(--text-2); }
+.hint { font-size: 13px; color: var(--text-2); }
+.hint.err { color: var(--danger); }
+.choices { display: flex; flex-wrap: wrap; gap: 28px; margin-top: 36px; align-items: center; }
+.check { display: inline-flex; align-items: center; gap: 10px; font-size: 15px; cursor: pointer; }
+.check input { appearance: none; width: 20px; height: 20px; margin: 0; border: 1.5px solid var(--border-strong); border-radius: 4px; display: grid; place-content: center; cursor: pointer; }
+.check input[type="radio"] { border-radius: 50%; }
+.check input:checked { background: var(--action-primary); border-color: var(--action-primary); }
+.check input[type="checkbox"]:checked::after { content: ""; width: 10px; height: 5px; border: 2px solid var(--text-inverse); border-top: 0; border-right: 0; transform: rotate(-45deg) translate(1px, -1px); }
+.check input[type="radio"]:checked::after { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--text-inverse); }
+.check input:focus-visible { outline: 2px solid var(--focus); outline-offset: 3px; }
+.switch { position: relative; width: 56px; height: 32px; border-radius: 999px; background: var(--neutral-800); box-shadow: inset 0 0 0 1px rgba(255,255,255,.12); border: 0; cursor: pointer; flex: none; padding: 0; }
+.switch::after { content: ""; position: absolute; left: 4px; top: 4px; width: 24px; height: 24px; border-radius: 50%; background: #FFFFFF; transition: transform .3s var(--ease-out), background .3s var(--ease-out); }
+.switch[aria-checked="true"]::after { transform: translateX(24px); background: #C8102E; }
+.switch:focus-visible { outline: 2px solid var(--focus); outline-offset: 3px; }
+
+/* ---------- cards ---------- */
+.cards { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 2px; }
+@media (max-width: 1100px) { .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 520px) { .cards { grid-template-columns: 1fr; } }
+.card { aspect-ratio: 4 / 5; max-width: 100%; display: flex; flex-direction: column; justify-content: space-between; padding: 20px; min-width: 0; overflow: hidden; transition: transform .4s var(--ease-out); }
+.card.interactive { cursor: pointer; }
+.card.interactive:hover { transform: translateY(-6px); }
+.card.interactive:focus-visible { outline: 2px solid var(--focus); outline-offset: 3px; }
+.card .tag { font: 400 11px var(--font-mono); letter-spacing: .1em; text-transform: uppercase; opacity: .75; }
+.card .logo { font-weight: 700; font-size: clamp(52px, 6vw, 88px); letter-spacing: -0.04em; line-height: 1; }
+.card .title { font-size: 26px; letter-spacing: -0.03em; line-height: 1.05; }
+.card .meta { font: 400 12px var(--font-mono); opacity: .75; }
+.c-grey { background: #F2F2F2; color: #141414; }
+.c-grey .dot { color: #C8102E; }
+.c-ink { background: #141414; color: #FFFFFF; }
+.c-red { background: #C8102E; color: #FFFFFF; }
+.c-white { background: var(--surface-raised); color: var(--text); box-shadow: inset 0 0 0 1px var(--border); }
+.tok { display: flex; gap: 4px; }
+.tok i { width: 28px; height: 28px; border: 1px solid rgba(20,20,20,.12); }
+.aa { align-self: flex-start; background: #FFFFFF; color: #141414; border-radius: 999px; padding: 6px 14px; font-weight: 700; font-size: 14px; }
+.stat-num { font-size: clamp(60px, 7vw, 104px); font-weight: 300; letter-spacing: -0.05em; line-height: .9; }
+.stat-num b { font-weight: 700; }
+.support { display: flex; flex-wrap: wrap; gap: 16px; align-items: center; }
+.label-mono { font: 400 12px var(--font-mono); letter-spacing: .1em; padding: 6px 10px; border: 1px solid var(--border-strong); }
+.avatar { width: 44px; height: 44px; border-radius: 50%; background: var(--action-primary); color: var(--text-inverse); display: grid; place-items: center; font-weight: 700; font-size: 15px; position: relative; }
+.avatar::after { content: ""; position: absolute; right: 8px; bottom: 11px; width: 5px; height: 5px; border-radius: 50%; background: #C8102E; }
+.badge { font-weight: 700; font-size: 13px; padding: 5px 12px; border-radius: 999px; background: #C8102E; color: #FFFFFF; }
+
+/* ---------- layouts ---------- */
+.gridviz { display: grid; gap: var(--g); padding: 14px var(--m); background: var(--bg); box-shadow: inset 0 0 0 1px var(--line); height: 120px; }
+.gridviz i { background: color-mix(in srgb, #C8102E 14%, transparent); box-shadow: inset 0 0 0 1px color-mix(in srgb, #C8102E 40%, transparent); }
+.grid-spec { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; font: 400 12px var(--font-mono); color: var(--sub); margin-top: 8px; }
+.bp { position: relative; height: 56px; margin-top: 8px; }
+.bp .bar { position: absolute; left: 0; height: 10px; background: currentColor; }
+.bp .tick { position: absolute; top: 18px; font: 400 11px var(--font-mono); color: var(--sub); white-space: nowrap; transform: translateX(-50%); }
+.bp .tick::before { content: ""; position: absolute; left: 50%; top: -14px; width: 1px; height: 10px; background: currentColor; }
+.patterns { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; }
+@media (max-width: 760px) { .patterns { grid-template-columns: 1fr; } }
+.pattern { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.pattern h4 { font-size: 20px; letter-spacing: -0.02em; }
+.frame { aspect-ratio: 16 / 9; max-width: 100%; border: 1px solid var(--line); position: relative; overflow: hidden; display: flex; flex-direction: column; padding: 12px; gap: 8px; }
+.wf-lab { display: flex; justify-content: space-between; }
+.wf-lab i, .wf-line { display: block; height: 5px; background: currentColor; opacity: .5; }
+.wf-lab i { width: 18%; }
+.wf-h { height: 18px; background: currentColor; width: 62%; border-radius: 2px; }
+.wf-h.lt2 { opacity: .35; width: 40%; }
+.wf-row { display: grid; gap: 4px; flex: 1; }
+.wf-row i { background: currentColor; opacity: .14; }
+.wf-dot { width: 8px; height: 8px; border-radius: 50%; background: #C8102E; display: inline-block; }
+
+/* ---------- foundations ---------- */
+.values { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border-top: 1.5px solid currentColor; }
+@media (max-width: 1000px) { .values { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 24px; } }
+.values > div { padding: 18px 20px 0 0; display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.values b { font-size: clamp(22px, 2.4vw, 30px); letter-spacing: -0.02em; line-height: 1.1; }
+.values span { font-size: 14px; color: var(--sub); }
+.layers { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border-top: 1.5px solid currentColor; }
+@media (max-width: 1000px) { .layers { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 28px; } }
+.layers > div { padding: 18px 20px 0 0; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.layers .n { font: 500 12px var(--font-mono); color: var(--accent-text); letter-spacing: .06em; }
+.layers h4 { font-size: clamp(26px, 3vw, 38px); font-weight: 300; }
+.layers h4 b { font-weight: 700; }
+.layers code { font-size: 12.5px; color: var(--sub); overflow-wrap: anywhere; }
+.chip { width: 44px; height: 44px; border-radius: 50%; background: #C8102E; }
+.rules { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 40px; }
+@media (max-width: 760px) { .rules { grid-template-columns: 1fr; } }
+.rules li { display: grid; grid-template-columns: 120px minmax(0, 1fr); gap: 16px; padding: 14px 0; border-bottom: 1px solid var(--line); font-size: 15px; }
+.rules li b { font: 500 13px var(--font-mono); }
+.table-scroll { overflow-x: auto; }
+.tbl { width: 100%; border-collapse: collapse; font-size: 14px; }
+.tbl th, .tbl td { text-align: left; padding: 13px 16px 13px 0; border-bottom: 1px solid var(--line); white-space: nowrap; }
+.tbl th { font: 400 11px var(--font-mono); letter-spacing: .1em; text-transform: uppercase; color: var(--sub); }
+.tbl code { font-size: 12.5px; }
+
+/* ---------- theme ---------- */
+.sample { display: inline-grid; place-items: center; width: 40px; height: 32px; font-weight: 700; font-size: 14px; vertical-align: middle; margin-right: 8px; }
+.ratio { font: 500 13px var(--font-mono); font-variant-numeric: tabular-nums; }
+.grade { font: 400 11px var(--font-mono); margin-left: 6px; padding: 2px 7px; border: 1px solid currentColor; border-radius: 999px; }
+.g-fail { color: #E4637A; }
+.compare { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2px; }
+@media (max-width: 760px) { .compare { grid-template-columns: 1fr; } }
+.mode { background: var(--bg); color: var(--text); padding: 24px; display: flex; flex-direction: column; gap: 18px; min-width: 0; }
+.mode .mlab { font: 400 11px var(--font-mono); letter-spacing: .1em; color: var(--text-2); text-transform: uppercase; }
+.mode .mtitle { font-size: 34px; font-weight: 300; letter-spacing: -0.03em; }
+.mode .mtitle b { font-weight: 700; }
+.mode .mtitle .dot { color: var(--accent-text); }
+.bands { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 2px; }
+@media (max-width: 760px) { .bands { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.bands div { aspect-ratio: 1.3; max-width: 100%; padding: 12px; display: flex; flex-direction: column; justify-content: space-between; font: 400 11px/1.5 var(--font-mono); box-shadow: inset 0 0 0 1px rgba(255,255,255,.12); }
+.bands b { font-family: var(--font-sans); font-size: 18px; letter-spacing: -0.02em; }
+
+/* ---------- typography ---------- */
+.families { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2px; }
+@media (max-width: 760px) { .families { grid-template-columns: 1fr; } }
+.family { background: rgba(0,0,0,.12); padding: 24px; display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+.family .big { font-size: clamp(64px, 8vw, 120px); line-height: 1; letter-spacing: -0.04em; }
+.family .weights { display: flex; gap: 18px; flex-wrap: wrap; font-size: 22px; }
+.type-row { display: grid; grid-template-columns: 170px minmax(0, 1fr); gap: 24px; align-items: baseline; padding-block: 14px; border-bottom: 1px solid var(--line); }
+.type-row .spec { font: 400 12px var(--font-mono); color: var(--sub); }
+.type-row .ex { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; letter-spacing: -0.035em; line-height: 1.1; }
+@media (max-width: 720px) { .type-row { grid-template-columns: 1fr; gap: 4px; } }
+.dodont { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2px; }
+@media (max-width: 760px) { .dodont { grid-template-columns: 1fr; } }
+.dodont > div { background: rgba(0,0,0,.12); padding: 24px; display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+.dodont .verdict { font: 500 12px var(--font-mono); letter-spacing: .1em; }
+.dodont .ex { font-size: clamp(32px, 4vw, 52px); letter-spacing: -0.035em; line-height: 1; }
+
+footer.end { padding-block: 72px; }
+footer.end h2 { font-size: clamp(56px, 9vw, 128px); font-weight: 300; }
+footer.end h2 b { font-weight: 700; }
+
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition-duration: 0s !important; animation-duration: 0s !important; } }
+</style>
+
+<div class="shell">
+  <aside class="side" aria-label="Navegação do design system">
+    <a class="brand" href="#primitives">
+      <svg width="30" height="30" viewBox="0 0 32 32" aria-hidden="true">
+        <path d="M16 4 C21 10 21 18 16 26 C11 18 11 10 16 4 Z" fill="none" stroke="#FFFFFF" stroke-width="1.6"/>
+        <path d="M15 25 C9 23 5 17 5 11 C10 13 13 17 15 25 Z" fill="none" stroke="#FFFFFF" stroke-width="1.6"/>
+        <path d="M17 25 C23 23 27 17 27 11 C22 13 19 17 17 25 Z" fill="none" stroke="#FFFFFF" stroke-width="1.6"/>
+        <circle cx="16" cy="28.5" r="2.2" fill="#C8102E"/>
+      </svg>
+      <span>IY Lotus<small>Design system</small></span>
+    </a>
+    <nav>
+      <ol class="nav" id="nav">
+        <li><a href="#primitives"><span class="n">01</span>Primitives</a>
+          <ul class="sub"><li><a href="#p-color">Color</a></li><li><a href="#p-space">Space</a></li><li><a href="#p-shape">Shape &amp; elevation</a></li><li><a href="#p-motion">Motion</a></li></ul></li>
+        <li><a href="#components"><span class="n">02</span>Components</a>
+          <ul class="sub"><li><a href="#c-button">Button</a></li><li><a href="#c-inputs">Inputs</a></li><li><a href="#c-cards">Cards</a></li><li><a href="#c-support">Support</a></li></ul></li>
+        <li><a href="#layouts"><span class="n">03</span>Layouts</a>
+          <ul class="sub"><li><a href="#l-grid">Grid</a></li><li><a href="#l-breakpoints">Breakpoints</a></li><li><a href="#l-patterns">Patterns</a></li></ul></li>
+        <li><a href="#foundations"><span class="n">04</span>Foundations</a>
+          <ul class="sub"><li><a href="#f-values">Values</a></li><li><a href="#f-layers">Layers</a></li><li><a href="#f-a11y">Accessibility</a></li><li><a href="#f-naming">Naming</a></li></ul></li>
+        <li><a href="#theme"><span class="n">05</span>Theme</a>
+          <ul class="sub"><li><a href="#t-tokens">Semantic tokens</a></li><li><a href="#t-modes">Light &amp; dark</a></li><li><a href="#t-scenes">Scenes</a></li></ul></li>
+        <li><a href="#typography"><span class="n">06</span>Typography</a>
+          <ul class="sub"><li><a href="#y-families">Families</a></li><li><a href="#y-scale">Scale</a></li><li><a href="#y-pairing">Pairing</a></li></ul></li>
+      </ol>
+    </nav>
+    <div class="side-foot">
+      <div class="theme-row"><span>theme: <span id="themeName">light</span></span><button class="switch" id="themeSwitch" role="switch" aria-checked="false" aria-label="Modo escuro"></button></div>
+      <span class="ver">v0 · draft</span>
+    </div>
+  </aside>
+
+  <main>
+    <!-- 01 PRIMITIVES -->
+    <section id="primitives" class="ink grid-bg">
+      <div class="in">
+        <div class="labels"><span>Primitives</span><span>01 / 06</span></div>
+        <h1 class="headline"><span class="lt">Raw </span><b>values</b><span class="dot">.</span></h1>
+        <p class="lede">A raiz do sistema: valores crus, sem significado. Nenhum componente usa um primitive direto; ele passa sempre por um token de tema.</p>
+
+        <div class="block" id="p-color">
+          <div class="block-head"><h3><span class="lt">Co</span><b>lor</b></h3><code>neutral/0–950 · red/50–800</code></div>
+          <div class="swatches" id="neutral"></div>
+          <div class="swatches reds" id="red"></div>
+        </div>
+
+        <div class="block" id="p-space">
+          <div class="block-head"><h3><span class="lt">Spa</span><b>ce</b></h3><code>base 4 px</code></div>
+          <div class="cols2">
+            <div id="spaces" style="display:grid;gap:8px"></div>
+            <div><p class="small">Toda distância é múltipla de 4. Os nomes contam quantas unidades de 4 px: <code>space/4</code> = 16 px.</p></div>
+          </div>
+        </div>
+
+        <div class="block" id="p-shape">
+          <div class="block-head"><h3><span class="lt">Shape &amp; </span><b>elevation</b></h3><code>radius · border · shadow</code></div>
+          <div class="cols3">
+            <div><span class="small">Radius</span>
+              <div class="radii"><div style="border-radius:0">none 0</div><div style="border-radius:4px">sm 4</div><div style="border-radius:8px">md 8</div><div style="border-radius:18px">lg 18</div><div style="border-radius:40px">xl 40</div><div style="border-radius:999px;justify-content:center">pill</div></div></div>
+            <div><span class="small">Border</span>
+              <div class="borders"><div style="border:1px solid #FFFFFF">hairline · 1</div><div style="border:1.5px solid #FFFFFF">strong · 1.5</div><div style="outline:2px solid #FFFFFF;outline-offset:3px">focus · 2 + offset 3</div></div></div>
+            <div><span class="small">Elevation</span>
+              <div class="elev"><div style="box-shadow:0 1px 2px rgba(0,0,0,.18)">1</div><div style="box-shadow:0 6px 16px rgba(0,0,0,.22)">2</div><div style="box-shadow:0 18px 40px rgba(0,0,0,.32)">3</div></div>
+              <p class="small">Sutil: o estilo é plano. Elevação só para o que flutua (menus, diálogos).</p></div>
+          </div>
+        </div>
+
+        <div class="block" id="p-motion">
+          <div class="block-head"><h3><span class="lt">Mo</span><b>tion</b></h3><code>duration · easing</code></div>
+          <div class="cols2">
+            <div>
+              <div><div class="track e-out"><div class="ball"></div></div><div class="track-label"><span>ease/out</span><span>.16, 1, .3, 1</span></div></div>
+              <div><div class="track e-io"><div class="ball"></div></div><div class="track-label"><span>ease/in-out</span><span>.7, 0, .2, 1</span></div></div>
+              <div><div class="track e-lin"><div class="ball"></div></div><div class="track-label"><span>linear</span><span>evitar</span></div></div>
+              <button class="btn secondary sm" type="button" id="play" style="align-self:flex-start;color:#FFFFFF;border-color:#FFFFFF">Animar</button>
+            </div>
+            <div>
+              <div class="dur"><div><i style="width:19%"></i>fast 150</div><div><i style="width:38%"></i>base 300</div><div><i style="width:63%"></i>slow 500</div><div><i style="width:100%"></i>scene 800</div></div>
+              <p class="small">Uma curva para quase tudo: entra rápido e assenta devagar. A in-out fica para trocas de cena.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 02 COMPONENTS -->
+    <section id="components" class="paper">
+      <div class="in">
+        <div class="labels"><span>Components</span><span>02 / 06</span></div>
+        <h2 class="headline"><span class="lt">I design in </span><b>pixels</b><span class="dot">.</span></h2>
+        <p class="lede">Todas as variantes e todos os estados, com o mesmo nome no Figma e no React. Passe o mouse e use o teclado: já funcionam.</p>
+
+        <div class="block" id="c-button">
+          <div class="block-head"><h3><span class="lt">But</span><b>ton</b></h3><code>&lt;Button variant="accent" size="md" /&gt;</code></div>
+          <div class="matrix-scroll"><div class="matrix" id="btnMatrix"></div></div>
+          <div class="row">
+            <button class="btn accent sm" type="button">Small 32</button>
+            <button class="btn accent" type="button">Medium 44</button>
+            <button class="btn accent lg" type="button">Large 56</button>
+            <button class="btn primary lg" type="button">View case <span aria-hidden="true">→</span></button>
+            <button class="btn secondary" type="button" aria-label="Adicionar" style="width:44px;padding:0">+</button>
+          </div>
+        </div>
+
+        <div class="block" id="c-inputs">
+          <div class="block-head"><h3><span class="lt">In</span><b>puts</b></h3><code>&lt;TextField label="Email" error="…" /&gt;</code></div>
+          <div class="fields">
+            <div class="field"><span class="state">DEFAULT</span><label for="f1">Name</label><div class="control"><input id="f1" placeholder="Isabela Yukari"></div><span class="hint">How you want to be called</span></div>
+            <div class="field"><span class="state">FOCUS</span><label for="f2">Email</label><div class="control is-focus"><input id="f2" placeholder="you@email.com"></div><span class="hint">Only to reply to you</span></div>
+            <div class="field"><span class="state">FILLED · AFFIX</span><label for="f3">Portfolio</label><div class="control"><span class="affix">https://</span><input id="f3" value="isabelayukari.com"></div><span class="hint">Fixed prefix</span></div>
+            <div class="field"><span class="state">ERROR</span><label for="f4">Email</label><div class="control is-error"><input id="f4" value="isabela@" aria-invalid="true" aria-describedby="f4e"></div><span class="hint err" id="f4e">Add the domain, like isabela@email.com</span></div>
+            <div class="field"><span class="state">DISABLED</span><label for="f5">Company</label><div class="control is-disabled"><input id="f5" placeholder="Unavailable" disabled></div><span class="hint">Unlocks after the previous step</span></div>
+            <div class="field"><span class="state">SEARCH</span><label for="f6">Find a component</label><div class="control"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><circle cx="7" cy="7" r="5" fill="none" stroke="var(--text-2)" stroke-width="1.5"/><path d="M11 11 L14 14" stroke="var(--text-2)" stroke-width="1.5" stroke-linecap="round"/></svg><input id="f6" placeholder="Button, Card…"><span class="affix">⌘K</span></div><span class="hint">With a keyboard shortcut</span></div>
+          </div>
+          <div class="choices">
+            <label class="check"><input type="checkbox" id="c1" checked> Design Systems</label>
+            <label class="check"><input type="checkbox" id="c2"> Prototyping</label>
+            <label class="check"><input type="radio" name="r" id="r1" checked> Design Engineer</label>
+            <label class="check"><input type="radio" name="r" id="r2"> Product Designer</label>
+            <span class="check"><button class="switch" id="sw2" role="switch" aria-checked="true" aria-labelledby="sw2l"></button><span id="sw2l" class="mono" style="font-size:13px">switch: on</span></span>
+          </div>
+        </div>
+
+        <div class="block" id="c-cards">
+          <div class="block-head"><h3><span class="lt">Car</span><b>ds</b></h3><code>&lt;Card variant="project" interactive /&gt;</code></div>
+          <div class="cards">
+            <article class="card c-grey"><span class="tag">Tokens</span><div class="logo">IY<span class="dot">.</span></div><div class="tok"><i style="background:#141414"></i><i style="background:#FFFFFF"></i><i style="background:#C8102E"></i><i style="background:#8A8A8A"></i></div><span class="meta">--accent: #C8102E;</span></article>
+            <article class="card c-ink interactive" tabindex="0"><span class="tag">Case</span><div class="title"><span class="lt">Design </span><b>System</b></div><span class="meta">Product · Design Engineering →</span></article>
+            <article class="card c-red"><span class="tag">Accessibility</span><div class="logo">IY<span style="color:#141414">.</span></div><span class="aa">AA 5.9 : 1</span></article>
+            <article class="card c-white"><span class="tag">Stat</span><div class="stat-num"><span class="lt">12</span><b>+</b></div><span class="meta">components in v1</span></article>
+          </div>
+        </div>
+
+        <div class="block" id="c-support">
+          <div class="block-head"><h3><span class="lt">Sup</span><b>port</b></h3><code>Tag · Badge · Avatar · Link</code></div>
+          <div class="support">
+            <span class="label-mono">ROLE 01 / 02</span>
+            <span class="badge">AA 5.9 : 1</span>
+            <span class="avatar" aria-label="IY">IY</span>
+            <button class="btn link" type="button">View on GitHub</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 03 LAYOUTS -->
+    <section id="layouts" class="surface">
+      <div class="in">
+        <div class="labels"><span>Layouts</span><span>03 / 06</span></div>
+        <h2 class="headline"><span class="lt">Scenes on a </span><b>grid</b><span class="dot">.</span></h2>
+        <p class="lede">Como as páginas se organizam: um grid por tamanho de tela e quatro padrões de cena, tirados do reel.</p>
+
+        <div class="block" id="l-grid">
+          <div class="block-head"><h3><span class="lt">Gr</span><b>id</b></h3><code>columns · gutter · margin</code></div>
+          <div style="display:grid;gap:28px">
+            <div><div class="gridviz" style="--g:24px;--m:96px;grid-template-columns:repeat(12,minmax(0,1fr))" id="gDesk"></div><div class="grid-spec"><span>Desktop ≥ 1024</span><span>12 colunas · gutter 24 · margem 96 · máx. 1280</span></div></div>
+            <div style="max-width:560px"><div class="gridviz" style="--g:20px;--m:48px;grid-template-columns:repeat(8,minmax(0,1fr))" id="gTab"></div><div class="grid-spec"><span>Tablet 768</span><span>8 colunas · gutter 20 · margem 48</span></div></div>
+            <div style="max-width:260px"><div class="gridviz" style="--g:16px;--m:16px;grid-template-columns:repeat(4,minmax(0,1fr))" id="gMob"></div><div class="grid-spec"><span>Mobile 390</span><span>4 col · 16 · 16</span></div></div>
+          </div>
+        </div>
+
+        <div class="block" id="l-breakpoints">
+          <div class="block-head"><h3><span class="lt">Break</span><b>points</b></h3><code>bp/sm · md · lg · xl</code></div>
+          <div class="bp">
+            <span class="bar" style="width:100%;opacity:.12"></span>
+            <span class="bar" style="width:27%;background:#C8102E"></span>
+            <span class="tick" style="left:27%">sm 390</span><span class="tick" style="left:53%">md 768</span><span class="tick" style="left:71%">lg 1024</span><span class="tick" style="left:100%;transform:translateX(-100%)">xl 1440</span>
+          </div>
+        </div>
+
+        <div class="block" id="l-patterns">
+          <div class="block-head"><h3><span class="lt">Pat</span><b>terns</b></h3><code>Scene · Hero · Card grid · Split</code></div>
+          <div class="patterns">
+            <div class="pattern"><div class="frame" style="background:#141414;color:#FFFFFF"><div class="wf-lab"><i></i><i style="width:10%"></i></div><div style="flex:1;display:grid;place-items:center"><div style="display:flex;align-items:flex-end;gap:4px;width:60%"><div class="wf-h lt2" style="width:45%"></div><div class="wf-h" style="width:55%"></div><span class="wf-dot"></span></div></div></div>
+              <h4>Hero</h4><p class="small">Cena escura com grade, título gigante leve/negrito e o ponto vermelho. Abre a página.</p></div>
+            <div class="pattern"><div class="frame" style="background:#C8102E;color:#FFFFFF"><div class="wf-lab"><i></i><i style="width:10%"></i></div><div class="wf-h lt2" style="margin-top:14%"></div><div class="wf-h"></div><div class="wf-line" style="width:50%;margin-top:6px"></div></div>
+              <h4>Scene</h4><p class="small">Faixa de largura total com cor própria, rótulos mono nos cantos e título. Troca de cor a cada seção.</p></div>
+            <div class="pattern"><div class="frame" style="color:var(--text);background:var(--bg)"><div class="wf-lab"><i></i><i style="width:10%"></i></div><div class="wf-h" style="width:40%"></div><div class="wf-row" style="grid-template-columns:repeat(4,1fr)"><i></i><i style="opacity:.3"></i><i style="background:#C8102E;opacity:1"></i><i></i></div></div>
+              <h4>Card grid</h4><p class="small">Quatro colunas coladas (gap 2), como os artefatos do reel. Duas no tablet, uma no mobile.</p></div>
+            <div class="pattern"><div class="frame" style="color:var(--text);background:var(--bg)"><div class="wf-lab"><i></i><i style="width:10%"></i></div><div class="wf-row" style="grid-template-columns:1.2fr 1fr;gap:10px"><i style="opacity:.8;background:#141414"></i><div style="display:grid;gap:6px;align-content:start"><div class="wf-line"></div><div class="wf-line" style="width:70%"></div><div class="wf-line" style="width:85%"></div></div></div></div>
+              <h4>Split</h4><p class="small">Código ou mídia de um lado, texto do outro. Empilha abaixo de 900 px.</p></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 04 FOUNDATIONS -->
+    <section id="foundations" class="paper">
+      <div class="in">
+        <div class="labels"><span>Foundations</span><span>04 / 06</span></div>
+        <h2 class="headline"><span class="lt">From </span><b>root</b><span class="lt"> to </span><b>bloom</b><span class="dot">.</span></h2>
+        <p class="lede">Os valores do lótus viram regras, e a estrutura cresce em camadas, como a flor.</p>
+
+        <div class="block" id="f-values">
+          <div class="block-head"><h3><span class="lt">Val</span><b>ues</b></h3><code>4 princípios</code></div>
+          <div class="values">
+            <div><b>Crescimento</b><span>Tokens em camadas. Componente novo nasce de tokens que já existem. Versões com changelog.</span></div>
+            <div><b>Beleza</b><span>Leve e negrito, espaço em branco, um único acento vermelho em cerca de 10% da tela.</span></div>
+            <div><b>Disciplina</b><span>Escala de 4 px, todos os estados, nomes iguais no Figma e no código.</span></div>
+            <div><b>Sabedoria</b><span>AA como mínimo. Cada componente diz quando usar e quando não usar.</span></div>
+          </div>
+        </div>
+
+        <div class="block" id="f-layers">
+          <div class="block-head"><h3><span class="lt">Lay</span><b>ers</b></h3><code>Root → Stem → Petal → Bloom</code></div>
+          <div class="layers">
+            <div><span class="n">ROOT</span><h4><span class="lt">Primi</span><b>tives</b></h4><div class="chip"></div><code>red/600 = #C8102E</code></div>
+            <div><span class="n">STEM</span><h4><span class="lt">The</span><b>me</b></h4><code>color/action/accent</code><code>light · dark</code></div>
+            <div><span class="n">PETAL</span><h4><span class="lt">Compo</span><b>nents</b></h4><code>button/accent/bg</code></div>
+            <div><span class="n">BLOOM</span><h4><span class="lt">Lay</span><b>outs</b></h4><button class="btn accent" type="button">View work</button><code>páginas e cenas</code></div>
+          </div>
+        </div>
+
+        <div class="block" id="f-a11y">
+          <div class="block-head"><h3><span class="lt">Accessi</span><b>bility</b></h3><code>WCAG 2.2 AA</code></div>
+          <ul class="rules">
+            <li><b>4.5 : 1</b><span>Contraste mínimo para texto normal.</span></li>
+            <li><b>3 : 1</b><span>Texto grande (24 px ou 19 px negrito), ícones e bordas de controles.</span></li>
+            <li><b>2 px</b><span>Anel de foco visível, com 3 px de distância, em tudo que é clicável.</span></li>
+            <li><b>44 px</b><span>Área mínima de toque. O Button md tem 44 de altura.</span></li>
+            <li><b>reduce</b><span>Com prefers-reduced-motion, as animações param e o estado final aparece.</span></li>
+            <li><b>texto</b><span>Nunca só cor: erro tem mensagem, estado ativo tem forma.</span></li>
+          </ul>
+        </div>
+
+        <div class="block" id="f-naming">
+          <div class="block-head"><h3><span class="lt">Nam</span><b>ing</b></h3><code>um nome, três lugares</code></div>
+          <div class="table-scroll">
+            <table class="tbl">
+              <thead><tr><th>Figma</th><th>CSS</th><th>React / TS</th></tr></thead>
+              <tbody>
+                <tr><td><code>color/action/accent</code></td><td><code>--color-action-accent</code></td><td><code>tokens.color.action.accent</code></td></tr>
+                <tr><td><code>space/4</code></td><td><code>--space-4</code></td><td><code>tokens.space[4]</code></td></tr>
+                <tr><td><code>Button / variant=accent, size=md</code></td><td><code>.iy-button--accent.iy-button--md</code></td><td><code>&lt;Button variant="accent" size="md" /&gt;</code></td></tr>
+                <tr><td><code>TextField / state=error</code></td><td><code>.iy-field[aria-invalid]</code></td><td><code>&lt;TextField error="…" /&gt;</code></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 05 THEME -->
+    <section id="theme" class="ink">
+      <div class="in">
+        <div class="labels"><span>Theme</span><span>05 / 06</span></div>
+        <h2 class="headline"><span class="lt">Ink, paper, </span><b>one red</b><span class="dot">.</span></h2>
+        <p class="lede">Os tokens de tema dão significado aos primitives e mudam com o modo. O switch na barra lateral troca o modo desta página inteira.</p>
+
+        <div class="block" id="t-tokens">
+          <div class="block-head"><h3><span class="lt">Semantic </span><b>tokens</b></h3><code>contraste calculado ao vivo</code></div>
+          <div class="table-scroll">
+            <table class="tbl">
+              <thead><tr><th>Token</th><th>Light</th><th>Dark</th><th>Uso</th></tr></thead>
+              <tbody id="pairs"></tbody>
+            </table>
+          </div>
+          <p class="small" style="margin-top:16px">O cinza <code>#8A8A8A</code> do reel dá 3,4:1 sobre branco, então fica para ícones; o texto secundário usa <code>#6B6B6B</code>.</p>
+        </div>
+
+        <div class="block" id="t-modes">
+          <div class="block-head"><h3><span class="lt">Light &amp; </span><b>dark</b></h3><code>mesmo componente, dois modos</code></div>
+          <div class="compare">
+            <div class="mode force-light"><span class="mlab">Light</span><div class="mtitle"><span class="lt">Design </span><b>Engineer</b><span class="dot">.</span></div><div class="control"><input aria-label="Email no modo claro" placeholder="you@email.com"></div><div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn primary" type="button">Primary</button><button class="btn accent" type="button">Accent</button><button class="btn secondary" type="button">Secondary</button></div></div>
+            <div class="mode force-dark"><span class="mlab">Dark</span><div class="mtitle"><span class="lt">Design </span><b>Engineer</b><span class="dot">.</span></div><div class="control"><input aria-label="Email no modo escuro" placeholder="you@email.com"></div><div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn primary" type="button">Primary</button><button class="btn accent" type="button">Accent</button><button class="btn secondary" type="button">Secondary</button></div></div>
+          </div>
+        </div>
+
+        <div class="block" id="t-scenes">
+          <div class="block-head"><h3><span class="lt">Sce</span><b>nes</b></h3><code>quais faixas mudam com o tema</code></div>
+          <div class="bands">
+            <div style="background:#FFFFFF;color:#141414"><b>Paper</b><span>light #FFFFFF<br>dark #1C1C1C</span></div>
+            <div style="background:#F2F2F2;color:#141414"><b>Surface</b><span>light #F2F2F2<br>dark #232323</span></div>
+            <div style="background:#141414;color:#FFFFFF"><b>Ink</b><span>fixa #141414<br>com grade</span></div>
+            <div style="background:#C8102E;color:#FFFFFF"><b>Red</b><span>fixa #C8102E<br>cena de destaque</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 06 TYPOGRAPHY -->
+    <section id="typography" class="red">
+      <div class="in">
+        <div class="labels"><span>Typography</span><span>06 / 06</span></div>
+        <h2 class="headline"><span class="lt">Light </span><b>&amp; bold</b><span class="dot">.</span></h2>
+        <p class="lede">DM Sans para títulos e texto, JetBrains Mono para rótulos e código. O contraste entre 300 e 700 é a assinatura do sistema.</p>
+
+        <div class="block" id="y-families">
+          <div class="block-head"><h3><span class="lt">Fami</span><b>lies</b></h3><code>font/sans · font/mono</code></div>
+          <div class="families">
+            <div class="family"><span class="mono" style="font-size:12px;opacity:.8">font/sans · DM Sans</span><div class="big"><span class="lt">A</span><b>a</b></div><div class="weights"><span style="font-weight:300">Light 300</span><span style="font-weight:400">Regular 400</span><span style="font-weight:500">Medium 500</span><span style="font-weight:700">Bold 700</span></div></div>
+            <div class="family"><span class="mono" style="font-size:12px;opacity:.8">font/mono · JetBrains Mono</span><div class="big mono" style="letter-spacing:-0.02em">{ }</div><div class="weights mono" style="font-size:16px"><span>Regular 400</span><span style="font-weight:500">Medium 500</span></div></div>
+          </div>
+        </div>
+
+        <div class="block" id="y-scale">
+          <div class="block-head"><h3><span class="lt">Sca</span><b>le</b></h3><code>size / weight</code></div>
+          <div id="typeScale"></div>
+        </div>
+
+        <div class="block" id="y-pairing">
+          <div class="block-head"><h3><span class="lt">Pair</span><b>ing</b></h3><code>regras de uso</code></div>
+          <div class="dodont">
+            <div><span class="verdict">✓ FAÇA</span><div class="ex"><span class="lt">Design </span><b>Engineer</b></div><p style="font-size:14px;opacity:.85">Leve e negrito em palavras inteiras: a palavra-chave fica em negrito.</p></div>
+            <div><span class="verdict">✕ EVITE</span><div class="ex"><span class="lt">Cresci</span><b>mento</b></div><p style="font-size:14px;opacity:.85">Trocar o peso no meio da palavra: parece que ela não terminou.</p></div>
+            <div><span class="verdict">✓ FAÇA</span><div class="ex mono" style="font-size:22px;letter-spacing:.1em">ROLE 01 / 02</div><p style="font-size:14px;opacity:.85">Mono em caixa alta só para rótulos curtos, contadores e código.</p></div>
+            <div><span class="verdict">✕ EVITE</span><div class="ex mono" style="font-size:22px">Um parágrafo inteiro em mono</div><p style="font-size:14px;opacity:.85">Texto corrido sempre em DM Sans, com cerca de 65 caracteres por linha.</p></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="end ink">
+      <div class="in" style="max-width:1120px;padding-left:max(48px, env(safe-area-inset-left, 0px));padding-right:max(48px, env(safe-area-inset-right, 0px))">
+        <h2><span class="lt">IY </span><b>Lotus</b><span class="dot">.</span></h2>
+      </div>
+    </footer>
+  </main>
+</div>
+
+<script>
+(function () {
+  const root = document.documentElement;
+  const css = (name) => getComputedStyle(root).getPropertyValue(name).trim();
+
+  const lum = (hex) => {
+    const n = hex.replace('#', '');
+    const c = [0, 2, 4].map((i) => parseInt(n.slice(i, i + 2), 16) / 255)
+      .map((v) => (v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4));
+    return 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2];
+  };
+  const ratio = (a, b) => { const [x, y] = [lum(a), lum(b)].sort((p, q) => q - p); return (x + 0.05) / (y + 0.05); };
+  const grade = (r) => (r >= 4.5 ? ['AA', ''] : r >= 3 ? ['AA large', ''] : ['Fail', 'g-fail']);
+
+  // primitives: cor
+  const swatch = (fam, k) => {
+    const hex = css(`--${fam}-${k}`);
+    const fg = ratio(hex, '#FFFFFF') >= ratio(hex, '#141414') ? '#FFFFFF' : '#141414';
+    return `<div class="sw" style="background:${hex};color:${fg};box-shadow:inset 0 0 0 1px rgba(255,255,255,.06)"><b>${k}</b>${hex}</div>`;
+  };
+  document.getElementById('neutral').innerHTML = ['0', '50', '100', '200', '300', '400', '500', '600', '700', '750', '800', '850', '900', '950'].map((k) => swatch('neutral', k)).join('');
+  document.getElementById('red').innerHTML = ['50', '100', '300', '600', '700', '800'].map((k) => swatch('red', k)).join('');
+
+  // primitives: espaço
+  document.getElementById('spaces').innerHTML = [[1, 4], [2, 8], [3, 12], [4, 16], [6, 24], [8, 32], [12, 48], [16, 64], [24, 96], [32, 128]].map(([k, v]) =>
+    `<div class="space-row"><span>space/${k} · ${v}</span><i style="width:${(v / 128 * 100).toFixed(1)}%"></i></div>`).join('');
+
+  // tema: pares semânticos
+  const BG = { light: '#FFFFFF', dark: '#1C1C1C' };
+  const PAIRS = [
+    ['color/text/primary', '#141414', '#FFFFFF', null, 'Texto principal'],
+    ['color/text/secondary', '#6B6B6B', '#A8A8A8', null, 'Texto de apoio'],
+    ['color/text/accent', '#C8102E', '#E4637A', null, 'Destaque e links'],
+    ['color/action/accent', '#FFFFFF', '#FFFFFF', '#C8102E', 'Botão accent'],
+    ['color/feedback/danger', '#A80D27', '#E4637A', null, 'Mensagem de erro'],
+    ['color/icon/muted', '#8A8A8A', '#8A8A8A', null, 'Ícones e detalhes'],
+  ];
+  const cell = (fg, bg) => {
+    const r = ratio(fg, bg), [g, cls] = grade(r);
+    return `<td><span class="sample" style="background:${bg};color:${fg};box-shadow:inset 0 0 0 1px rgba(138,138,138,.4)">Aa</span><span class="ratio">${r.toFixed(1)}:1</span><span class="grade ${cls}">${g}</span></td>`;
+  };
+  document.getElementById('pairs').innerHTML = PAIRS.map(([name, l, d, fixed, use]) =>
+    `<tr><td><code>${name}</code></td>${cell(l, fixed || BG.light)}${cell(d, fixed || BG.dark)}<td style="color:var(--sub)">${use}</td></tr>`).join('');
+
+  // tipografia: escala
+  const TYPE = [
+    ['display', 170, 300, 'Lotus'], ['h1', 128, 700, 'Design Engineer'], ['h2', 84, 300, 'I design in pixels'],
+    ['h3', 58, 700, 'and ship in code.'], ['title', 34, 700, 'Design System'], ['body/lg', 18, 400, 'Crescimento, beleza, disciplina e sabedoria.'],
+    ['body', 16, 400, 'Cada componente nasce de tokens que já existem.'], ['caption', 14, 400, 'Atualizado na versão 0.1.0'],
+    ['label · mono', 12, 500, 'ROLE 01 / 02'], ['code · mono', 14, 400, 'font: 700 170px "DM Sans";'],
+  ];
+  document.getElementById('typeScale').innerHTML = TYPE.map(([n, s, w, ex]) => {
+    const mono = n.includes('mono');
+    return `<div class="type-row"><span class="spec">${n} · ${s} / ${w}</span><span class="ex" style="font-size:clamp(14px, ${(s / 14).toFixed(2)}vw, ${s}px);font-weight:${w};${mono ? 'font-family:var(--font-mono);letter-spacing:.06em' : ''}">${ex}</span></div>`;
+  }).join('');
+
+  // componentes: matriz de botões
+  const V = ['primary', 'accent', 'secondary', 'ghost', 'link'];
+  const S = [['default', ''], ['hover', 'is-hover'], ['pressed', 'is-pressed'], ['focus', 'is-focus'], ['disabled', 'dis'], ['loading', 'load']];
+  let m = '<span></span>' + S.map(([s]) => `<span class="h">${s}</span>`).join('');
+  V.forEach((v) => {
+    m += `<span class="h">${v}</span>`;
+    S.forEach(([, c]) => {
+      const dis = c === 'dis' ? ' disabled' : '';
+      const inner = c === 'load' ? '<span class="spin" aria-hidden="true"></span>Saving' : 'Button';
+      m += `<span><button type="button" class="btn ${v} ${c.startsWith('is-') ? c : ''}"${dis}${c === 'load' ? ' aria-busy="true"' : ''}>${inner}</button></span>`;
+    });
+  });
+  document.getElementById('btnMatrix').innerHTML = m;
+
+  // layouts: colunas do grid
+  [['gDesk', 12], ['gTab', 8], ['gMob', 4]].forEach(([id, n]) => { document.getElementById(id).innerHTML = '<i></i>'.repeat(n); });
+
+  // motion
+  const tracks = document.querySelectorAll('.track');
+  const size = () => tracks.forEach((t) => t.style.setProperty('--w', t.clientWidth + 'px'));
+  size(); addEventListener('resize', size);
+  document.getElementById('play').addEventListener('click', () => tracks.forEach((t) => t.classList.toggle('go')));
+
+  // tema
+  const themeSwitch = document.getElementById('themeSwitch');
+  const isDark = () => root.dataset.theme ? root.dataset.theme === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches;
+  const syncTheme = () => { themeSwitch.setAttribute('aria-checked', String(isDark())); document.getElementById('themeName').textContent = isDark() ? 'dark' : 'light'; };
+  syncTheme();
+  themeSwitch.addEventListener('click', () => { root.dataset.theme = isDark() ? 'light' : 'dark'; syncTheme(); });
+  matchMedia('(prefers-color-scheme: dark)').addEventListener('change', syncTheme);
+  new MutationObserver(syncTheme).observe(root, { attributes: true, attributeFilter: ['data-theme'] });
+  const sw2 = document.getElementById('sw2');
+  sw2.addEventListener('click', () => { const on = sw2.getAttribute('aria-checked') !== 'true'; sw2.setAttribute('aria-checked', String(on)); document.getElementById('sw2l').textContent = 'switch: ' + (on ? 'on' : 'off'); });
+
+  // barra lateral: marca a seção visível
+  const links = [...document.querySelectorAll('.nav > li > a')];
+  const sections = links.map((a) => document.querySelector(a.getAttribute('href')));
+  const setCurrent = () => {
+    const y = innerHeight * 0.35;
+    let cur = 0;
+    sections.forEach((s, i) => { if (s.getBoundingClientRect().top <= y) cur = i; });
+    links.forEach((a, i) => a.setAttribute('aria-current', String(i === cur)));
+  };
+  setCurrent();
+  addEventListener('scroll', setCurrent, { passive: true });
+
+  // abre a seção do link (#primitives, #theme…)
+  if (location.hash && document.querySelector(location.hash)) document.querySelector(location.hash).scrollIntoView();
+})();
+</script>

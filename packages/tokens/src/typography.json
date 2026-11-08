@@ -1,0 +1,16 @@
+{
+  "$description": "Type scale. Light/bold pairs work on whole words, never inside a word.",
+  "type": {
+    "$type": "typography",
+    "display": { "$value": { "fontFamily": "{font.family.sans}", "fontSize": "170px", "fontWeight": "{font.weight.light}", "lineHeight": 1, "letterSpacing": "-0.035em" } },
+    "h1": { "$value": { "fontFamily": "{font.family.sans}", "fontSize": "128px", "fontWeight": "{font.weight.bold}", "lineHeight": 1.02, "letterSpacing": "-0.035em" } },
+    "h2": { "$value": { "fontFamily": "{font.family.sans}", "fontSize": "84px", "fontWeight": "{font.weight.light}", "lineHeight": 1.02, "letterSpacing": "-0.03em" } },
+    "h3": { "$value": { "fontFamily": "{font.family.sans}", "fontSize": "58px", "fontWeight": "{font.weight.bold}", "lineHeight": 1.05, "letterSpacing": "-0.03em" } },
+    "title": { "$value": { "fontFamily": "{font.family.sans}", "fontSize": "34px", "fontWeight": "{font.weight.bold}", "lineHeight": 1.1, "letterSpacing": "-0.02em" } },
+    "body-lg": { "$value": { "fontFamily": "{font.family.sans}", "fontSize": "18px", "fontWeight": "{font.weight.regular}", "lineHeight": 1.55, "letterSpacing": "0em" } },
+    "body": { "$value": { "fontFamily": "{font.family.sans}", "fontSize": "16px", "fontWeight": "{font.weight.regular}", "lineHeight": 1.55, "letterSpacing": "0em" } },
+    "caption": { "$value": { "fontFamily": "{font.family.sans}", "fontSize": "14px", "fontWeight": "{font.weight.regular}", "lineHeight": 1.45, "letterSpacing": "0em" } },
+    "label": { "$value": { "fontFamily": "{font.family.mono}", "fontSize": "12px", "fontWeight": "{font.weight.medium}", "lineHeight": 1.4, "letterSpacing": "0.1em" } },
+    "code": { "$value": { "fontFamily": "{font.family.mono}", "fontSize": "14px", "fontWeight": "{font.weight.regular}", "lineHeight": 1.7, "letterSpacing": "0.02em" } }
+  }
+}
