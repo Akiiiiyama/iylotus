@@ -19,7 +19,7 @@ A component never uses a primitive directly. It always goes through a theme toke
 |---|---|---|
 | [`@iylotus/tokens`](packages/tokens) | Tokens in the W3C DTCG format, resolved to JSON and JavaScript | ready |
 | [`@iylotus/styles`](packages/styles) | CSS custom properties, light/dark themes, type classes, base styles | ready |
-| `@iylotus/react` | React + TypeScript components with Storybook | next |
+| [`@iylotus/react`](packages/react) | React + TypeScript components with Storybook | Button ready |
 | `@iylotus/figma-plugin` | Figma plugin that creates the variables, text styles and components from the tokens | next |
 
 ## Use
@@ -45,7 +45,8 @@ Without `data-theme`, the page follows the operating system.
 ```bash
 npm install
 npm run build   # tokens → JSON/JS → CSS
-npm test        # build + WCAG contrast checks for both themes
+npm test        # build + WCAG contrast checks + component tests
+npm run storybook   # component docs at http://localhost:6006
 ```
 
 The source of truth is [`packages/tokens/src`](packages/tokens/src). Edit the JSON there, then build. Everything in `dist/` is generated.

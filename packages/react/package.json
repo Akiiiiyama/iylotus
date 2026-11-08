@@ -1,0 +1,48 @@
+{
+  "name": "@iylotus/react",
+  "version": "0.0.0",
+  "description": "IY Lotus React components, built on @iylotus/styles.",
+  "type": "module",
+  "license": "MIT",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./styles.css": "./dist/styles.css"
+  },
+  "files": [
+    "dist"
+  ],
+  "sideEffects": [
+    "*.css"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json && node scripts/bundle-css.mjs",
+    "test": "node --test test/*.test.mjs",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build -o storybook-static"
+  },
+  "dependencies": {
+    "@iylotus/styles": "0.0.0"
+  },
+  "peerDependencies": {
+    "react": ">=18",
+    "react-dom": ">=18"
+  },
+  "devDependencies": {
+    "@storybook/addon-a11y": "^8.6.12",
+    "@storybook/addon-essentials": "^8.6.12",
+    "@storybook/react-vite": "^8.6.12",
+    "@types/react": "^19.1.2",
+    "@types/react-dom": "^19.1.2",
+    "@vitejs/plugin-react": "^4.4.1",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "storybook": "^8.6.12",
+    "typescript": "^5.8.3",
+    "vite": "^6.3.5"
+  }
+}

@@ -5,13 +5,15 @@
   "type": "module",
   "workspaces": [
     "packages/tokens",
-    "packages/styles"
+    "packages/styles",
+    "packages/react"
   ],
   "engines": {
     "node": ">=20"
   },
   "scripts": {
-    "build": "npm run build -w @iylotus/tokens && npm run build -w @iylotus/styles",
-    "test": "npm run build && npm test -w @iylotus/tokens"
+    "build": "npm run build -w @iylotus/tokens && npm run build -w @iylotus/styles && npm run build -w @iylotus/react",
+    "test": "npm run build && npm test -w @iylotus/tokens && npm test -w @iylotus/react",
+    "storybook": "npm run build -w @iylotus/tokens && npm run build -w @iylotus/styles && npm run storybook -w @iylotus/react"
   }
 }
