@@ -63,6 +63,16 @@ The source of truth is [`packages/tokens/src`](packages/tokens/src). Edit the JS
 | `space/4` | `--space-4` | `tokens.space['4']` |
 | `type/h2` | `.iy-type-h2` | `tokens.type.h2` |
 
+## Release
+
+Versions use [Changesets](https://github.com/changesets/changesets). `@iylotus/tokens`, `@iylotus/styles` and `@iylotus/react` always share the same version.
+
+1. In a PR, describe the change: `npm run changeset` (pick the packages and patch, minor or major).
+2. When the PR is merged, the **Release** workflow opens a "Version packages" PR with the new versions and changelogs.
+3. Merging that PR publishes to npm, with provenance.
+
+The workflow publishes only when the repository has the `NPM_TOKEN` secret (an npm automation token for the `iylotus` organization). Without it, it only runs the tests.
+
 ## License
 
 MIT
