@@ -49,9 +49,8 @@ export default async function Home({ params }: { params: Promise<{ lang: Lang }>
             <p className="hero__subtitle">{t.hero.subtitle}</p>
             <p className="hero__line"><Hl text={t.hero.line} /></p>
             <div className="actions">
-              <ButtonLink href="#work" variant="accent">{t.hero.ctaWork}</ButtonLink>
-              <ButtonLink href={LINKS.linkedin} variant="secondary" external>LinkedIn</ButtonLink>
-              <ButtonLink href={LINKS.github} variant="ghost" external>GitHub</ButtonLink>
+              <ButtonLink href={LINKS.linkedin} variant="accent" external>LinkedIn ↗</ButtonLink>
+              <ButtonLink href={LINKS.github} variant="secondary" external>GitHub ↗</ButtonLink>
             </div>
           </div>
         </section>
@@ -68,6 +67,12 @@ export default async function Home({ params }: { params: Promise<{ lang: Lang }>
                       <video className="project__video" src="/work/reel.mp4" poster="/work/reel.jpg" autoPlay muted loop playsInline />
                     ) : p.id === 'iylotus' ? (
                       <div className="art art--lotus"><span><span className="iy-lt">IY </span><span className="iy-bd">Lotus</span><span className="art__dot">.</span></span></div>
+                    ) : p.id === 'skills' ? (
+                      <div className="art art--skills">
+                        <span><b>/brand-motion-intro</b> <i>ready</i></span>
+                        <span>/accessibility-review <i>next</i></span>
+                        <span>/token-check <i>next</i></span>
+                      </div>
                     ) : p.id === 'site' ? (
                       <div className="art art--site"><span className="art__code">&lt;Button variant=&quot;accent&quot; /&gt;</span></div>
                     ) : (
@@ -122,16 +127,20 @@ export default async function Home({ params }: { params: Promise<{ lang: Lang }>
               <div className="about__bio">
                 {t.about.bio.map((b, i) => <p key={i}><Hl text={b} /></p>)}
               </div>
-              <aside className="about__side">
-                <h3 className="side__label">{t.about.keywordsLabel}</h3>
-                <div className="tags">{t.about.keywords.map((k) => <Tag key={k}>{k}</Tag>)}</div>
-                <h3 className="side__label">{t.about.stackLabel}</h3>
-                <dl className="stack">
-                  {t.about.stack.map((g) => (
-                    <div key={g.group} className="stack__row"><dt>{g.group}</dt><dd>{g.items.join(' · ')}</dd></div>
-                  ))}
-                </dl>
-              </aside>
+              <div className="about__more">
+                <div>
+                  <h3 className="side__label">{t.about.keywordsLabel}</h3>
+                  <div className="tags">{t.about.keywords.map((k) => <Tag key={k}>{k}</Tag>)}</div>
+                </div>
+                <div>
+                  <h3 className="side__label">{t.about.stackLabel}</h3>
+                  <dl className="stack">
+                    {t.about.stack.map((g) => (
+                      <div key={g.group} className="stack__row"><dt>{g.group}</dt><dd>{g.items.join(' · ')}</dd></div>
+                    ))}
+                  </dl>
+                </div>
+              </div>
             </div>
           </div>
         </section>

@@ -7,7 +7,7 @@ import { useEffect, useRef, useState } from 'react';
  * - a onda de luz (inspirada em "Wave Motion", nas cores Red Neon do IY Lotus) é desenhada num shader WebGL;
  * - um cursor de colaboração com a etiqueta "IY.", como no Figma, entra, clica e digita as frases;
  * - as frases são digitadas com o cursor de texto vermelho, em pares leve/negrito, com rótulos mono nos cantos;
- * - no fim, o cursor vira o ponto final de "Design Engineer.", o ponto viaja até o centro enquanto a onda
+ * - depois do nome vêm Strategy, Design e Engineering; o cursor vira o ponto final de "Engineering.", o ponto viaja até o centro enquanto a onda
  *   se recolhe nele, e se abre revelando a página.
  *
  * Toca só na primeira visita da sessão e nunca para quem pediu menos movimento (o script do layout decide,
@@ -21,11 +21,14 @@ type Phrase = { label: string; type: [number, number]; hold: number; parts: Part
 // Cada frase: quando digita (início, fim), até quando fica na tela, e o texto em pares leve/negrito.
 const PHRASES: Phrase[] = [
   { label: 'Hello', type: [0.4, 1.25], hold: 1.6, parts: [['Welcome to my website', 'iy-lt']] },
-  { label: 'Name', type: [1.75, 2.55], hold: 3.1, parts: [['I’m Isabela ', 'iy-lt'], ['Yukari', 'iy-bd']] },
-  { label: 'Role', type: [3.25, 3.85], hold: 4.55, parts: [['Design ', 'iy-lt'], ['Engineer', 'iy-bd']] },
+  { label: 'Name', type: [1.75, 2.55], hold: 3.05, parts: [['I’m Isabela ', 'iy-lt'], ['Yukari', 'iy-bd']] },
+  // as três palavras do meu trabalho, uma por batida
+  { label: 'Strategy', type: [3.15, 3.5], hold: 3.85, parts: [['Strategy', 'iy-lt']] },
+  { label: 'Design', type: [3.9, 4.15], hold: 4.5, parts: [['Design', 'iy-lt']] },
+  { label: 'Engineering', type: [4.55, 4.95], hold: 6.0, parts: [['Engineering', 'iy-bd']] },
 ];
-const DUR = 6.2;
-const T = { drawIn: [0.0, 0.8], toDot: [3.95, 4.2], collapse: [4.55, 5.1], reveal: [5.3, 6.2] } as const;
+const DUR = 7.1;
+const T = { drawIn: [0.0, 0.8], toDot: [5.0, 5.25], collapse: [5.55, 6.1], reveal: [6.25, 7.1] } as const;
 
 // Red Neon: cada lâmina passa de uma cor para outra ao longo do comprimento, como o azul ↔ lilás da referência.
 const SHEETS = [
@@ -219,7 +222,7 @@ export function Opening({ skipLabel }: { skipLabel: string }) {
       const str = typed(ph.parts, n);
       if (text.innerHTML !== str) text.innerHTML = str;
       label.textContent = ph.label;
-      counter.textContent = `0${i + 1} / 03`;
+      counter.textContent = `0${i + 1} / 0${PHRASES.length}`;
 
       // cursor: pisca parado, fica aceso enquanto digita; na última frase vira o ponto final
       const typing = t >= ph.type[0] && t <= ph.type[1];
@@ -289,7 +292,7 @@ export function Opening({ skipLabel }: { skipLabel: string }) {
   return (
     <div ref={rootRef} className="opening" data-theme="dark" aria-hidden={!active}>
       <canvas ref={canvasRef} className="opening__canvas" />
-      <div className="opening__labels"><span ref={labelRef}>Hello</span><span ref={counterRef}>01 / 03</span></div>
+      <div className="opening__labels"><span ref={labelRef}>Hello</span><span ref={counterRef}>01 / 05</span></div>
       <p className="opening__caption" aria-live="polite">
         <span ref={textRef} />
         <span ref={caretRef} className="opening__caret" aria-hidden="true" />

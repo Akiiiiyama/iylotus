@@ -6,8 +6,9 @@ export type Lang = (typeof LANGS)[number];
 
 export const LINKS = {
   github: 'https://github.com/Akiiiiyama',
-  // TODO: trocar pelo endereço do perfil da Isabela no LinkedIn.
-  linkedin: 'https://www.linkedin.com/',
+  linkedin: 'https://www.linkedin.com/in/isabelayukari',
+  cv: '/cv/isabela-yukari-cv.pdf',
+  skills: 'https://github.com/Akiiiiyama/skills-para-designers',
   iylotus: 'https://github.com/Akiiiiyama/iylotus',
   skill: 'https://github.com/Akiiiiyama/skills-para-designers/tree/main/skills/brand-motion-intro',
   pilulas: 'https://github.com/Akiiiiyama/pilulas-ia',
@@ -17,7 +18,7 @@ export const LINKS = {
 export type Highlight = { a: string; hl?: string; b?: string };
 
 type Project = {
-  id: 'iylotus' | 'site' | 'skill' | 'pilulas';
+  id: 'iylotus' | 'site' | 'skill' | 'skills' | 'pilulas';
   tag: string;
   title: [string, string];
   body: string;
@@ -29,11 +30,11 @@ type Project = {
 type Job = { years: string; org: string; role: string; work: string };
 
 export type Dict = {
-  nav: { work: string; experience: string; about: string; contact: string };
+  nav: { work: string; experience: string; about: string; contact: string; cv: string; cvLabel: string };
   theme: string;
   langSwitch: string;
   skip: string;
-  hero: { label: string; counter: string; subtitle: string; line: Highlight; ctaWork: string };
+  hero: { label: string; counter: string; subtitle: string; line: Highlight };
   work: { label: string; title: [string, string]; lede: string; projects: Project[] };
   experience: { label: string; title: [string, string]; lede: string; jobs: Job[]; cta: string; ctaButton: string };
   about: { label: string; title: [string, string]; bio: Highlight[]; keywordsLabel: string; keywords: string[]; stackLabel: string; stack: { group: string; items: string[] }[] };
@@ -50,7 +51,7 @@ const STACK_ITEMS = {
 
 export const dict: Record<Lang, Dict> = {
   en: {
-    nav: { work: 'Work', experience: 'Experience', about: 'About', contact: 'Contact' },
+    nav: { work: 'Work', experience: 'Experience', about: 'About', contact: 'Contact', cv: 'CV', cvLabel: 'Download my CV (PDF)' },
     theme: 'Dark mode',
     langSwitch: 'Português',
     skip: 'Skip intro',
@@ -59,7 +60,6 @@ export const dict: Record<Lang, Dict> = {
       counter: '00 / 05',
       subtitle: 'I design in pixels and ship in code.',
       line: { a: 'Senior Design Engineer with ', hl: '10+ years across design and engineering', b: ', building digital products. Currently at Itaú Unibanco, the largest bank in Latin America.' },
-      ctaWork: 'See the work',
     },
     work: {
       label: 'Work',
@@ -69,6 +69,7 @@ export const dict: Record<Lang, Dict> = {
         { id: 'iylotus', tag: 'Design system', title: ['IY ', 'Lotus'], body: 'My design system. Tokens in four layers, from root to bloom, light and dark themes checked for WCAG contrast, and React components documented in Storybook.', meta: 'Figma · Tokens · React · npm', href: LINKS.iylotus, cta: 'View on GitHub' },
         { id: 'site', tag: 'This website', title: ['Built with ', 'Lotus'], body: 'The first product made with IY Lotus. Next.js and React, a WebGL intro that runs at 60 fps, English and Portuguese, light and dark.', meta: 'Next.js · WebGL · TypeScript', href: LINKS.iylotus, cta: 'View the code' },
         { id: 'skill', tag: 'AI tooling', title: ['Motion in ', 'code'], body: 'A Claude Code skill that turns one sentence, a design system and a music track into a motion video, with every cut on the beat.', meta: 'Claude Code · Skill · Motion', href: LINKS.skill, cta: 'See the skill' },
+        { id: 'skills', tag: 'Open source', title: ['Skills for ', 'designers'], body: 'A growing library of Claude Code skills that help designers ship better UI with AI. The first one makes motion videos; accessibility review and token checks are next.', meta: 'Claude Code · Skills · GitHub', href: LINKS.skills, cta: 'See the library' },
         { id: 'pilulas', tag: 'Writing', title: ['AI ', 'pills'], body: 'Short guides for designers on prompts, agents and AI-made motion, in Portuguese and English.', meta: 'Guides · PT / EN', href: LINKS.pilulas, cta: 'Read the guides' },
       ],
     },
@@ -113,7 +114,7 @@ export const dict: Record<Lang, Dict> = {
     replay: 'Replay intro',
   },
   pt: {
-    nav: { work: 'Projetos', experience: 'Experiência', about: 'Sobre', contact: 'Contato' },
+    nav: { work: 'Projetos', experience: 'Experiência', about: 'Sobre', contact: 'Contato', cv: 'CV', cvLabel: 'Baixar meu currículo (PDF)' },
     theme: 'Modo escuro',
     langSwitch: 'English',
     skip: 'Pular abertura',
@@ -122,7 +123,6 @@ export const dict: Record<Lang, Dict> = {
       counter: '00 / 05',
       subtitle: 'Desenho em pixels e entrego em código.',
       line: { a: 'Senior Design Engineer com ', hl: '+10 anos entre design e engenharia', b: ', construindo produtos digitais. Hoje no Itaú Unibanco, o maior banco da América Latina.' },
-      ctaWork: 'Ver projetos',
     },
     work: {
       label: 'Projetos',
@@ -132,6 +132,7 @@ export const dict: Record<Lang, Dict> = {
         { id: 'iylotus', tag: 'Design system', title: ['IY ', 'Lotus'], body: 'Meu design system. Tokens em quatro camadas, da raiz ao florescer, temas claro e escuro com contraste WCAG verificado e componentes React documentados no Storybook.', meta: 'Figma · Tokens · React · npm', href: LINKS.iylotus, cta: 'Ver no GitHub' },
         { id: 'site', tag: 'Este site', title: ['Feito com ', 'Lotus'], body: 'O primeiro produto feito com o IY Lotus. Next.js e React, uma abertura em WebGL a 60 quadros por segundo, português e inglês, claro e escuro.', meta: 'Next.js · WebGL · TypeScript', href: LINKS.iylotus, cta: 'Ver o código' },
         { id: 'skill', tag: 'Ferramenta de IA', title: ['Motion em ', 'código'], body: 'Uma skill do Claude Code que transforma uma frase, um design system e uma música num vídeo de motion, com cada corte na batida.', meta: 'Claude Code · Skill · Motion', href: LINKS.skill, cta: 'Ver a skill' },
+        { id: 'skills', tag: 'Código aberto', title: ['Skills para ', 'designers'], body: 'Uma biblioteca de skills do Claude Code que ajudam designers a entregar interfaces melhores com IA. A primeira faz vídeos de motion; revisão de acessibilidade e checagem de tokens vêm a seguir.', meta: 'Claude Code · Skills · GitHub', href: LINKS.skills, cta: 'Ver a biblioteca' },
         { id: 'pilulas', tag: 'Escrita', title: ['Pílulas de ', 'IA'], body: 'Guias curtos para designers sobre prompts, agentes e motion feito com IA, em português e inglês.', meta: 'Guias · PT / EN', href: LINKS.pilulas, cta: 'Ler os guias' },
       ],
     },
