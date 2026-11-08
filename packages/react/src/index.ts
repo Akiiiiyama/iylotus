@@ -17,3 +17,13 @@ export { Radio, RadioGroup } from './Radio/Radio.js';
 export type { RadioProps, RadioGroupProps } from './Radio/Radio.js';
 export { Switch } from './Switch/Switch.js';
 export type { SwitchProps } from './Switch/Switch.js';
+
+export { Tag } from './Tag/Tag.js';
+export { Badge } from './Badge/Badge.js';
+export type { BadgeProps, BadgeTone } from './Badge/Badge.js';
+export { Avatar } from './Avatar/Avatar.js';
+export type { AvatarProps, AvatarSize } from './Avatar/Avatar.js';
+export { Link } from './Link/Link.js';
+export type { LinkProps } from './Link/Link.js';
+export { Divider } from './Divider/Divider.js';
+export type { DividerProps } from './Divider/Divider.js';
