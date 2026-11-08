@@ -153,6 +153,7 @@ export default async function Home({ params }: { params: Promise<{ lang: Lang }>
       <footer className="band band--grid footer" data-theme="dark">
         <div className="in footer__in">
           <span>{t.footer}</span>
+          <a href="?intro" className="footer__replay">{t.replay} ↺</a>
           <span>05 / 05</span>
         </div>
       </footer>

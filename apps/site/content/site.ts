@@ -39,6 +39,7 @@ export type Dict = {
   about: { label: string; title: [string, string]; bio: Highlight[]; keywordsLabel: string; keywords: string[]; stackLabel: string; stack: { group: string; items: string[] }[] };
   contact: { label: string; title: [string, string]; body: string; linkedin: string; github: string };
   footer: string;
+  replay: string;
 };
 
 const STACK_ITEMS = {
@@ -109,6 +110,7 @@ export const dict: Record<Lang, Dict> = {
       github: 'GitHub',
     },
     footer: 'Designed and built by Isabela Yukari with IY Lotus.',
+    replay: 'Replay intro',
   },
   pt: {
     nav: { work: 'Projetos', experience: 'Experiência', about: 'Sobre', contact: 'Contato' },
@@ -171,5 +173,6 @@ export const dict: Record<Lang, Dict> = {
       github: 'GitHub',
     },
     footer: 'Desenhado e construído por Isabela Yukari com o IY Lotus.',
+    replay: 'Rever abertura',
   },
 };

@@ -145,6 +145,9 @@ h1, h2 { text-wrap: balance; letter-spacing: -0.035em; line-height: 1; }
 .footer { padding-block: 28px; border-top: 1px solid rgba(255, 255, 255, 0.1); }
 .footer__in { display: flex; justify-content: space-between; gap: var(--space-4); flex-wrap: wrap; font: 400 12px var(--font-family-mono); letter-spacing: 0.06em; color: var(--color-text-secondary); }
 
+.footer__replay { color: inherit; text-decoration: underline; text-decoration-color: var(--color-action-accent); text-underline-offset: 4px; }
+.footer__replay:hover { color: var(--color-text-primary); }
+
 /* ---------- abertura ---------- */
 .opening { position: fixed; inset: 0; z-index: 100; display: none; background: #141414; }
 html.is-opening .opening { display: block; }
