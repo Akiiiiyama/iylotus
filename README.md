@@ -21,6 +21,7 @@ A component never uses a primitive directly. It always goes through a theme toke
 | [`@iylotus/styles`](packages/styles) | CSS custom properties, light/dark themes, type classes, base styles | ready |
 | [`@iylotus/react`](packages/react) | React + TypeScript components with Storybook | v1 components ready |
 | `@iylotus/figma-plugin` | Figma plugin that creates the variables, text styles and components from the tokens | next |
+| [`site`](apps/site) | Isabela Yukari's website, the first product built with IY Lotus (Next.js) | in progress |
 
 ## Use
 

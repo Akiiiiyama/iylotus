@@ -6,7 +6,8 @@
   "workspaces": [
     "packages/tokens",
     "packages/styles",
-    "packages/react"
+    "packages/react",
+    "apps/site"
   ],
   "engines": {
     "node": ">=20"
@@ -14,6 +15,8 @@
   "scripts": {
     "build": "npm run build -w @iylotus/tokens && npm run build -w @iylotus/styles && npm run build -w @iylotus/react",
     "test": "npm run build && npm test -w @iylotus/tokens && npm test -w @iylotus/react",
-    "storybook": "npm run build -w @iylotus/tokens && npm run build -w @iylotus/styles && npm run storybook -w @iylotus/react"
+    "storybook": "npm run build -w @iylotus/tokens && npm run build -w @iylotus/styles && npm run storybook -w @iylotus/react",
+    "dev": "npm run build && npm run dev -w site",
+    "build:site": "npm run build && npm run build -w site"
   }
 }

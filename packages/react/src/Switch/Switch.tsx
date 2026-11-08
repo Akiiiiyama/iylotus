@@ -1,3 +1,5 @@
+'use client';
+
 import { forwardRef, useState, type ButtonHTMLAttributes, type ReactNode } from 'react';
 
 export interface SwitchProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'onChange' | 'value'> {
