@@ -4,6 +4,7 @@ import { DM_Sans, JetBrains_Mono } from 'next/font/google';
 import '@iylotus/styles';
 import '@iylotus/react/styles.css';
 import '../globals.css';
+import { Analytics } from '@vercel/analytics/next';
 import { LANGS, type Lang } from '@/content/site';
 
 // As fontes do IY Lotus, servidas pelo próprio Next (sem pedir nada ao Google no navegador).
@@ -33,7 +34,11 @@ export default async function RootLayout({ children, params }: { children: React
       <head>
         <script dangerouslySetInnerHTML={{ __html: BOOT }} />
       </head>
-      <body>{children}</body>
+      <body>
+        {children}
+        {/* contador de visitantes da Vercel: sem cookies, os números ficam no painel do projeto */}
+        <Analytics />
+      </body>
     </html>
   );
 }
