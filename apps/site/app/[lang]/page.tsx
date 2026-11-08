@@ -3,6 +3,7 @@ import { dict, type Lang, type Highlight, LINKS } from '@/content/site';
 import { Header } from '@/components/Header';
 import { Opening } from '@/components/Opening';
 import { SectionHead } from '@/components/SectionHead';
+import { LotusBloom } from '@/components/LotusBloom';
 
 // Página única: abertura → hero → projetos → experiência → sobre → contato.
 // Cada seção é uma "cena" com cor própria, como os cortes do reel.
@@ -66,7 +67,7 @@ export default async function Home({ params }: { params: Promise<{ lang: Lang }>
                     {p.id === 'skill' ? (
                       <video className="project__video" src="/work/reel.mp4" poster="/work/reel.jpg" autoPlay muted loop playsInline />
                     ) : p.id === 'iylotus' ? (
-                      <div className="art art--lotus"><span><span className="iy-lt">IY </span><span className="iy-bd">Lotus</span><span className="art__dot">.</span></span></div>
+                      <div className="art art--lotus"><LotusBloom /><span className="art__wordmark"><span className="iy-lt">IY </span><span className="iy-bd">Lotus</span><span className="art__dot">.</span></span></div>
                     ) : p.id === 'skills' ? (
                       <div className="art art--skills">
                         <span><b>/brand-motion-intro</b> <i>ready</i></span>

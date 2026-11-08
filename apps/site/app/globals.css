@@ -26,6 +26,7 @@ h1, h2 { text-wrap: balance; letter-spacing: -0.035em; line-height: 1; }
 
 /* ---------- header flutuante: dois painéis soltos do topo ---------- */
 .topbar {
+  transition: opacity 0.6s var(--ease-out);
   position: fixed; z-index: 50; left: 0; right: 0; top: calc(16px + env(safe-area-inset-top, 0px));
   display: flex; justify-content: space-between; align-items: center; gap: var(--space-3);
   padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
@@ -106,15 +107,33 @@ h1, h2 { text-wrap: balance; letter-spacing: -0.035em; line-height: 1; }
 .projects { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-6); }
 @media (max-width: 860px) { .projects { grid-template-columns: 1fr; } }
 .project { text-decoration: none; color: inherit; }
-/* IY Lotus em destaque: ocupa a linha inteira, com a imagem ao lado do texto */
-.project--iylotus { grid-column: 1 / -1; display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); }
-.project--iylotus .project__media { aspect-ratio: auto; min-height: 320px; }
+/* IY Lotus em destaque: ocupa a linha inteira, imagem em cima e texto embaixo, como os outros cards */
+.project--iylotus { grid-column: 1 / -1; }
+.project--iylotus .project__media { aspect-ratio: 21 / 9; }
+@media (max-width: 860px) { .project--iylotus .project__media { aspect-ratio: 4 / 3; } }
+.project__media { aspect-ratio: auto; min-height: 320px; }
 @media (max-width: 860px) { .project--iylotus { display: flex; } .project--iylotus .project__media { aspect-ratio: 16 / 9; min-height: 0; } }
 .project__media { aspect-ratio: 16 / 9; overflow: hidden; }
 .project__video { width: 100%; height: 100%; object-fit: cover; display: block; }
 .project__body { font-size: 16px; line-height: 1.55; opacity: 0.85; }
 .art { width: 100%; height: 100%; display: grid; place-items: center; }
-.art--lotus { background: #141414; color: #FFFFFF; font-size: clamp(44px, 6vw, 80px); letter-spacing: -0.04em; }
+.art--lotus { background: #141414; color: #FFFFFF; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: var(--space-4); }
+.art__wordmark { font-size: clamp(32px, 4vw, 56px); letter-spacing: -0.04em; line-height: 1; }
+/* a flor de lótus abrindo: cada pétala gira a partir da base, das do meio para as de fora */
+.lotus { width: clamp(140px, 18vw, 240px); height: auto; overflow: visible; }
+.lotus__petal {
+  fill: none; stroke: #FFFFFF; stroke-width: 2.2; stroke-linejoin: round;
+  transform-box: view-box; transform-origin: 100px 112px;
+  transform: rotate(0deg) scale(calc(var(--s) * 0.55), 0.35); opacity: 0.4;
+  transition: transform 1.1s var(--ease-out) var(--d), opacity 0.6s var(--ease-out) var(--d);
+}
+.lotus.is-open .lotus__petal { transform: rotate(var(--a)) scale(var(--s)); opacity: 1; }
+.lotus__dot { fill: var(--color-red-600); transform-box: view-box; transform-origin: 100px 124px; transform: scale(0); transition: transform 0.6s var(--ease-out) 0.35s; }
+.lotus.is-open .lotus__dot { transform: scale(1); }
+@media (prefers-reduced-motion: reduce) {
+  .lotus__petal { transform: rotate(var(--a)) scale(var(--s)); opacity: 1; transition: none; }
+  .lotus__dot { transform: scale(1); transition: none; }
+}
 .art__dot { color: var(--color-red-600); font-weight: 700; }
 .art--skills { background: #141414; color: #A8A8A8; display: flex; flex-direction: column; justify-content: center; gap: 10px; padding: 0 12%; font: 400 clamp(13px, 1.4vw, 16px) var(--font-family-mono); }
 .art--skills b { color: #FFFFFF; font-weight: 500; }
@@ -165,28 +184,39 @@ h1, h2 { text-wrap: balance; letter-spacing: -0.035em; line-height: 1; }
 .footer__replay { color: inherit; text-decoration: underline; text-decoration-color: var(--color-action-accent); text-underline-offset: 4px; }
 .footer__replay:hover { color: var(--color-text-primary); }
 
-/* ---------- abertura ---------- */
-.opening { position: fixed; inset: 0; z-index: 100; display: none; background: #141414; }
+/* ---------- abertura: tipografia cinética, cenas de cor com cortes secos ---------- */
+.opening { position: fixed; inset: 0; z-index: 100; display: none; overflow: hidden; color: #FFFFFF; }
 html.is-opening .opening { display: block; }
 html.is-opening body { overflow: hidden; }
-.opening__canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
-.opening__dot { position: fixed; display: none; border-radius: 50%; background: var(--color-red-600); }
-.opening__labels {
-  position: absolute; top: calc(28px + env(safe-area-inset-top, 0px)); left: max(24px, env(safe-area-inset-left, 0px)); right: max(24px, env(safe-area-inset-right, 0px));
-  display: flex; justify-content: space-between; font: 400 13px var(--font-family-mono); letter-spacing: 0.08em; text-transform: uppercase; color: #A8A8A8;
+html.is-opening .topbar { opacity: 0; }
+.op-bg { position: absolute; inset: 0; background: #141414; }
+.op-scene { position: absolute; inset: 0; display: grid; place-items: center; visibility: hidden; overflow: hidden; }
+.op-s1 { background: #141414; }
+.op-s2 { background: var(--color-red-600); }
+.op-s3 { background: #F2F2F2; color: #141414; place-items: start center; }
+.op-s4 { background: #141414; }
+.op-s5 { background: transparent; }
+/* palavras grandes, negrito, caixa alta e tracking apertado, como na referência */
+.op-word, .op-stack, .op-item, .op-giant {
+  margin: 0; font-weight: 700; text-transform: uppercase; letter-spacing: -0.05em; line-height: 0.88; white-space: nowrap;
 }
-/* frase digitada no estilo do reel: leve/negrito e o cursor vermelho que vira ponto final */
-.opening__caption {
-  position: absolute; left: 0; right: 0; top: 72%; text-align: center; color: #FFFFFF; white-space: nowrap;
-  font-size: clamp(30px, 5.2vw, 76px); letter-spacing: -0.035em; line-height: 1;
-  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+.op-word { font-size: clamp(64px, 15vw, 240px); }
+.op-stack { display: flex; flex-direction: column; align-items: center; font-size: clamp(56px, 13vw, 210px); }
+.op-mask { display: block; overflow: hidden; padding: 0 0.06em 0.06em; }
+.op-mask > span { display: block; }
+.op-col { position: absolute; left: 0; right: 0; top: 0; will-change: transform; }
+.op-item { text-align: center; font-size: clamp(56px, 12vw, 190px); padding-block: 0.04em; color: #CFCFCF; }
+.op-item.is-on { color: #141414; }
+.op-item.is-on::after { content: "."; color: var(--color-red-600); }
+.op-giant { font-size: clamp(120px, 30vw, 460px); will-change: transform; }
+.op-giant span { color: var(--color-red-600); }
+.op-im { position: absolute; top: 34%; left: 0; right: 0; text-align: center; margin: 0; font-size: clamp(24px, 3vw, 40px); font-weight: 300; letter-spacing: -0.02em; }
+/* o nome usa a mesma classe do título do hero: mesmo tamanho, mesma quebra de linha */
+.op-name { position: fixed; margin: 0; color: #FFFFFF; will-change: transform; }
+.op-mask--name { padding: 0 0.04em 0.12em; margin: 0 -0.04em -0.12em; }
+.op-side {
+  position: absolute; left: max(20px, env(safe-area-inset-left, 0px)); bottom: calc(28px + env(safe-area-inset-bottom, 0px));
+  margin: 0; writing-mode: vertical-rl; transform: rotate(180deg); mix-blend-mode: difference;
+  font: 500 12px var(--font-family-mono); letter-spacing: 0.14em; text-transform: uppercase; color: #FFFFFF;
 }
-.opening__caret { display: inline-block; vertical-align: baseline; background: var(--color-red-600); width: 0.06em; height: 0.8em; margin-left: 0.04em; }
-@media (max-width: 520px) { .opening__caption { white-space: normal; } }
-.opening__pointer { position: fixed; left: 0; top: 0; transform-origin: 2px 2px; will-change: transform; pointer-events: none; }
-.opening__pointer svg { display: block; filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.4)); }
-.opening__pointer-tag {
-  position: absolute; left: 16px; top: 20px; padding: 4px 9px; border-radius: 999px 999px 999px 4px;
-  background: var(--color-red-600); color: #FFFFFF; font: 700 13px var(--font-family-sans); letter-spacing: -0.01em; white-space: nowrap;
-}
-.opening__skip { position: absolute; right: max(24px, env(safe-area-inset-right, 0px)); bottom: calc(24px + env(safe-area-inset-bottom, 0px)); }
+.opening__skip { position: absolute; right: max(24px, env(safe-area-inset-right, 0px)); bottom: calc(24px + env(safe-area-inset-bottom, 0px)); mix-blend-mode: difference; }

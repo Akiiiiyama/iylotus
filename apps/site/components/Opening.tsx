@@ -3,40 +3,29 @@
 import { useEffect, useRef, useState } from 'react';
 
 /**
- * Abertura do site, na linguagem do reel Design Engineer:
- * - a onda de luz (inspirada em "Wave Motion", nas cores Red Neon do IY Lotus) é desenhada num shader WebGL;
- * - um cursor de colaboração com a etiqueta "IY.", como no Figma, entra, clica e digita as frases;
- * - as frases são digitadas com o cursor de texto vermelho, em pares leve/negrito, com rótulos mono nos cantos;
- * - depois do nome vêm Strategy, Design e Engineering; o cursor vira o ponto final de "Engineering.", o ponto viaja até o centro enquanto a onda
- *   se recolhe nele, e se abre revelando a página.
+ * Abertura do site em tipografia cinética (inspirada em "JustType & Motion", Studio Size), nas cores do IY Lotus.
+ * As palavras passam em cenas de cor com cortes secos; no fim, "Isabela Yukari." aparece no tamanho do título
+ * e desliza até o lugar exato do título do hero, enquanto a página surge em volta. Sem corte: o título da
+ * página é o mesmo texto que acabou de chegar.
  *
- * Toca só na primeira visita da sessão e nunca para quem pediu menos movimento (o script do layout decide,
- * antes da página aparecer, colocando a classe `is-opening` no <html>).
- * TODO (voz): quando a gravação existir, tocar o áudio a partir de um clique em "Enter" e ligar `voice()` ao volume real.
+ * Cenas (segundos):
+ *   0.00 WELCOME            preto, a palavra bate na tela
+ *   0.55 TO MY WEBSITE      painel vermelho sobe como cortina
+ *   1.15 STRATEGY…          branco, coluna de palavras rola e para em ENGINEERING
+ *   2.35 IY                 preto, as letras atravessam a câmera
+ *   2.85 I'm Isabela Yukari. o nome sobe da máscara
+ *   3.55 → 4.45             o nome desliza até o hero e a página aparece
+ *
+ * Toca na primeira visita da aba (ou sempre com ?intro). Quem pediu menos movimento vê a página direto.
+ * TODO (voz): quando a gravação existir, tocar o áudio a partir de um clique e alinhar as cenas às palavras.
  */
 
-type Part = [text: string, cls: 'iy-lt' | 'iy-bd'];
-type Phrase = { label: string; type: [number, number]; hold: number; parts: Part[] };
-
-// Cada frase: quando digita (início, fim), até quando fica na tela, e o texto em pares leve/negrito.
-const PHRASES: Phrase[] = [
-  { label: 'Hello', type: [0.4, 1.25], hold: 1.6, parts: [['Welcome to my website', 'iy-lt']] },
-  { label: 'Name', type: [1.75, 2.55], hold: 3.05, parts: [['I’m Isabela ', 'iy-lt'], ['Yukari', 'iy-bd']] },
-  // as três palavras do meu trabalho, uma por batida
-  { label: 'Strategy', type: [3.15, 3.5], hold: 3.85, parts: [['Strategy', 'iy-lt']] },
-  { label: 'Design', type: [3.9, 4.15], hold: 4.5, parts: [['Design', 'iy-lt']] },
-  { label: 'Engineering', type: [4.55, 4.95], hold: 6.0, parts: [['Engineering', 'iy-bd']] },
-];
-const DUR = 7.1;
-const T = { drawIn: [0.0, 0.8], toDot: [5.0, 5.25], collapse: [5.55, 6.1], reveal: [6.25, 7.1] } as const;
-
-// Red Neon: cada lâmina passa de uma cor para outra ao longo do comprimento, como o azul ↔ lilás da referência.
-const SHEETS = [
-  { c1: [255, 45, 85], c2: [255, 143, 163], a: 1.25, amp: 1.0, wid: 0.13, f: [2.2, 3.9], sp: [1.0, -0.65], ph: 0.0, tw: [4.6, 0.9] },
-  { c1: [200, 16, 46], c2: [255, 45, 85], a: 1.4, amp: 0.85, wid: 0.11, f: [1.8, 4.6], sp: [-0.85, 0.75], ph: 1.9, tw: [5.4, -1.1] },
-  { c1: [255, 143, 163], c2: [255, 255, 255], a: 0.8, amp: 0.6, wid: 0.09, f: [2.6, 3.3], sp: [-1.15, 0.55], ph: 5.1, tw: [6.2, -0.8] },
-];
-const EXPOSURE = 2.2, WHITE = 0.3;
+const DUR = 4.45;
+const T = {
+  welcome: [0.0, 0.55], toMy: [0.55, 1.15], ticker: [1.15, 2.35], iy: [2.35, 2.85], name: [2.85, 3.55], handoff: [3.55, 4.45],
+} as const;
+const TICKER = ['Strategy', 'Design', 'Engineering', 'Strategy', 'Design', 'Engineering', 'Strategy', 'Design', 'Engineering'];
+const TICKER_STOP = 5; // para no segundo "Engineering"
 
 const clamp = (v: number, a = 0, b = 1) => Math.min(b, Math.max(a, v));
 const prog = (t: number, a: number, b: number) => clamp((t - a) / (b - a));
@@ -55,91 +44,11 @@ function bez(x1: number, y1: number, x2: number, y2: number) {
     return 3 * y1 * t * (1 - t) ** 2 + 3 * y2 * t * t * (1 - t) + t ** 3;
   };
 }
-const OUT = bez(0.16, 1, 0.3, 1), INOUT = bez(0.7, 0, 0.2, 1);
-const blink = (t: number) => Math.floor(t / 0.265) % 2 === 0;
-
-// Envelope de "voz" simulado: sílabas (~4 por segundo) enquanto cada frase é digitada e logo depois.
-function voice(t: number) {
-  let v = 0;
-  for (const p of PHRASES) {
-    const [a, b] = p.type;
-    if (t < a - 0.2 || t > b + 0.45) continue;
-    const gate = prog(t, a - 0.15, a + 0.1) * (1 - prog(t, b + 0.05, b + 0.45));
-    const syl = 0.55 + 0.45 * Math.abs(Math.sin((t - a) * Math.PI * 4.1)) * (0.7 + 0.3 * Math.sin((t - a) * 9.3));
-    v = Math.max(v, gate * syl);
-  }
-  return v;
-}
-
-/** Texto digitado até `n` caracteres, mantendo o par leve/negrito. */
-function typed(parts: Part[], n: number) {
-  let left = n, html = '';
-  for (const [s, c] of parts) {
-    const k = Math.max(0, Math.min(s.length, left));
-    left -= k;
-    if (k) html += `<span class="${c}">${s.slice(0, k)}</span>`;
-  }
-  return html;
-}
-
-const VS = 'attribute vec2 p; void main(){ gl_Position = vec4(p, 0.0, 1.0); }';
-const FS = `
-precision highp float;
-uniform vec2 uRes; uniform float uT, uAmp, uHalf, uCy, uK, uExp, uWhite;
-uniform vec3 uC1[3]; uniform vec3 uC2[3]; uniform float uA[3], uAmpS[3], uWid[3], uPh[3];
-uniform vec2 uF[3], uSp[3], uTw[3];
-void main() {
-  vec2 p = vec2(gl_FragCoord.x, uRes.y - gl_FragCoord.y);
-  vec3 col = vec3(0.0);
-  float x0 = uRes.x * 0.5 - uHalf;
-  float uRaw = (p.x - x0) / max(2.0 * uHalf, 1.0);
-  float u = clamp(uRaw, 0.0, 1.0);
-  float outside = max(0.0, max(-uRaw, uRaw - 1.0)) * 2.0 * uHalf;
-  if (uHalf > 0.5 && outside < 200.0 && abs(p.y - uCy) < uRes.y * 0.36) {
-    // pontas afinam como na referência: a onda se abre no meio e termina em ponto de luz
-    float env = pow(sin(3.14159265 * u), 1.6);
-    // nós: pontos em que todas as lâminas se cruzam e afinam, formando os "X" da referência
-    float sn = sin(3.14159265 * (1.65 * u + 0.12 + 0.05 * sin(uT * 0.5)));
-    float node = 0.22 + 0.78 * sn * sn;
-    float e2 = env * node;
-    float tt = uT * 0.8;
-    for (int i = 0; i < 3; i++) {
-      float c = (sin(u * uF[i].x + tt * uSp[i].x + uPh[i]) * 0.62 + sin(u * uF[i].y + tt * uSp[i].y + uPh[i] * 1.7) * 0.38) * uAmpS[i] * 0.19 * uAmp;
-      float w = sin(u * uTw[i].x + tt * uTw[i].y + uPh[i]) * uWid[i] * (0.6 + 0.4 * uAmp);
-      float yc = uCy + mix(env, e2, 0.5) * uRes.y * c * 1.6;
-      float hw = abs(e2 * uRes.y * w) * uK;
-      float dy = abs(p.y - yc);
-      float d = length(vec2(abs(dy - hw), outside));
-      vec3 hue = mix(uC1[i], uC2[i], 0.5 + 0.5 * sin(u * 2.4 + uT * 0.6 + uPh[i]));
-      // como na referência: a lâmina é uma faixa de luz acetinada. Uma borda é o fio branco e aceso, a outra é macia,
-      // e o lado aceso troca quando a lâmina torce. O miolo tem cor, clareando em direção à borda acesa.
-      float bright = (p.y < yc) == (w > 0.0) ? 1.0 : 0.0;
-      float edgeCore = mix(0.12, 0.65, bright);
-      float glow = edgeCore * exp(-d / 0.9) + 0.26 * exp(-d / 4.5) + 0.12 * exp(-d / 24.0);
-      float side = clamp(((p.y < yc) == (w > 0.0) ? 1.0 : -1.0) * dy / max(hw, 1.0), -1.0, 1.0); // -1 borda macia · +1 borda acesa
-      float inside = (1.0 - smoothstep(hw - 1.5, hw + 1.5, dy)) * step(outside, 0.0);
-      float sheen = 0.65 + 0.35 * sin(u * 7.0 - uT * 1.3 + uPh[i] * 2.0);
-      float streaks = 0.7 + 0.3 * cos(side * 9.0);
-      float fill = inside * (0.04 + 0.42 * pow(0.5 + 0.5 * side, 2.6)) * sheen * streaks;
-      float twist = 1.0 + 1.0 * exp(-hw / 8.0);
-      float fade = 0.3 + 0.7 * pow(env, 0.5);
-      col += (mix(hue, vec3(1.0), uWhite) * glow * twist + hue * fill) * uA[i] * fade;
-    }
-  }
-  col = 1.0 - exp(-col * uExp);
-  vec3 bg = vec3(20.0 / 255.0);
-  gl_FragColor = vec4(bg + col * (1.0 - bg), 1.0);
-}`;
+const OUT = bez(0.16, 1, 0.3, 1), INOUT = bez(0.7, 0, 0.2, 1), IN = bez(0.6, 0, 0.9, 0.4), TICK = bez(0.25, 0.1, 0.1, 1);
+const inScene = (t: number, [a, b]: readonly [number, number]) => t >= a && t < b;
 
 export function Opening({ skipLabel }: { skipLabel: string }) {
   const rootRef = useRef<HTMLDivElement>(null);
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const textRef = useRef<HTMLSpanElement>(null);
-  const caretRef = useRef<HTMLSpanElement>(null);
-  const dotRef = useRef<HTMLDivElement>(null);
-  const labelRef = useRef<HTMLSpanElement>(null);
-  const counterRef = useRef<HTMLSpanElement>(null);
-  const pointerRef = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState(false);
   const finishRef = useRef<() => void>(() => {});
 
@@ -148,130 +57,96 @@ export function Opening({ skipLabel }: { skipLabel: string }) {
     if (!html.classList.contains('is-opening')) return;
     setActive(true);
 
-    const cv = canvasRef.current!, root = rootRef.current!, text = textRef.current!, caret = caretRef.current!;
-    const dot = dotRef.current!, label = labelRef.current!, counter = counterRef.current!, pointer = pointerRef.current!;
-    let px = NaN, py = NaN; // posição atual do cursor IY. (segue o texto com suavidade)
-    const gl = cv.getContext('webgl', { antialias: false, premultipliedAlpha: false, preserveDrawingBuffer: true });
-    let raf = 0, done = false;
+    const root = rootRef.current!;
+    const q = <E extends HTMLElement>(s: string) => root.querySelector(s) as E;
+    const bg = q('.op-bg'), side = q('.op-side');
+    const s1 = q('.op-s1'), w1 = q('.op-s1 .op-word');
+    const s2 = q('.op-s2'), w2a = q('.op-s2 .op-a'), w2b = q('.op-s2 .op-b');
+    const s3 = q('.op-s3'), col = q('.op-s3 .op-col'), items = [...root.querySelectorAll<HTMLElement>('.op-s3 .op-item')];
+    const s4 = q('.op-s4'), giant = q('.op-s4 .op-giant');
+    const s5 = q('.op-s5'), im = q('.op-s5 .op-im'), name = q('.op-s5 .op-name'), nameIn = q('.op-s5 .op-name-in');
+    const hero = document.getElementById('hero-title');
+    if (hero) hero.style.visibility = 'hidden';
 
+    let raf = 0, done = false;
     const finish = () => {
       if (done) return;
       done = true;
       cancelAnimationFrame(raf);
+      if (hero) hero.style.visibility = '';
       try { sessionStorage.setItem('iy-opening-seen', '1'); } catch { /* sem armazenamento: toca de novo na próxima visita */ }
       html.classList.remove('is-opening');
       setActive(false);
     };
     finishRef.current = finish;
-    if (!gl) { finish(); return; }
 
-    // compila o shader e passa os parâmetros fixos das lâminas
-    const sh = (type: number, src: string) => { const o = gl.createShader(type)!; gl.shaderSource(o, src); gl.compileShader(o); return o; };
-    const pr = gl.createProgram()!;
-    gl.attachShader(pr, sh(gl.VERTEX_SHADER, VS));
-    gl.attachShader(pr, sh(gl.FRAGMENT_SHADER, FS));
-    gl.linkProgram(pr);
-    if (!gl.getProgramParameter(pr, gl.LINK_STATUS)) { finish(); return; }
-    gl.useProgram(pr);
-    gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer());
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
-    const loc = gl.getAttribLocation(pr, 'p');
-    gl.enableVertexAttribArray(loc);
-    gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
-    const U = (n: string) => gl.getUniformLocation(pr, n);
-    gl.uniform3fv(U('uC1'), SHEETS.flatMap((s) => s.c1.map((c) => c / 255)));
-    gl.uniform3fv(U('uC2'), SHEETS.flatMap((s) => s.c2.map((c) => c / 255)));
-    gl.uniform1fv(U('uA'), SHEETS.map((s) => s.a));
-    gl.uniform1fv(U('uAmpS'), SHEETS.map((s) => s.amp));
-    gl.uniform1fv(U('uWid'), SHEETS.map((s) => s.wid));
-    gl.uniform1fv(U('uPh'), SHEETS.map((s) => s.ph));
-    gl.uniform2fv(U('uF'), SHEETS.flatMap((s) => s.f));
-    gl.uniform2fv(U('uSp'), SHEETS.flatMap((s) => s.sp));
-    gl.uniform2fv(U('uTw'), SHEETS.flatMap((s) => s.tw));
-    gl.uniform1f(U('uExp'), EXPOSURE);
-    gl.uniform1f(U('uWhite'), WHITE);
-    const uRes = U('uRes'), uT = U('uT'), uAmp = U('uAmp'), uHalf = U('uHalf'), uCy = U('uCy'), uK = U('uK');
-
-    // o neon é macio por natureza: 1 pixel do canvas por pixel CSS basta, mesmo em telas Retina
-    let W = 0, H = 0;
-    const resize = () => {
-      W = cv.clientWidth; H = cv.clientHeight;
-      cv.width = W; cv.height = H;
-      gl.viewport(0, 0, W, H);
-    };
-    resize();
-    addEventListener('resize', resize);
+    const show = (el: HTMLElement, on: boolean) => { el.style.visibility = on ? 'visible' : 'hidden'; };
+    const tickY = (t: number, H: number, lineH: number) => lerp(H, H / 2 - (TICKER_STOP + 0.5) * lineH, TICK(prog(t, T.ticker[0], T.ticker[1] - 0.25)));
 
     const render = (t: number) => {
-      // ---- onda
-      const grow = OUT(prog(t, T.drawIn[0], T.drawIn[1]));
-      const shrink = INOUT(prog(t, T.collapse[0], T.collapse[1]));
-      const half = W * 0.5 * grow * (1 - shrink);
-      const amp = (0.55 + 0.45 * voice(t)) * (1 - shrink);
-      const cy = H * 0.42;
-      gl.uniform2f(uRes, W, H);
-      gl.uniform1f(uT, t); gl.uniform1f(uAmp, amp); gl.uniform1f(uHalf, half); gl.uniform1f(uCy, cy); gl.uniform1f(uK, 1 - shrink);
-      gl.drawArrays(gl.TRIANGLES, 0, 3);
+      const W = innerWidth, H = innerHeight;
 
-      // ---- frase atual, digitada com o cursor vermelho
-      let i = PHRASES.findIndex((p) => t < p.hold);
-      if (i < 0) i = PHRASES.length - 1;
-      const ph = PHRASES[i];
-      const total = ph.parts.reduce((n, [s]) => n + s.length, 0);
-      const n = Math.round(total * prog(t, ph.type[0], ph.type[1]));
-      const str = typed(ph.parts, n);
-      if (text.innerHTML !== str) text.innerHTML = str;
-      label.textContent = ph.label;
-      counter.textContent = `0${i + 1} / 0${PHRASES.length}`;
-
-      // cursor: pisca parado, fica aceso enquanto digita; na última frase vira o ponto final
-      const typing = t >= ph.type[0] && t <= ph.type[1];
-      const last = i === PHRASES.length - 1;
-      const toDot = last ? OUT(prog(t, T.toDot[0], T.toDot[1])) : 0;
-      const caretOn = toDot > 0 || typing || blink(t);
-      Object.assign(caret.style, {
-        width: `${lerp(0.06, 0.2, toDot)}em`, height: `${lerp(0.8, 0.2, toDot)}em`,
-        borderRadius: toDot > 0.5 ? '50%' : '2px', marginLeft: `${lerp(0.04, 0.05, toDot)}em`,
-        visibility: caretOn && !(last && t >= T.collapse[0]) ? 'visible' : 'hidden',
-      });
-      const textFade = 1 - prog(t, T.collapse[0], T.collapse[0] + 0.3);
-      text.parentElement!.style.opacity = String(textFade);
-
-      // ---- cursor de colaboração "IY.", como no Figma: entra pelo canto, clica para começar cada frase e segue o texto
-      const cr = caret.getBoundingClientRect();
-      const tx = cr.right + 10, ty = cr.bottom + 6;
-      const enter = OUT(prog(t, 0.0, 0.42));
-      if (t < 0.42 || Number.isNaN(px)) {
-        px = lerp(W * 0.86, tx, enter); py = lerp(H * 1.05, ty, enter);
-      } else {
-        px += (tx - px) * 0.2; py += (ty - py) * 0.2;
+      // 1 · WELCOME bate na tela: chega grande e desfocada, assenta no tamanho
+      show(s1, inScene(t, T.welcome));
+      if (inScene(t, T.welcome)) {
+        const p = OUT(prog(t, 0.05, 0.32));
+        w1.style.transform = `scale(${lerp(1.35, 1, p)})`;
+        w1.style.filter = `blur(${lerp(10, 0, p)}px)`;
+        w1.style.opacity = String(p > 0 ? 1 : 0);
       }
-      const leave = INOUT(prog(t, T.collapse[0] - 0.05, T.collapse[0] + 0.4));
-      const ox = lerp(px, W * 0.9, leave), oy = lerp(py, H * 1.08, leave);
-      // clique: um apertão rápido quando cada frase começa a ser digitada
-      let press = 0;
-      for (const ph2 of PHRASES) press = Math.max(press, Math.sin(Math.PI * prog(t, ph2.type[0] - 0.08, ph2.type[0] + 0.08)));
-      pointer.style.transform = `translate(${ox}px, ${oy}px) scale(${1 - 0.14 * press})`;
-      pointer.style.opacity = String(1 - prog(t, T.collapse[0] + 0.1, T.collapse[0] + 0.45));
 
-      // ---- o ponto final sai do texto, viaja até o centro da onda e se abre revelando a página
-      const reveal = INOUT(prog(t, T.reveal[0], T.reveal[1]));
-      if (last && t >= T.collapse[0]) {
-        const r0 = caret.getBoundingClientRect();
-        const travel = INOUT(prog(t, T.collapse[0], T.collapse[1]));
-        const size = lerp(r0.width || 14, 22, travel);
-        const x = lerp(r0.left + r0.width / 2, W / 2, travel), y = lerp(r0.top + r0.height / 2, cy, travel);
-        Object.assign(dot.style, { display: 'block', width: `${size}px`, height: `${size}px`, left: `${x - size / 2}px`, top: `${y - size / 2}px`, opacity: String(1 - reveal) });
-      } else {
-        dot.style.display = 'none';
+      // 2 · painel vermelho sobe como cortina; TO MY / WEBSITE sobem da máscara
+      const s2on = t >= T.toMy[0] && t < T.ticker[0] + 0.25;
+      show(s2, s2on);
+      if (s2on) {
+        const wipe = INOUT(prog(t, T.toMy[0], T.toMy[0] + 0.22));
+        s2.style.clipPath = `inset(${(1 - wipe) * 100}% 0 0 0)`;
+        w2a.style.transform = `translateY(${(1 - OUT(prog(t, 0.68, 0.9))) * 110}%)`;
+        w2b.style.transform = `translateY(${(1 - OUT(prog(t, 0.76, 1.0))) * 110}%)`;
       }
-      const hole = lerp(0, Math.hypot(W, H), reveal);
-      const mask = reveal > 0 ? `radial-gradient(circle at 50% ${cy}px, transparent ${hole}px, #000 ${hole + 1}px)` : 'none';
-      root.style.maskImage = mask;
-      root.style.webkitMaskImage = mask;
+
+      // 3 · branco desce como cortina; a coluna de palavras rola rápido e freia em ENGINEERING (desfoque enquanto corre)
+      show(s3, inScene(t, T.ticker));
+      if (inScene(t, T.ticker)) {
+        const wipe = INOUT(prog(t, T.ticker[0], T.ticker[0] + 0.25));
+        s3.style.clipPath = `inset(0 0 ${(1 - wipe) * 100}% 0)`;
+        const lineH = items[0].offsetHeight;
+        const y = tickY(t, H, lineH), speed = Math.abs(y - tickY(t - 1 / 60, H, lineH));
+        col.style.transform = `translateY(${y}px)`;
+        col.style.filter = `blur(${Math.min(6, speed / 14)}px)`;
+        items.forEach((el, i) => el.classList.toggle('is-on', i === TICKER_STOP && t > T.ticker[1] - 0.3));
+      }
+
+      // 4 · IY atravessa a câmera: cresce até as letras passarem da tela
+      show(s4, inScene(t, T.iy));
+      if (inScene(t, T.iy)) {
+        const p = IN(prog(t, T.iy[0], T.iy[1]));
+        giant.style.transform = `scale(${lerp(0.55, 9, p)})`;
+        giant.style.filter = `blur(${lerp(0, 14, p)}px)`;
+      }
+
+      // 5 · I'm + o nome sobe da máscara, no mesmo tamanho do título do hero, centralizado
+      const nameOn = t >= T.name[0];
+      show(s5, nameOn);
+      side.style.opacity = String(0.7 * (1 - prog(t, T.handoff[0], T.handoff[0] + 0.3)));
+      bg.style.opacity = '1';
+      if (nameOn) {
+        nameIn.style.transform = `translateY(${(1 - OUT(prog(t, T.name[0] + 0.05, T.name[0] + 0.45))) * 110}%)`;
+        im.style.opacity = String(OUT(prog(t, T.name[0], T.name[0] + 0.3)) * (1 - prog(t, T.handoff[0], T.handoff[0] + 0.25)));
+
+        // 6 · o nome desliza até o título do hero e a página aparece em volta
+        if (hero) {
+          const r = hero.getBoundingClientRect();
+          Object.assign(name.style, { left: `${r.left}px`, top: `${r.top}px`, width: `${r.width}px` });
+          const dx = W / 2 - (r.left + r.width / 2), dy = H / 2 - (r.top + r.height / 2);
+          const h = INOUT(prog(t, T.handoff[0], T.handoff[1] - 0.15));
+          name.style.transform = `translate(${dx * (1 - h)}px, ${dy * (1 - h)}px)`;
+        }
+        bg.style.opacity = String(1 - prog(t, T.handoff[0] + 0.35, T.handoff[1]));
+      }
     };
 
-    // modo de inspeção: /en?opening-debug deixa renderizar qualquer instante (usado para conferir quadros)
+    // modo de inspeção: /en?intro&opening-debug deixa renderizar qualquer instante (usado para conferir quadros)
     if (location.search.includes('opening-debug')) {
       (window as unknown as { __opening: unknown }).__opening = { render, stop: () => cancelAnimationFrame(raf) };
     }
@@ -282,26 +157,30 @@ export function Opening({ skipLabel }: { skipLabel: string }) {
       render(Math.min(t, DUR));
       if (t < DUR) raf = requestAnimationFrame(loop); else finish();
     };
+    render(0);
     raf = requestAnimationFrame(loop);
 
     const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') finish(); };
     addEventListener('keydown', onKey);
-    return () => { cancelAnimationFrame(raf); removeEventListener('resize', resize); removeEventListener('keydown', onKey); };
+    return () => { cancelAnimationFrame(raf); removeEventListener('keydown', onKey); };
   }, []);
 
   return (
     <div ref={rootRef} className="opening" data-theme="dark" aria-hidden={!active}>
-      <canvas ref={canvasRef} className="opening__canvas" />
-      <div className="opening__labels"><span ref={labelRef}>Hello</span><span ref={counterRef}>01 / 05</span></div>
-      <p className="opening__caption" aria-live="polite">
-        <span ref={textRef} />
-        <span ref={caretRef} className="opening__caret" aria-hidden="true" />
-      </p>
-      <div ref={dotRef} className="opening__dot" />
-      <div ref={pointerRef} className="opening__pointer" aria-hidden="true">
-        <svg width="22" height="24" viewBox="0 0 22 24"><path d="M2 2 L2 19 L6.8 14.6 L10.2 22 L13.4 20.6 L10 13.4 L17 13.4 Z" fill="#C8102E" stroke="#FFFFFF" strokeWidth="1.6" strokeLinejoin="round" /></svg>
-        <span className="opening__pointer-tag">IY.</span>
-      </div>
+      <div className="op-bg" />
+      <section className="op-scene op-s1"><p className="op-word">Welcome</p></section>
+      <section className="op-scene op-s2">
+        <p className="op-stack"><span className="op-mask"><span className="op-a">To my</span></span><span className="op-mask"><span className="op-b">website</span></span></p>
+      </section>
+      <section className="op-scene op-s3">
+        <div className="op-col">{TICKER.map((w, i) => <p key={i} className="op-item">{w}</p>)}</div>
+      </section>
+      <section className="op-scene op-s4"><p className="op-giant">IY<span>.</span></p></section>
+      <section className="op-scene op-s5">
+        <p className="op-im">I’m</p>
+        <p className="op-name hero__title"><span className="op-mask op-mask--name"><span className="op-name-in"><span className="iy-lt">Isabela </span><span className="iy-bd">Yukari</span><span className="iy-dot">.</span></span></span></p>
+      </section>
+      <p className="op-side">Isabela Yukari — Design Engineer</p>
       <button type="button" className="opening__skip iy-button iy-button--secondary iy-button--sm" onClick={() => finishRef.current()}>
         <span className="iy-button__label">{skipLabel}</span>
       </button>
