@@ -15,6 +15,11 @@
   "scripts": {
     "build": "npm run build -w @iylotus/tokens && npm run build -w @iylotus/styles && npm run build -w @iylotus/react && npm run build -w @iylotus/figma-plugin",
     "test": "npm run build && npm test -w @iylotus/tokens && npm test -w @iylotus/react && npm test -w @iylotus/figma-plugin",
-    "storybook": "npm run build -w @iylotus/tokens && npm run build -w @iylotus/styles && npm run storybook -w @iylotus/react"
+    "storybook": "npm run build -w @iylotus/tokens && npm run build -w @iylotus/styles && npm run storybook -w @iylotus/react",
+    "changeset": "changeset",
+    "release": "npm run build && changeset publish"
+  },
+  "devDependencies": {
+    "@changesets/cli": "^2.31.1"
   }
 }

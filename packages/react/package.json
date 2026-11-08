@@ -1,9 +1,27 @@
 {
   "name": "@iylotus/react",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "IY Lotus React components, built on @iylotus/styles.",
   "type": "module",
   "license": "MIT",
+  "author": "Isabela Yukari",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Akiiiiyama/iylotus.git",
+    "directory": "packages/react"
+  },
+  "homepage": "https://github.com/Akiiiiyama/iylotus#readme",
+  "bugs": {
+    "url": "https://github.com/Akiiiiyama/iylotus/issues"
+  },
+  "keywords": [
+    "design-system",
+    "design-tokens",
+    "iylotus",
+    "react",
+    "components",
+    "accessibility"
+  ],
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
@@ -14,7 +32,8 @@
     "./styles.css": "./dist/styles.css"
   },
   "files": [
-    "dist"
+    "dist",
+    "CHANGELOG.md"
   ],
   "sideEffects": [
     "*.css"
@@ -26,23 +45,26 @@
     "build-storybook": "storybook build -o storybook-static"
   },
   "dependencies": {
-    "@iylotus/styles": "0.0.0"
+    "@iylotus/styles": "^0.1.0"
   },
   "peerDependencies": {
     "react": ">=18",
     "react-dom": ">=18"
   },
   "devDependencies": {
-    "@storybook/addon-a11y": "^8.6.12",
-    "@storybook/addon-essentials": "^8.6.12",
-    "@storybook/react-vite": "^8.6.12",
+    "@storybook/addon-a11y": "^8.6.19",
+    "@storybook/addon-essentials": "^8.6.19",
+    "@storybook/react-vite": "^8.6.19",
     "@types/react": "^19.1.2",
     "@types/react-dom": "^19.1.2",
     "@vitejs/plugin-react": "^4.4.1",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
-    "storybook": "^8.6.12",
+    "storybook": "^8.6.19",
     "typescript": "^5.8.3",
-    "vite": "^6.3.5"
+    "vite": "^6.4.5"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

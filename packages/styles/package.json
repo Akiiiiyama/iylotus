@@ -1,9 +1,27 @@
 {
   "name": "@iylotus/styles",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "IY Lotus CSS: tokens as custom properties, light and dark themes, type classes and base styles.",
   "type": "module",
   "license": "MIT",
+  "author": "Isabela Yukari",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Akiiiiyama/iylotus.git",
+    "directory": "packages/styles"
+  },
+  "homepage": "https://github.com/Akiiiiyama/iylotus#readme",
+  "bugs": {
+    "url": "https://github.com/Akiiiiyama/iylotus/issues"
+  },
+  "keywords": [
+    "design-system",
+    "design-tokens",
+    "iylotus",
+    "css",
+    "css-variables",
+    "dark-mode"
+  ],
   "style": "./dist/iylotus.css",
   "exports": {
     ".": "./dist/iylotus.css",
@@ -11,7 +29,8 @@
     "./base.css": "./dist/base.css"
   },
   "files": [
-    "dist"
+    "dist",
+    "CHANGELOG.md"
   ],
   "sideEffects": [
     "*.css"
@@ -20,6 +39,9 @@
     "build": "node scripts/build.mjs"
   },
   "dependencies": {
-    "@iylotus/tokens": "0.0.0"
+    "@iylotus/tokens": "^0.1.0"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

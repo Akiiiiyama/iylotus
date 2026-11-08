@@ -1,9 +1,26 @@
 {
   "name": "@iylotus/tokens",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "IY Lotus design tokens in the W3C DTCG format, resolved to JSON and JavaScript.",
   "type": "module",
   "license": "MIT",
+  "author": "Isabela Yukari",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Akiiiiyama/iylotus.git",
+    "directory": "packages/tokens"
+  },
+  "homepage": "https://github.com/Akiiiiyama/iylotus#readme",
+  "bugs": {
+    "url": "https://github.com/Akiiiiyama/iylotus/issues"
+  },
+  "keywords": [
+    "design-system",
+    "design-tokens",
+    "iylotus",
+    "dtcg",
+    "tokens"
+  ],
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
@@ -16,10 +33,14 @@
   },
   "files": [
     "dist",
-    "src"
+    "src",
+    "CHANGELOG.md"
   ],
   "scripts": {
     "build": "node scripts/build.mjs",
     "test": "node --test test/*.test.mjs"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
