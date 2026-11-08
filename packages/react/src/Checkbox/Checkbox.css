@@ -1,0 +1,46 @@
+/* Checkbox e Radio dividem o layout .iy-choice: controle de 20 px e texto ao lado. */
+.iy-choice {
+  display: inline-flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  font-family: var(--font-family-sans);
+  font-size: 15px;
+  line-height: 20px;
+  color: var(--color-text-primary);
+  cursor: pointer;
+}
+.iy-choice--disabled { opacity: 0.45; cursor: not-allowed; }
+.iy-choice__text { display: flex; flex-direction: column; gap: 2px; }
+.iy-choice__hint { font-size: 13px; line-height: 1.4; color: var(--color-text-secondary); }
+
+.iy-choice__input {
+  appearance: none;
+  -webkit-appearance: none;
+  flex: none;
+  display: grid;
+  place-content: center;
+  width: 20px;
+  height: 20px;
+  margin: 0;
+  border: var(--border-strong) solid var(--color-border-strong);
+  background: transparent;
+  cursor: inherit;
+  transition: background-color var(--duration-fast) var(--ease-out), border-color var(--duration-fast) var(--ease-out);
+}
+.iy-choice__input:focus-visible { outline: var(--border-focus) solid var(--color-focus); outline-offset: 3px; }
+.iy-choice__input:checked,
+.iy-checkbox:indeterminate { background: var(--color-action-primary); border-color: var(--color-action-primary); }
+
+.iy-checkbox { border-radius: var(--radius-sm); }
+.iy-checkbox:checked::after {
+  content: "";
+  width: 10px;
+  height: 5px;
+  border: 2px solid var(--color-text-inverse);
+  border-top: 0;
+  border-right: 0;
+  transform: rotate(-45deg) translate(1px, -1px);
+}
+.iy-checkbox:indeterminate::after { content: ""; width: 10px; height: 2px; background: var(--color-text-inverse); }
+
+.iy-choice__input[aria-invalid="true"] { border-color: var(--color-feedback-danger); }

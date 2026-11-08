@@ -1,6 +1,8 @@
+/// <reference types="vite/client" />
 import type { Decorator, Preview } from '@storybook/react';
 import '@iylotus/styles';
-import '../src/Button/Button.css';
+// O CSS de todos os componentes, na mesma ordem do dist/styles.css.
+import.meta.glob('../src/*/*.css', { eager: true });
 import './preview.css';
 
 // Troca o tema pelo menu da barra do Storybook: aplica data-theme no bloco de cada story.

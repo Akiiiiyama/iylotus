@@ -1,0 +1,9 @@
+/* Radio · usa o layout .iy-choice do Checkbox. */
+.iy-radio { border-radius: 50%; }
+.iy-radio:checked::after { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--color-text-inverse); }
+
+.iy-radio-group { margin: 0; padding: 0; border: 0; min-width: 0; display: flex; flex-direction: column; gap: var(--space-3); font-family: var(--font-family-sans); }
+.iy-radio-group__legend { padding: 0; margin-bottom: var(--space-1); font-size: 14px; font-weight: var(--font-weight-medium); color: var(--color-text-primary); }
+.iy-radio-group__options { display: flex; flex-direction: column; gap: var(--space-3); }
+.iy-radio-group--row .iy-radio-group__options { flex-direction: row; flex-wrap: wrap; gap: var(--space-3) var(--space-6); }
+.iy-radio-group[aria-invalid="true"] .iy-radio { border-color: var(--color-feedback-danger); }

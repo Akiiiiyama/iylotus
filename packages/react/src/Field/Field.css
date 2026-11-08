@@ -1,0 +1,65 @@
+/* Field · base de TextField, TextArea e Select: rótulo, controle, ajuda e erro. */
+.iy-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1-5, 6px);
+  min-width: 0;
+  font-family: var(--font-family-sans);
+}
+
+.iy-field__top { display: flex; justify-content: space-between; align-items: baseline; gap: var(--space-2); }
+.iy-field__label { font-size: 14px; font-weight: var(--font-weight-medium); color: var(--color-text-primary); }
+.iy-field__aside { font-family: var(--font-family-mono); font-size: 12px; color: var(--color-text-secondary); font-variant-numeric: tabular-nums; }
+.iy-field__hint,
+.iy-field__error { margin: 0; font-size: 13px; line-height: 1.4; }
+.iy-field__hint { color: var(--color-text-secondary); }
+.iy-field__error { color: var(--color-feedback-danger); }
+
+/* A caixa do controle: borda, foco e estados. */
+.iy-control {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: 48px;
+  padding: 0 var(--space-4);
+  background: var(--color-surface-raised);
+  border: var(--border-strong) solid var(--color-border);
+  border-radius: var(--radius-md);
+  color: var(--color-text-primary);
+  transition: border-color var(--duration-fast) var(--ease-out), box-shadow var(--duration-fast) var(--ease-out);
+}
+.iy-control:hover { border-color: var(--color-text-secondary); }
+.iy-control:focus-within {
+  border-color: var(--color-border-strong);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-focus) 16%, transparent);
+}
+.iy-field--invalid .iy-control { border-color: var(--color-feedback-danger); }
+.iy-field--disabled .iy-control { background: var(--color-surface); opacity: 0.55; cursor: not-allowed; }
+.iy-control--multiline { align-items: stretch; padding: var(--space-3) var(--space-4); }
+
+.iy-control__input {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-size: 15px;
+  line-height: 1.5;
+}
+.iy-control__input::placeholder { color: var(--color-text-secondary); }
+.iy-control__input:disabled { cursor: not-allowed; }
+textarea.iy-control__input { resize: vertical; min-height: 96px; }
+
+.iy-control__affix {
+  display: inline-flex;
+  align-items: center;
+  flex: none;
+  font-family: var(--font-family-mono);
+  font-size: 12px;
+  color: var(--color-text-secondary);
+}
+.iy-control__affix > svg { width: 16px; height: 16px; }
