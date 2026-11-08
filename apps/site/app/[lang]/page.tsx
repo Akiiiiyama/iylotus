@@ -1,4 +1,4 @@
-import { Card, CardBody, CardMedia, CardMeta, CardTag, CardTitle, Tag } from '@iylotus/react';
+import { Card, CardBody, CardGroup, CardMedia, CardMeta, CardTag, CardTitle, Tag } from '@iylotus/react';
 import { dict, type Lang, type Highlight, LINKS } from '@/content/site';
 import { Header } from '@/components/Header';
 import { Opening } from '@/components/Opening';
@@ -71,7 +71,7 @@ export default async function Home({ params }: { params: Promise<{ lang: Lang }>
         <section id="work" className="band band--paper" aria-labelledby="work-title">
           <div className="in">
             <SectionHead id="work-title" label={t.work.label} counter="01 / 05" title={t.work.title} lede={t.work.lede} />
-            <div className="projects">
+            <CardGroup spotlight className="projects">
               {t.work.projects.map((p) => (
                 <Card key={p.id} href={p.href} target="_blank" rel="noopener noreferrer" tone={p.id === 'iylotus' ? 'red' : p.id === 'skill' ? 'ink' : 'raised'} className={`project project--${p.id}`}>
                   <CardMedia aria-hidden="true" className="project__media">
@@ -99,7 +99,7 @@ export default async function Home({ params }: { params: Promise<{ lang: Lang }>
                   </CardBody>
                 </Card>
               ))}
-            </div>
+            </CardGroup>
           </div>
         </section>
 
