@@ -1,0 +1,22 @@
+/* Link · sublinhado vermelho, que engrossa no hover. */
+.iy-link {
+  color: var(--color-text-primary);
+  text-decoration: underline;
+  text-decoration-color: var(--color-action-accent);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 5px;
+  border-radius: var(--radius-sm);
+  transition: text-decoration-thickness var(--duration-fast) var(--ease-out), text-underline-offset var(--duration-fast) var(--ease-out);
+}
+.iy-link:hover { text-decoration-thickness: 3px; text-underline-offset: 3px; }
+.iy-link:focus-visible { outline: var(--border-focus) solid var(--color-focus); outline-offset: 3px; }
+.iy-link__arrow { display: inline-block; margin-left: 0.15em; font-size: 0.85em; }
+
+.iy-visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}

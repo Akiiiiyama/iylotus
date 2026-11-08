@@ -1,0 +1,4 @@
+/* Divider · linha entre conteúdos. */
+.iy-divider { width: 100%; margin: 0; border: 0; }
+.iy-divider--hairline { border-top: var(--border-hairline) solid var(--color-border); }
+.iy-divider--strong { border-top: var(--border-strong) solid var(--color-border-strong); }

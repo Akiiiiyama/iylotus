@@ -1,0 +1,31 @@
+/* Avatar · foto ou iniciais, com o ponto vermelho no canto das iniciais. */
+.iy-avatar {
+  --iy-avatar-size: 44px;
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  width: var(--iy-avatar-size);
+  height: var(--iy-avatar-size);
+  border-radius: 50%;
+  overflow: hidden;
+  background: var(--color-action-primary);
+  color: var(--color-text-inverse);
+  font-family: var(--font-family-sans);
+  font-size: calc(var(--iy-avatar-size) * 0.34);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: -0.02em;
+}
+.iy-avatar--sm { --iy-avatar-size: 32px; }
+.iy-avatar--lg { --iy-avatar-size: 64px; }
+.iy-avatar--dot::after {
+  content: "";
+  position: absolute;
+  right: 18%;
+  bottom: 25%;
+  width: 11%;
+  height: 11%;
+  border-radius: 50%;
+  background: var(--color-red-600);
+}
+.iy-avatar__img { width: 100%; height: 100%; object-fit: cover; }

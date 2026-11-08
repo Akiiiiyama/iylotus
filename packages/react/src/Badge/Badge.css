@@ -1,0 +1,17 @@
+/* Badge · pílula curta com status ou número. */
+.iy-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: 5px 12px;
+  border-radius: var(--radius-pill);
+  font-family: var(--font-family-sans);
+  font-size: 13px;
+  font-weight: var(--font-weight-bold);
+  line-height: 1.2;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+.iy-badge--accent { background: var(--color-action-accent); color: var(--color-action-on-accent); }
+.iy-badge--neutral { background: var(--color-action-primary); color: var(--color-text-inverse); }
+.iy-badge--outline { background: transparent; color: var(--color-text-primary); box-shadow: inset 0 0 0 var(--border-hairline) var(--color-border-strong); }
