@@ -104,23 +104,25 @@ h1, h2 { text-wrap: balance; letter-spacing: -0.035em; line-height: 1; }
 @media (max-width: 600px) { .sel__spec { display: none; } .sel { display: block; margin: 40px 16px 0 14px; } .hero__subtitle { margin-top: 56px; } }
 
 /* ---------- projetos ---------- */
-.projects { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-6); }
-@media (max-width: 860px) { .projects { grid-template-columns: 1fr; } }
+.projects { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-4); }
+@media (max-width: 1100px) { .projects { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 700px) { .projects { grid-template-columns: 1fr; } }
 .project { text-decoration: none; color: inherit; }
-/* IY Lotus em destaque: ocupa a linha inteira, imagem em cima e texto embaixo, como os outros cards */
-.project--iylotus { grid-column: 1 / -1; }
-.project--iylotus .project__media { aspect-ratio: 21 / 9; }
-@media (max-width: 860px) { .project--iylotus .project__media { aspect-ratio: 4 / 3; } }
-.project__media { aspect-ratio: auto; min-height: 320px; }
-@media (max-width: 860px) { .project--iylotus { display: flex; } .project--iylotus .project__media { aspect-ratio: 16 / 9; min-height: 0; } }
+.project .iy-card__body { padding: 18px 20px 20px; gap: 6px; }
+.project .iy-card__title { font-size: 22px; }
+/* IY Lotus em destaque: duas colunas, com a flor ocupando a altura que sobra */
+.project--iylotus { grid-column: span 2; }
+@media (max-width: 700px) { .project--iylotus { grid-column: auto; } }
 .project__media { aspect-ratio: 16 / 9; overflow: hidden; }
+.project--iylotus .project__media { aspect-ratio: auto; flex: 1; min-height: 200px; }
+.project--iylotus .iy-card__body { flex: 0 0 auto; }
 .project__video { width: 100%; height: 100%; object-fit: cover; display: block; }
-.project__body { font-size: 16px; line-height: 1.55; opacity: 0.85; }
+.project__body { font-size: 15px; line-height: 1.5; opacity: 0.85; }
 .art { width: 100%; height: 100%; display: grid; place-items: center; }
 .art--lotus { background: #141414; color: #FFFFFF; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: var(--space-4); }
-.art__wordmark { font-size: clamp(32px, 4vw, 56px); letter-spacing: -0.04em; line-height: 1; }
+.art__wordmark { font-size: clamp(26px, 2.6vw, 38px); letter-spacing: -0.04em; line-height: 1; }
 /* a flor de lótus abrindo: cada pétala gira a partir da base, das do meio para as de fora */
-.lotus { width: clamp(140px, 18vw, 240px); height: auto; overflow: visible; }
+.lotus { width: clamp(90px, 9vw, 140px); height: auto; overflow: visible; }
 .lotus__petal {
   fill: none; stroke: #FFFFFF; stroke-width: 2.2; stroke-linejoin: round;
   transform-box: view-box; transform-origin: 100px 112px;
@@ -184,36 +186,41 @@ h1, h2 { text-wrap: balance; letter-spacing: -0.035em; line-height: 1; }
 .footer__replay { color: inherit; text-decoration: underline; text-decoration-color: var(--color-action-accent); text-underline-offset: 4px; }
 .footer__replay:hover { color: var(--color-text-primary); }
 
-/* ---------- abertura: tipografia cinética, cenas de cor com cortes secos ---------- */
+/* ---------- abertura: tipografia cinética, cenas de cor que entram como cortina ----------
+   As posições iniciais vêm da Web Animations API (fill: both); aqui só ficam forma, cor e camadas. */
 .opening { position: fixed; inset: 0; z-index: 100; display: none; overflow: hidden; color: #FFFFFF; }
 html.is-opening .opening { display: block; }
 html.is-opening body { overflow: hidden; }
 html.is-opening .topbar { opacity: 0; }
-.op-bg { position: absolute; inset: 0; background: #141414; }
-.op-scene { position: absolute; inset: 0; display: grid; place-items: center; visibility: hidden; overflow: hidden; }
+html.is-opening-out .topbar { opacity: 1; }
+.op-scenes { position: absolute; inset: 0; will-change: opacity; }
+.op-scene { position: absolute; inset: 0; display: grid; place-items: center; overflow: hidden; will-change: transform, opacity; }
 .op-s1 { background: #141414; }
 .op-s2 { background: var(--color-red-600); }
-.op-s3 { background: #F2F2F2; color: #141414; place-items: start center; }
+.op-s3 { background: #F2F2F2; color: #141414; }
 .op-s4 { background: #141414; }
-.op-s5 { background: transparent; }
 /* palavras grandes, negrito, caixa alta e tracking apertado, como na referência */
 .op-word, .op-stack, .op-item, .op-giant {
   margin: 0; font-weight: 700; text-transform: uppercase; letter-spacing: -0.05em; line-height: 0.88; white-space: nowrap;
 }
-.op-word { font-size: clamp(64px, 15vw, 240px); }
+.op-word { font-size: clamp(64px, 15vw, 240px); will-change: transform, opacity; }
 .op-stack { display: flex; flex-direction: column; align-items: center; font-size: clamp(56px, 13vw, 210px); }
 .op-mask { display: block; overflow: hidden; padding: 0 0.06em 0.06em; }
-.op-mask > span { display: block; }
+.op-mask > span { display: block; will-change: transform; }
 .op-col { position: absolute; left: 0; right: 0; top: 0; will-change: transform; }
-.op-item { text-align: center; font-size: clamp(56px, 12vw, 190px); padding-block: 0.04em; color: #CFCFCF; }
-.op-item.is-on { color: #141414; }
-.op-item.is-on::after { content: "."; color: var(--color-red-600); }
-.op-giant { font-size: clamp(120px, 30vw, 460px); will-change: transform; }
+.op-item { position: relative; text-align: center; font-size: clamp(56px, 12vw, 190px); padding-block: 0.04em; }
+.op-grey { color: #CFCFCF; }
+.op-ink { position: absolute; inset: 0.04em 0 auto; color: #141414; will-change: opacity; }
+.op-period { color: var(--color-red-600); }
+.op-giant { font-size: clamp(120px, 30vw, 460px); will-change: transform, opacity; }
 .op-giant span { color: var(--color-red-600); }
-.op-im { position: absolute; top: 34%; left: 0; right: 0; text-align: center; margin: 0; font-size: clamp(24px, 3vw, 40px); font-weight: 300; letter-spacing: -0.02em; }
+.op-im { position: absolute; top: 33%; left: 0; right: 0; text-align: center; margin: 0; font-size: clamp(24px, 3vw, 40px); font-weight: 300; letter-spacing: -0.02em; will-change: transform, opacity; }
 /* o nome usa a mesma classe do título do hero: mesmo tamanho, mesma quebra de linha */
 .op-name { position: fixed; margin: 0; color: #FFFFFF; will-change: transform; }
 .op-mask--name { padding: 0 0.04em 0.12em; margin: 0 -0.04em -0.12em; }
+/* o ponto vermelho que viaja: no nome, ele substitui o ponto do texto */
+.op-name .iy-dot { color: transparent; }
+.op-dot { position: fixed; border-radius: 50%; background: var(--color-red-600); transform-origin: center; will-change: transform, opacity; z-index: 1; }
 .op-side {
   position: absolute; left: max(20px, env(safe-area-inset-left, 0px)); bottom: calc(28px + env(safe-area-inset-bottom, 0px));
   margin: 0; writing-mode: vertical-rl; transform: rotate(180deg); mix-blend-mode: difference;
