@@ -7,7 +7,8 @@
     "packages/tokens",
     "packages/styles",
     "packages/react",
-    "packages/figma-plugin"
+    "packages/figma-plugin",
+    "apps/site"
   ],
   "engines": {
     "node": ">=20"
@@ -17,7 +18,9 @@
     "test": "npm run build && npm test -w @iylotus/tokens && npm test -w @iylotus/react && npm test -w @iylotus/figma-plugin",
     "storybook": "npm run build -w @iylotus/tokens && npm run build -w @iylotus/styles && npm run storybook -w @iylotus/react",
     "changeset": "changeset",
-    "release": "npm run build && changeset publish"
+    "release": "npm run build && changeset publish",
+    "dev": "npm run build && npm run dev -w site",
+    "build:site": "npm run build && npm run build -w site"
   },
   "devDependencies": {
     "@changesets/cli": "^2.31.1"

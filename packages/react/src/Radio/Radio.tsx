@@ -1,3 +1,5 @@
+'use client';
+
 import { createContext, forwardRef, useContext, useId, type ChangeEvent, type InputHTMLAttributes, type ReactNode } from 'react';
 
 interface GroupContext {

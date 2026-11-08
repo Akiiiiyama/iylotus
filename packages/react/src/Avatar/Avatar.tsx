@@ -1,3 +1,5 @@
+'use client';
+
 import { useState, type HTMLAttributes } from 'react';
 
 export type AvatarSize = 'sm' | 'md' | 'lg';
