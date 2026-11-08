@@ -117,6 +117,12 @@ h1, h2 { text-wrap: balance; letter-spacing: -0.035em; line-height: 1; }
 .project__media { height: clamp(180px, 17vw, 240px); overflow: hidden; flex: none; }
 .project .iy-card__body { flex: 1; }
 .project .iy-card__meta { margin-top: auto; padding-top: 8px; }
+/* hover em coleção: no lugar do contorno, o card em foco fica em destaque e os outros se apagam.
+   Usa filter (e não opacity) para não brigar com a animação de entrada ligada à rolagem. Teclado também vale. */
+.projects .project { transition: filter var(--duration-slow) var(--ease-out), transform var(--duration-base) var(--ease-out); }
+.projects .project.iy-card--link:hover { box-shadow: none; }
+.projects:has(.project:hover) .project:not(:hover),
+.projects:has(.project:focus-visible) .project:not(:focus-visible) { filter: opacity(0.35) saturate(0.6); }
 .project__video { width: 100%; height: 100%; object-fit: cover; display: block; }
 .project__body { font-size: 15px; line-height: 1.5; opacity: 0.85; }
 .art { width: 100%; height: 100%; display: grid; place-items: center; }
@@ -187,47 +193,25 @@ h1, h2 { text-wrap: balance; letter-spacing: -0.035em; line-height: 1; }
 .footer__replay { color: inherit; text-decoration: underline; text-decoration-color: var(--color-action-accent); text-underline-offset: 4px; }
 .footer__replay:hover { color: var(--color-text-primary); }
 
-/* ---------- abertura: tipografia cinética, cenas de cor que entram como cortina ----------
-   As posições iniciais vêm da Web Animations API (fill: both); aqui só ficam forma, cor e camadas. */
-.opening { position: fixed; inset: 0; z-index: 100; display: none; overflow: hidden; color: #FFFFFF; }
+/* ---------- abertura: constrói a primeira dobra ----------
+   Uma cor (o preto da página) e só tipografia. Posições iniciais vêm da Web Animations API (fill: both). */
+.opening { position: fixed; inset: 0; z-index: 100; display: none; overflow: hidden; color: #FFFFFF; pointer-events: none; }
 html.is-opening .opening { display: block; }
 html.is-opening body { overflow: hidden; }
 html.is-opening .topbar { opacity: 0; }
 html.is-opening-out .topbar { opacity: 1; }
-.op-scenes { position: absolute; inset: 0; will-change: opacity; }
-.op-scene { position: absolute; inset: 0; display: grid; place-items: center; overflow: hidden; will-change: transform, opacity; }
-.op-s1 { background: #141414; }
-.op-s2 { background: var(--color-red-600); }
-.op-s3 { background: #F2F2F2; color: #141414; }
-.op-s4 { background: #141414; }
-/* palavras grandes, negrito, caixa alta e tracking apertado, como na referência */
-.op-word, .op-stack, .op-item, .op-giant {
-  margin: 0; font-weight: 700; text-transform: uppercase; letter-spacing: -0.05em; line-height: 0.88; white-space: nowrap;
-}
-.op-word { font-size: clamp(64px, 15vw, 240px); will-change: transform, opacity; }
-.op-stack { display: flex; flex-direction: column; align-items: center; font-size: clamp(56px, 13vw, 210px); }
-.op-mask { display: block; overflow: hidden; padding: 0 0.06em 0.06em; }
-.op-mask > span { display: block; will-change: transform; }
-.op-col { position: absolute; left: 0; right: 0; top: 0; will-change: transform; }
-.op-item { position: relative; text-align: center; font-size: clamp(56px, 12vw, 190px); padding-block: 0.04em; }
-.op-grey { color: #CFCFCF; }
-.op-ink { position: absolute; inset: 0.04em 0 auto; color: #141414; will-change: opacity; }
-.op-period { color: var(--color-red-600); }
-.op-giant { font-size: clamp(120px, 30vw, 460px); will-change: transform, opacity; }
-.op-giant span { color: var(--color-red-600); }
-.op-im { position: absolute; top: 33%; left: 0; right: 0; text-align: center; margin: 0; font-size: clamp(24px, 3vw, 40px); font-weight: 300; letter-spacing: -0.02em; will-change: transform, opacity; }
+.op-bg { position: absolute; inset: 0; background: #141414; will-change: opacity; }
+.op-words { position: absolute; inset: 0; display: grid; place-items: center; will-change: opacity; }
+.op-w { grid-area: 1 / 1; margin: 0; overflow: hidden; padding: 0 0.06em 0.14em; font-size: clamp(64px, 13vw, 210px); letter-spacing: -0.045em; line-height: 1; white-space: nowrap; }
+.op-w-in { display: block; will-change: transform; }
+.op-period { color: transparent; } /* o ponto de verdade é o .op-dot, que viaja */
 /* o nome usa a mesma classe do título do hero: mesmo tamanho, mesma quebra de linha */
-.op-name { position: fixed; margin: 0; color: #FFFFFF; will-change: transform; }
-.op-mask--name { padding: 0 0.04em 0.12em; margin: 0 -0.04em -0.12em; }
-/* o ponto vermelho que viaja: no nome, ele substitui o ponto do texto */
+.op-name { position: fixed; margin: 0; color: #FFFFFF; }
 .op-name .iy-dot { color: transparent; }
-.op-dot { position: fixed; border-radius: 50%; background: var(--color-red-600); transform-origin: center; will-change: transform, opacity; z-index: 1; }
-.op-side {
-  position: absolute; left: max(20px, env(safe-area-inset-left, 0px)); bottom: calc(28px + env(safe-area-inset-bottom, 0px));
-  margin: 0; writing-mode: vertical-rl; transform: rotate(180deg); mix-blend-mode: difference;
-  font: 500 12px var(--font-family-mono); letter-spacing: 0.14em; text-transform: uppercase; color: #FFFFFF;
-}
-.opening__skip { position: absolute; right: max(24px, env(safe-area-inset-right, 0px)); bottom: calc(24px + env(safe-area-inset-bottom, 0px)); mix-blend-mode: difference; }
+.op-reveal, .op-reveal-in { display: block; will-change: transform; }
+.op-reveal { overflow: hidden; padding: 0 0.04em 0.12em; margin: 0 -0.04em -0.12em; }
+.op-dot { position: fixed; border-radius: 50%; background: var(--color-red-600); transform-origin: center; will-change: transform; }
+.opening__skip { position: absolute; right: max(24px, env(safe-area-inset-right, 0px)); bottom: calc(24px + env(safe-area-inset-bottom, 0px)); pointer-events: auto; }
 
 /* ---------- cena de manifesto: presa na tela enquanto a frase acende ---------- */
 .statement { position: relative; height: 240vh; background: #141414; color: #FFFFFF; view-timeline: --stmt block; }
