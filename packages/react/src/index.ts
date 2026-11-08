@@ -2,6 +2,9 @@
 export { Button } from './Button/Button.js';
 export type { ButtonProps, ButtonVariant, ButtonSize } from './Button/Button.js';
 
+export { Card, CardMedia, CardBody, CardTag, CardTitle, CardMeta, CardStat } from './Card/Card.js';
+export type { CardProps, CardTone, CardShape, CardTitleProps, CardStatProps } from './Card/Card.js';
+
 export { TextField } from './TextField/TextField.js';
 export type { TextFieldProps } from './TextField/TextField.js';
 export { TextArea } from './TextArea/TextArea.js';
