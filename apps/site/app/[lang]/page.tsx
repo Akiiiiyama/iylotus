@@ -4,6 +4,7 @@ import { Header } from '@/components/Header';
 import { Opening } from '@/components/Opening';
 import { SectionHead } from '@/components/SectionHead';
 import { LotusBloom } from '@/components/LotusBloom';
+import { ScrollWords } from '@/components/ScrollWords';
 
 // Página única: abertura → hero → projetos → experiência → sobre → contato.
 // Cada seção é uma "cena" com cor própria, como os cortes do reel.
@@ -52,6 +53,16 @@ export default async function Home({ params }: { params: Promise<{ lang: Lang }>
             <div className="actions">
               <ButtonLink href={LINKS.linkedin} variant="accent" external>LinkedIn ↗</ButtonLink>
               <ButtonLink href={LINKS.github} variant="secondary" external>GitHub ↗</ButtonLink>
+            </div>
+          </div>
+        </section>
+
+        {/* MANIFESTO: cena presa na tela; a frase acende palavra por palavra com a rolagem */}
+        <section className="statement" data-theme="dark" aria-label={t.statement.label}>
+          <div className="statement__pin">
+            <div className="in">
+              <div className="labels"><span>{t.statement.label}</span><span>IY.</span></div>
+              <ScrollWords text={t.statement.text} className="statement__text" />
             </div>
           </div>
         </section>
@@ -113,7 +124,7 @@ export default async function Home({ params }: { params: Promise<{ lang: Lang }>
 
         <section className="band band--red teaser" data-theme="dark" aria-label={t.experience.ctaButton}>
           <div className="in teaser__in">
-            <p className="teaser__text">{t.experience.cta}</p>
+            <ScrollWords text={t.experience.cta} className="teaser__text" />
             <a className="iy-button iy-button--lg teaser__button" href={LINKS.linkedin} target="_blank" rel="noopener noreferrer">
               <span className="iy-button__label">{t.experience.ctaButton} ↗</span>
             </a>

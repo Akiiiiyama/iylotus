@@ -41,6 +41,8 @@ export type Dict = {
   contact: { label: string; title: [string, string]; body: string; linkedin: string; github: string };
   footer: string;
   replay: string;
+  /** Frase da cena presa na tela. Palavras entre *asteriscos* ficam em negrito. */
+  statement: { label: string; text: string };
 };
 
 const STACK_ITEMS = {
@@ -112,6 +114,7 @@ export const dict: Record<Lang, Dict> = {
     },
     footer: 'Designed and built by Isabela Yukari with IY Lotus.',
     replay: 'Replay intro',
+    statement: { label: 'Manifesto', text: 'I design in *pixels* and ship in *code.* Strategy, design and engineering, in one loop.' },
   },
   pt: {
     nav: { work: 'Projetos', experience: 'Experiência', about: 'Sobre', contact: 'Contato', cv: 'CV', cvLabel: 'Baixar meu currículo (PDF)' },
@@ -175,5 +178,6 @@ export const dict: Record<Lang, Dict> = {
     },
     footer: 'Desenhado e construído por Isabela Yukari com o IY Lotus.',
     replay: 'Rever abertura',
+    statement: { label: 'Manifesto', text: 'Desenho em *pixels* e entrego em *código.* Estratégia, design e engenharia, num ciclo só.' },
   },
 };

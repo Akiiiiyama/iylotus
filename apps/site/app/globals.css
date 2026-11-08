@@ -227,3 +227,54 @@ html.is-opening-out .topbar { opacity: 1; }
   font: 500 12px var(--font-family-mono); letter-spacing: 0.14em; text-transform: uppercase; color: #FFFFFF;
 }
 .opening__skip { position: absolute; right: max(24px, env(safe-area-inset-right, 0px)); bottom: calc(24px + env(safe-area-inset-bottom, 0px)); mix-blend-mode: difference; }
+
+/* ---------- cena de manifesto: presa na tela enquanto a frase acende ---------- */
+.statement { position: relative; height: 240vh; background: #141414; color: #FFFFFF; view-timeline: --stmt block; }
+.statement__pin { position: sticky; top: 0; height: 100vh; display: flex; align-items: center; }
+.statement__pin > .in { width: 100%; max-width: 1280px; margin: 0 auto; padding-left: max(24px, env(safe-area-inset-left, 0px)); padding-right: max(24px, env(safe-area-inset-right, 0px)); }
+.statement__text { margin: 0; font-size: clamp(40px, 6.4vw, 104px); font-weight: 300; letter-spacing: -0.04em; line-height: 1.04; max-width: 15ch; text-wrap: balance; }
+.teaser { view-timeline: --teaser block; }
+
+/* ---------- motion ligado à rolagem (como nas páginas de produto da Apple) ----------
+   Só com suporte a scroll-driven animations e para quem não pediu menos movimento. As animações usam
+   opacity, translate e scale (propriedades separadas de transform), então rodam no compositor e não
+   brigam com o hover dos cards. Sem suporte, tudo aparece pronto. */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    /* palavras acendem uma a uma */
+    .scroll-words__w { animation: word-on linear both; }
+    .statement .scroll-words__w {
+      animation-timeline: --stmt;
+      animation-range: contain calc(4% + var(--i) / var(--n) * 72%) contain calc(4% + (var(--i) + 1) / var(--n) * 72%);
+    }
+    .teaser .scroll-words__w {
+      animation-timeline: --teaser;
+      animation-range: cover calc(18% + var(--i) / var(--n) * 40%) cover calc(18% + (var(--i) + 1) / var(--n) * 40%);
+    }
+    @keyframes word-on { from { opacity: 0.16; } to { opacity: 1; } }
+
+    /* hero se despede: o conteúdo encolhe, sobe e se dissolve */
+    .hero > .in { animation: hero-out linear both; animation-timeline: view(); animation-range: exit 0% exit 85%; transform-origin: 0 0; }
+    @keyframes hero-out { to { opacity: 0; translate: 0 -90px; scale: 0.92; } }
+
+    /* títulos de seção sobem ao entrar */
+    .section-head { animation: rise linear both; animation-timeline: view(); animation-range: entry 5% entry 70%; }
+
+    /* cards: o IY Lotus cresce até o tamanho final; os outros sobem em sequência por coluna */
+    .project { animation: rise linear both; animation-timeline: view(); animation-range: entry 0% entry 65%; }
+    .project:nth-child(3n + 2) { animation-range: entry 8% entry 73%; }
+    .project:nth-child(3n) { animation-range: entry 16% entry 81%; }
+    .project--iylotus { animation-name: zoom-in; animation-range: entry 0% cover 45%; }
+    @keyframes rise { from { opacity: 0; translate: 0 80px; scale: 0.96; } to { opacity: 1; translate: 0 0; scale: 1; } }
+    @keyframes zoom-in { from { opacity: 0.3; scale: 0.82; } to { opacity: 1; scale: 1; } }
+
+    /* experiência: cada linha desliza da esquerda */
+    .job { animation: slide-in linear both; animation-timeline: view(); animation-range: entry 10% entry 90%; }
+    @keyframes slide-in { from { opacity: 0; translate: -64px 0; } to { opacity: 1; translate: 0 0; } }
+
+    /* sobre: parágrafos e blocos sobem; contato: o título cresce até o tamanho final */
+    .about__bio p, .about__more > div { animation: rise linear both; animation-timeline: view(); animation-range: entry 10% entry 80%; }
+    .contact__title { animation: grow linear both; animation-timeline: view(); animation-range: entry 10% cover 45%; transform-origin: 0 100%; }
+    @keyframes grow { from { opacity: 0.2; scale: 0.72; } to { opacity: 1; scale: 1; } }
+  }
+}
