@@ -113,9 +113,10 @@ h1, h2 { text-wrap: balance; letter-spacing: -0.035em; line-height: 1; }
 /* IY Lotus em destaque: duas colunas, com a flor ocupando a altura que sobra */
 .project--iylotus { grid-column: span 2; }
 @media (max-width: 700px) { .project--iylotus { grid-column: auto; } }
-.project__media { aspect-ratio: 16 / 9; overflow: hidden; }
-.project--iylotus .project__media { aspect-ratio: auto; flex: 1; min-height: 200px; }
-.project--iylotus .iy-card__body { flex: 0 0 auto; }
+/* mesma altura de imagem em todos os cards: o texto começa na mesma linha e o rodapé fica preso embaixo */
+.project__media { height: clamp(180px, 17vw, 240px); overflow: hidden; flex: none; }
+.project .iy-card__body { flex: 1; }
+.project .iy-card__meta { margin-top: auto; padding-top: 8px; }
 .project__video { width: 100%; height: 100%; object-fit: cover; display: block; }
 .project__body { font-size: 15px; line-height: 1.5; opacity: 0.85; }
 .art { width: 100%; height: 100%; display: grid; place-items: center; }
