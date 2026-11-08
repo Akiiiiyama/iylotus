@@ -5,7 +5,7 @@ import { Switch } from '@iylotus/react';
 
 /**
  * Liga e desliga o modo escuro com o Switch do IY Lotus.
- * Sem escolha salva, o site segue o sistema; a escolha fica guardada neste navegador.
+ * O site abre no escuro; a escolha da pessoa fica guardada neste navegador.
  */
 export function ThemeSwitch({ label }: { label: string }) {
   const [dark, setDark] = useState<boolean | null>(null);

@@ -21,8 +21,8 @@ export function generateStaticParams() {
 }
 export const dynamicParams = false;
 
-// Roda antes da página aparecer: aplica o tema salvo e decide se a abertura toca (só na primeira visita da sessão).
-const BOOT = `(function(){try{var d=document.documentElement;var t=localStorage.getItem('iy-theme');if(t==='light'||t==='dark')d.setAttribute('data-theme',t);
+// Roda antes da página aparecer: aplica o tema (escuro por padrão, ou o salvo) e decide se a abertura toca (só na primeira visita da sessão).
+const BOOT = `(function(){try{var d=document.documentElement;var t=localStorage.getItem('iy-theme');d.setAttribute('data-theme',t==='light'?'light':'dark');
 var r=matchMedia('(prefers-reduced-motion: reduce)').matches;if(!r&&!sessionStorage.getItem('iy-opening-seen'))d.classList.add('is-opening');}catch(e){}})();`;
 
 export default async function RootLayout({ children, params }: { children: React.ReactNode; params: Promise<{ lang: string }> }) {
