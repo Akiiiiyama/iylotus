@@ -216,23 +216,6 @@ html.is-opening-out .topbar { opacity: 1; }
 .statement__pin > .in { width: 100%; max-width: 1280px; margin: 0 auto; padding-left: max(24px, env(safe-area-inset-left, 0px)); padding-right: max(24px, env(safe-area-inset-right, 0px)); }
 /* alinhada à esquerda, na mesma grade dos títulos do site; centralizada só na vertical */
 .statement__text { margin: 0; text-align: left; font-size: clamp(40px, 6.4vw, 104px); font-weight: 300; letter-spacing: -0.04em; line-height: 1.04; max-width: 15ch; text-wrap: balance; }
-/* frase à esquerda, loop design ↔ código à direita */
-.statement__grid { display: grid; grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr); align-items: center; gap: clamp(32px, 5vw, 96px); }
-@media (max-width: 860px) { .statement__grid { grid-template-columns: 1fr; gap: 40px; } .loop { max-width: 220px; } }
-
-/* loop: estado final (sem animação ou sem suporte); a rolagem anima a partir dele */
-.loop { width: 100%; max-width: 420px; justify-self: end; overflow: visible; }
-.loop__track { fill: none; stroke: rgba(255, 255, 255, 0.12); stroke-width: 1.5; }
-.loop__ticks line { stroke: rgba(255, 255, 255, 0.28); stroke-width: 1.5; }
-.loop__arc { fill: none; stroke: #FFFFFF; stroke-width: 1.5; stroke-dasharray: 1; stroke-dashoffset: 0; }
-.loop__spin { transform-box: view-box; transform-origin: 200px 200px; }
-.loop__upright { transform-box: fill-box; transform-origin: center; }
-.loop__node { fill: #141414; stroke: #FFFFFF; stroke-width: 1.5; }
-.loop__node--code { fill: #FFFFFF; }
-.loop__label { fill: #A8A8A8; font: 500 15px var(--font-family-mono); letter-spacing: 0.08em; text-anchor: middle; text-transform: uppercase; }
-.loop__center { fill: #A8A8A8; font: 400 14px var(--font-family-mono); letter-spacing: 0.06em; text-anchor: middle; }
-.loop__dot { fill: var(--color-red-600); transform-box: fill-box; transform-origin: center; }
-
 .teaser { view-timeline: --teaser block; }
 
 /* ---------- motion ligado à rolagem (como nas páginas de produto da Apple) ----------
@@ -252,17 +235,6 @@ html.is-opening-out .topbar { opacity: 1; }
       animation-range: cover calc(18% + var(--i) / var(--n) * 40%) cover calc(18% + (var(--i) + 1) / var(--n) * 40%);
     }
     @keyframes word-on { from { opacity: 0.16; } to { opacity: 1; } }
-
-    /* o loop gira e se fecha junto com a frase; o ponto vermelho aparece em "in one loop." */
-    .loop__arc, .loop__spin, .loop__upright, .loop__dot { animation-timeline: --stmt; animation-fill-mode: both; animation-timing-function: linear; }
-    .loop__arc { animation-name: loop-close; animation-range: contain 4% contain 76%; }
-    .loop__spin { animation-name: loop-spin; animation-range: contain 4% contain 76%; }
-    .loop__upright { animation-name: loop-upright; animation-range: contain 4% contain 76%; }
-    .loop__dot { animation-name: loop-dot; animation-range: contain 70% contain 80%; }
-    @keyframes loop-close { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
-    @keyframes loop-spin { from { rotate: 0deg; } to { rotate: 360deg; } }
-    @keyframes loop-upright { from { rotate: 0deg; } to { rotate: -360deg; } }
-    @keyframes loop-dot { from { scale: 0; } to { scale: 1; } }
 
     /* hero se despede: o conteúdo encolhe, sobe e se dissolve */
     .hero > .in { animation: hero-out linear both; animation-timeline: view(); animation-range: exit 0% exit 85%; transform-origin: 0 0; }
