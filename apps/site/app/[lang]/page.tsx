@@ -5,6 +5,7 @@ import { Opening } from '@/components/Opening';
 import { SectionHead } from '@/components/SectionHead';
 import { LotusBloom } from '@/components/LotusBloom';
 import { ScrollWords } from '@/components/ScrollWords';
+import { LoopDiagram } from '@/components/LoopDiagram';
 
 // Página única: abertura → hero → projetos → experiência → sobre → contato.
 // Cada seção é uma "cena" com cor própria, como os cortes do reel.
@@ -60,8 +61,9 @@ export default async function Home({ params }: { params: Promise<{ lang: Lang }>
         {/* MANIFESTO: cena presa na tela; a frase acende palavra por palavra com a rolagem */}
         <section className="statement" data-theme="dark" aria-label={t.statement.label}>
           <div className="statement__pin">
-            <div className="in">
+            <div className="in statement__grid">
               <ScrollWords text={t.statement.text} className="statement__text" />
+              <LoopDiagram from="Figma" to="React" />
             </div>
           </div>
         </section>
