@@ -210,10 +210,11 @@ html.is-opening-out .topbar { opacity: 1; }
 
 /* ---------- cena de manifesto: presa na tela enquanto a frase acende ---------- */
 .statement { position: relative; height: 200vh; background: #141414; color: #FFFFFF; view-timeline: --stmt block; }
-/* o texto fica no alto da tela presa, logo depois do hero, sem um vazio entre as duas dobras */
-.statement__pin { position: sticky; top: 0; height: 100vh; display: flex; align-items: flex-start; padding-top: clamp(56px, 12vh, 140px); }
+/* a frase fica no centro da tela enquanto está presa, sem abrir um vazio grande depois do hero:
+   a área presa ocupa só a faixa central (20vh–80vh), e a frase se centraliza dentro dela */
+.statement__pin { position: sticky; top: 20vh; min-height: 60vh; display: flex; align-items: center; }
 .statement__pin > .in { width: 100%; max-width: 1280px; margin: 0 auto; padding-left: max(24px, env(safe-area-inset-left, 0px)); padding-right: max(24px, env(safe-area-inset-right, 0px)); }
-.statement__text { margin: 0; font-size: clamp(40px, 6.4vw, 104px); font-weight: 300; letter-spacing: -0.04em; line-height: 1.04; max-width: 15ch; text-wrap: balance; }
+.statement__text { margin: 0 auto; text-align: center; font-size: clamp(40px, 6.4vw, 104px); font-weight: 300; letter-spacing: -0.04em; line-height: 1.04; max-width: 16ch; text-wrap: balance; }
 .teaser { view-timeline: --teaser block; }
 
 /* ---------- motion ligado à rolagem (como nas páginas de produto da Apple) ----------
