@@ -89,7 +89,7 @@ h1, h2 { text-wrap: balance; letter-spacing: -0.035em; line-height: 1; }
 .actions .iy-button, .teaser__button { text-decoration: none; }
 
 /* ---------- hero ---------- */
-.hero { padding-block: 128px 128px; }
+.hero { padding-block: 128px 48px; }
 .sel { position: relative; display: inline-block; margin: 48px 0 0 18px; color: #FFFFFF; }
 .sel::before { content: ""; position: absolute; inset: -12px -18px -6px; border: 1.5px solid currentColor; pointer-events: none; }
 .sel__h { position: absolute; width: 11px; height: 11px; background: #141414; border: 1.5px solid currentColor; }
@@ -209,8 +209,9 @@ html.is-opening-out .topbar { opacity: 1; }
 .opening__skip { position: absolute; right: max(24px, env(safe-area-inset-right, 0px)); bottom: calc(24px + env(safe-area-inset-bottom, 0px)); pointer-events: auto; }
 
 /* ---------- cena de manifesto: presa na tela enquanto a frase acende ---------- */
-.statement { position: relative; height: 240vh; background: #141414; color: #FFFFFF; view-timeline: --stmt block; }
-.statement__pin { position: sticky; top: 0; height: 100vh; display: flex; align-items: center; }
+.statement { position: relative; height: 200vh; background: #141414; color: #FFFFFF; view-timeline: --stmt block; }
+/* o texto fica no alto da tela presa, logo depois do hero, sem um vazio entre as duas dobras */
+.statement__pin { position: sticky; top: 0; height: 100vh; display: flex; align-items: flex-start; padding-top: clamp(56px, 12vh, 140px); }
 .statement__pin > .in { width: 100%; max-width: 1280px; margin: 0 auto; padding-left: max(24px, env(safe-area-inset-left, 0px)); padding-right: max(24px, env(safe-area-inset-right, 0px)); }
 .statement__text { margin: 0; font-size: clamp(40px, 6.4vw, 104px); font-weight: 300; letter-spacing: -0.04em; line-height: 1.04; max-width: 15ch; text-wrap: balance; }
 .teaser { view-timeline: --teaser block; }
