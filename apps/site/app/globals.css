@@ -305,6 +305,9 @@ html.is-opening body { overflow: hidden; }
 html.is-opening .topbar { opacity: 0; }
 html.is-opening-out .topbar { opacity: 1; }
 .op-bg { position: absolute; inset: 0; background: #141414; will-change: opacity; }
+/* até o JavaScript montar a animação (fontes carregadas), só o fundo aparece: senão as três palavras e o nome
+   ficam empilhados no mesmo lugar nos primeiros instantes */
+.opening:not(.is-live) :is(.op-words, .op-name, .op-dot) { visibility: hidden; }
 .op-words { position: absolute; inset: 0; display: grid; place-items: center; will-change: opacity; }
 .op-w { grid-area: 1 / 1; margin: 0; font-size: clamp(52px, 13vw, 210px); letter-spacing: -0.045em; line-height: 1; white-space: nowrap; }
 .op-w-in { display: block; will-change: transform; }

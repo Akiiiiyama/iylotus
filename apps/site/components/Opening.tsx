@@ -134,6 +134,8 @@ export function Opening({ skipLabel }: { skipLabel: string }) {
       });
       outTimer = window.setTimeout(() => html.classList.add('is-opening-out'), 4300);
       timer = window.setTimeout(finish, DUR);
+      // só agora as palavras e o nome podem aparecer: cada um já tem o seu primeiro quadro (fill 'both')
+      root.classList.add('is-live');
     };
 
     // modo de inspeção: /en?intro&opening-debug congela o relógio e deixa ver qualquer instante (para conferir quadros)
