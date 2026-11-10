@@ -42,6 +42,9 @@ h1, h2 { text-wrap: balance; letter-spacing: -0.035em; line-height: 1; }
 }
 .topbar__panel--start { padding-right: 20px; }
 .topbar__panel--end { gap: var(--space-4); padding-left: 16px; }
+/* o ponto da marca é sempre o vermelho escuro do DS (red-600), também no tema escuro
+   (onde o acento de texto vira red-300, mais claro): logo IY., títulos e abertura */
+.iy-dot { color: var(--color-red-600); }
 .topbar__brand { font-weight: 700; font-size: 22px; letter-spacing: -0.03em; color: var(--color-text-primary); text-decoration: none; }
 .topbar__nav { display: flex; gap: var(--space-6); }
 .topbar__nav a { font: 400 15px var(--font-family-sans); color: var(--color-text-primary); text-decoration: none; opacity: 0.8; }
@@ -182,7 +185,7 @@ h1, h2 { text-wrap: balance; letter-spacing: -0.035em; line-height: 1; }
 .lx-band--surface { background: var(--color-surface); color: var(--color-text-primary); }
 .lx-labels { display: flex; justify-content: space-between; font: 400 13px var(--font-family-mono); letter-spacing: 0.1em; text-transform: uppercase; opacity: 0.8; }
 .lx-headline { margin: 0; font-size: 104px; font-weight: 300; letter-spacing: -0.035em; line-height: 1; }
-.lx-dot { color: var(--color-text-accent); font-weight: 700; }
+.lx-dot { color: var(--color-red-600); font-weight: 700; }
 .lx-swatches { display: grid; grid-template-columns: repeat(11, 1fr); height: 140px; margin-top: 24px; box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08); }
 .lx-row { display: flex; gap: 16px; margin-top: 24px; }
 .lx-field { display: flex; flex-direction: column; gap: 8px; width: 420px; }
@@ -311,7 +314,7 @@ html.is-opening-out .topbar { opacity: 1; }
 .op-words { position: absolute; inset: 0; display: grid; place-items: center; will-change: opacity; }
 .op-w { grid-area: 1 / 1; margin: 0; font-size: clamp(52px, 13vw, 210px); letter-spacing: -0.045em; line-height: 1; white-space: nowrap; }
 .op-w-in { display: block; will-change: transform; }
-.op-period { color: var(--color-text-accent); } /* entra com a palavra; com ela parada, o .op-dot assume o lugar */
+.op-period { color: var(--color-red-600); } /* entra com a palavra; com ela parada, o .op-dot assume o lugar */
 /* o nome usa a mesma classe do título do hero: mesmo tamanho, mesma quebra de linha */
 .op-name { position: fixed; margin: 0; color: #FFFFFF; }
 .op-name .iy-dot { color: transparent; }
