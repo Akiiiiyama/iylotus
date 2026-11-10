@@ -12,6 +12,8 @@ const sans = DM_Sans({ subsets: ['latin'], weight: ['300', '400', '500', '700'],
 const mono = JetBrains_Mono({ subsets: ['latin'], weight: ['400', '500'], variable: '--font-jetbrains-mono', display: 'swap' });
 
 export const metadata: Metadata = {
+  // endereço oficial: links de compartilhamento e buscadores usam o .com
+  metadataBase: new URL('https://isabelayukari.com'),
   title: 'Isabela Yukari — Design Engineer',
   description: 'Senior Design Engineer. I design in pixels and ship in code.',
   icons: { icon: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><circle cx='8' cy='8' r='6' fill='%23C8102E'/></svg>" },
