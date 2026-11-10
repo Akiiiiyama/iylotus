@@ -4,6 +4,8 @@ import { Header } from '@/components/Header';
 import { Opening } from '@/components/Opening';
 import { SectionHead } from '@/components/SectionHead';
 import { LotusBloom } from '@/components/LotusBloom';
+import { StudyGraph } from '@/components/StudyGraph';
+import { LaptopDocs } from '@/components/LaptopDocs';
 import { ScrollWords } from '@/components/ScrollWords';
 
 // Página única: abertura → hero → projetos → experiência → sobre → contato.
@@ -77,7 +79,7 @@ export default async function Home({ params }: { params: Promise<{ lang: Lang }>
                     {p.id === 'skill' ? (
                       <video className="project__video" src="/work/reel.mp4" poster="/work/reel.jpg" autoPlay muted loop playsInline />
                     ) : p.id === 'iylotus' ? (
-                      <div className="art art--lotus"><LotusBloom /><span className="art__wordmark"><span className="iy-lt">IY </span><span className="iy-bd">Lotus</span><span className="art__dot">.</span></span></div>
+                      <div className="art art--lotus"><div className="art__mark"><LotusBloom /><span className="art__wordmark"><span className="iy-lt">IY </span><span className="iy-bd">Lotus</span><span className="art__dot">.</span></span></div><LaptopDocs /></div>
                     ) : p.id === 'skills' ? (
                       <div className="art art--skills">
                         <span><b>/brand-motion-intro</b> <i>ready</i></span>
@@ -87,7 +89,7 @@ export default async function Home({ params }: { params: Promise<{ lang: Lang }>
                     ) : p.id === 'site' ? (
                       <div className="art art--site"><span className="art__code">&lt;Button variant=&quot;accent&quot; /&gt;</span></div>
                     ) : (
-                      <div className="art art--pills"><span>prompts</span><span>agents</span><span>motion</span></div>
+                      <StudyGraph label="Study graph" />
                     )}
                   </CardMedia>
                   <CardBody>
