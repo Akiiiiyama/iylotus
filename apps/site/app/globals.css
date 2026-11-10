@@ -129,6 +129,7 @@ h1, h2 { text-wrap: balance; letter-spacing: -0.035em; line-height: 1; }
 /* ---------- notebook: a documentação do IY Lotus rolando, e o tema trocando no switch ---------- */
 .laptop { --sw: 336px; --k: 0.3; flex: none; display: flex; flex-direction: column; align-items: center; }
 @media (max-width: 1100px) { .laptop { --sw: 288px; --k: 0.2571; } }
+@media (max-width: 520px) { .laptop { --sw: 248px; --k: 0.2214; } .art--lotus { padding: 0 var(--space-4); } }
 .laptop__lid {
   position: relative; padding: 8px; border-radius: 14px 14px 4px 4px; background: #1F1F1F;
   box-shadow: inset 0 0 0 1px #3A3A3A, 0 24px 48px rgba(0, 0, 0, 0.45);
@@ -137,7 +138,7 @@ h1, h2 { text-wrap: balance; letter-spacing: -0.035em; line-height: 1; }
 .laptop__screen { border-radius: 3px; overflow: hidden; background: #141414; }
 .laptop__viewport { position: relative; width: var(--sw); height: calc(var(--sw) * 0.625); overflow: hidden; }
 .laptop__base {
-  position: relative; width: calc(var(--sw) + 64px); height: 10px; margin-top: -1px;
+  position: relative; width: calc(var(--sw) + 48px); height: 10px; margin-top: -1px;
   border-radius: 2px 2px 12px 12px; background: linear-gradient(#4A4A4A, #262626);
 }
 .laptop__notch { position: absolute; left: 50%; top: 0; width: 56px; height: 4px; margin-left: -28px; border-radius: 0 0 6px 6px; background: #1A1A1A; }
