@@ -1,21 +1,25 @@
+'use client';
+
+import { useEffect, useRef, useState } from 'react';
+
 /**
- * Notebook com a documentação do IY Lotus rolando na tela e o tema trocando de claro para escuro.
- * Só CSS (globals.css, bloco "notebook"): a página é desenhada em tamanho real (1120 × 700) e reduzida na tela.
- * Duas cópias da página rolam juntas; a escura aparece num círculo que nasce do switch, como no site.
- * Decorativo (aria-hidden no CardMedia). Quem pediu menos movimento vê o topo da página, parado, no tema claro.
+ * Notebook no estilo dos produtos da Apple: tampa de alumínio que abre quando o card entra na tela,
+ * bordas pretas finas, notch, e a documentação do IY Lotus (só no tema escuro) rolando na tela.
+ * O desenho e o movimento são CSS (globals.css, bloco "notebook"). Onde o navegador acompanha a rolagem
+ * (animation-timeline: view()), a tampa abre junto com o scroll; nos outros, abre uma vez ao aparecer.
+ * Decorativo (aria-hidden no CardMedia). Quem pediu menos movimento vê o notebook já aberto e a página parada.
  */
 const NEUTRALS = ['#FFFFFF', '#F2F2F2', '#E4E4E4', '#CFCFCF', '#A8A8A8', '#8A8A8A', '#6B6B6B', '#444444', '#2A2A2A', '#1C1C1C', '#141414'];
 const NAV = ['Primitives', 'Components', 'Layouts', 'Foundations', 'Theme', 'Typography'];
 
-function Page({ theme }: { theme: 'light' | 'dark' }) {
+function Page() {
   return (
-    <div className={`lx-page lx-page--${theme}`} data-theme={theme}>
+    <div className="lx-page" data-theme="dark">
       <div className="lx-scroll">
         <section className="lx-band lx-band--ink">
           <div className="lx-labels"><span>Primitives</span><span>01 / 06</span></div>
           <p className="lx-headline"><span className="iy-lt">Raw </span><span className="iy-bd">values</span><span className="lx-dot">.</span></p>
           <div className="lx-swatches">{NEUTRALS.map((c) => <i key={c} style={{ background: c }} />)}</div>
-          <div className="lx-swatches lx-swatches--red">{['#FDEBEE', '#F9CCD3', '#E4637A', '#C8102E', '#A80D27', '#8C0A20'].map((c) => <i key={c} style={{ background: c }} />)}</div>
         </section>
         <section className="lx-band lx-band--paper">
           <div className="lx-labels"><span>Components</span><span>02 / 06</span></div>
@@ -27,7 +31,7 @@ function Page({ theme }: { theme: 'light' | 'dark' }) {
           </div>
           <div className="lx-field"><span className="lx-field__label">Email</span><span className="lx-field__control">you@email.com</span></div>
         </section>
-        <section className="lx-band lx-band--red">
+        <section className="lx-band lx-band--surface">
           <div className="lx-labels"><span>Typography</span><span>06 / 06</span></div>
           <p className="lx-headline"><span className="iy-lt">Light </span><span className="iy-bd">&amp; bold</span><span className="lx-dot">.</span></p>
           <p className="lx-type lx-type--h2"><span className="iy-lt">Design </span><span className="iy-bd">Engineer</span></p>
@@ -46,17 +50,29 @@ function Page({ theme }: { theme: 'light' | 'dark' }) {
 }
 
 export function LaptopDocs() {
+  const ref = useRef<HTMLDivElement>(null);
+  const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    const el = ref.current!;
+    const io = new IntersectionObserver(([e]) => { if (e.isIntersecting) { setOpen(true); io.disconnect(); } }, { threshold: 0.4 });
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
   return (
-    <div className="laptop">
+    <div ref={ref} className="laptop" data-lid={open ? 'open' : 'closed'}>
       <div className="laptop__lid">
-        <div className="laptop__screen">
-          <div className="laptop__viewport">
-            <Page theme="light" />
-            <Page theme="dark" />
+        <div className="laptop__face laptop__face--front">
+          <div className="laptop__screen">
+            <div className="laptop__viewport"><Page /></div>
+            <span className="laptop__notch" />
+            <span className="laptop__glare" />
           </div>
         </div>
+        <div className="laptop__face laptop__face--back" />
       </div>
-      <div className="laptop__base"><span className="laptop__notch" /></div>
+      <div className="laptop__base"><span className="laptop__lip" /></div>
     </div>
   );
 }
