@@ -62,49 +62,45 @@
 html { scroll-behavior: smooth; }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
 body { background: var(--bg); color: var(--text); font-family: var(--font-sans); font-size: 16px; line-height: 1.55; -webkit-font-smoothing: antialiased; }
-body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 30; background: #141414; }
 .lt { font-weight: 300; } .bd { font-weight: 700; }
 .mono { font-family: var(--font-mono); letter-spacing: .04em; }
 h1, h2, h3, h4 { margin: 0; text-wrap: balance; letter-spacing: -0.035em; line-height: 1.02; }
 p { margin: 0; max-width: 64ch; }
 code { font-family: var(--font-mono); font-size: .86em; }
 
-.shell { display: grid; grid-template-columns: var(--side) minmax(0, 1fr); min-height: 100%; }
-
-/* ---------- barra lateral ---------- */
-.side { position: sticky; top: env(safe-area-inset-top, 0px); height: calc(100vh - env(safe-area-inset-top, 0px)); overflow-y: auto; background: #141414; color: #FFFFFF; display: flex; flex-direction: column; gap: 32px; padding: 28px 20px 24px max(20px, env(safe-area-inset-left, 0px)); color-scheme: dark; }
-.brand { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 18px; letter-spacing: -0.02em; color: #FFFFFF; text-decoration: none; }
-.brand small { display: block; font: 400 11px var(--font-mono); letter-spacing: .12em; color: #A8A8A8; text-transform: uppercase; margin-top: 2px; }
-.nav { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 2px; }
-.nav > li > a { display: grid; grid-template-columns: 28px minmax(0, 1fr) 10px; align-items: center; gap: 8px; padding: 10px 10px; color: #CFCFCF; text-decoration: none; font-size: 15px; font-weight: 500; border-radius: 8px; }
-.nav > li > a .n { font: 400 12px var(--font-mono); color: #8A8A8A; }
-.nav > li > a::after { content: ""; width: 7px; height: 7px; border-radius: 50%; background: #C8102E; opacity: 0; transform: scale(.4); transition: opacity .3s var(--ease-out), transform .3s var(--ease-out); }
-.nav > li > a:hover { background: #1C1C1C; color: #FFFFFF; }
-.nav > li > a[aria-current="true"] { color: #FFFFFF; background: #1C1C1C; }
-.nav > li > a[aria-current="true"] .n { color: #E4637A; }
-.nav > li > a[aria-current="true"]::after { opacity: 1; transform: none; }
-.nav a:focus-visible { outline: 2px solid #FFFFFF; outline-offset: 2px; }
-.sub { list-style: none; margin: 2px 0 8px 36px; padding: 0 0 0 12px; border-left: 1px solid #2A2A2A; display: flex; flex-direction: column; }
-.sub a { display: block; padding: 5px 8px; font-size: 13px; color: #A8A8A8; text-decoration: none; border-radius: 6px; }
-.sub a:hover { color: #FFFFFF; }
-.side-foot { margin-top: auto; display: flex; flex-direction: column; gap: 14px; padding-top: 20px; border-top: 1px solid #2A2A2A; }
-.theme-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; font: 400 12px var(--font-mono); color: #A8A8A8; }
-.side-foot .ver { font: 400 11px var(--font-mono); color: #6B6B6B; letter-spacing: .06em; }
-
-@media (max-width: 900px) {
-  .shell { grid-template-columns: 1fr; }
-  .side { height: auto; position: sticky; z-index: 20; flex-direction: row; align-items: center; gap: 16px; padding: 12px max(16px, env(safe-area-inset-right, 0px)) 12px max(16px, env(safe-area-inset-left, 0px)); overflow-x: auto; overflow-y: hidden; }
-  .brand small, .sub, .side-foot .ver { display: none; }
-  .nav { flex-direction: row; gap: 4px; }
-  .nav > li > a { grid-template-columns: auto auto; white-space: nowrap; padding: 8px 10px; font-size: 14px; }
-  .nav > li > a::after { display: none; }
-  .side-foot { margin-top: 0; padding-top: 0; border-top: 0; flex: none; }
-  .theme-row span { display: none; }
-  section { scroll-margin-top: 64px; }
+/* ---------- header flutuante (o mesmo do site): dois painéis soltos do topo, vidro, borda fina, raio lg ---------- */
+.topbar {
+  position: fixed; z-index: 50; left: 0; right: 0; top: calc(16px + env(safe-area-inset-top, 0px));
+  display: flex; justify-content: space-between; align-items: center; gap: 12px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  pointer-events: none;
 }
+.topbar__panel {
+  pointer-events: auto; display: flex; align-items: center; gap: 24px; min-height: 56px; min-width: 0;
+  padding: 8px 20px; border-radius: 18px;
+  background: color-mix(in srgb, var(--surface) 82%, transparent);
+  border: 1px solid var(--border);
+  backdrop-filter: blur(16px) saturate(140%); -webkit-backdrop-filter: blur(16px) saturate(140%);
+  box-shadow: 0 6px 16px rgba(0,0,0,.14);
+  color: var(--text);
+}
+.topbar__panel--end { gap: 12px; padding: 8px 12px 8px 16px; flex: none; }
+.brand { display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 17px; letter-spacing: -0.02em; color: var(--text); text-decoration: none; white-space: nowrap; flex: none; }
+.brand svg path { stroke: var(--text); }
+.nav { list-style: none; margin: 0; padding: 0; display: flex; gap: 4px; overflow-x: auto; scrollbar-width: none; min-width: 0; }
+.nav::-webkit-scrollbar { display: none; }
+.nav a { display: inline-flex; align-items: center; gap: 6px; padding: 8px 10px; border-radius: 999px; font-size: 14px; font-weight: 500; color: var(--text-2); text-decoration: none; white-space: nowrap; }
+.nav a .n { font: 400 11px var(--font-mono); color: var(--text-2); }
+.nav a:hover { color: var(--text); }
+.nav a[aria-current="true"] { color: var(--text); background: color-mix(in srgb, var(--text) 8%, transparent); }
+.nav a[aria-current="true"] .n { color: var(--accent-text); }
+.nav a:focus-visible, .brand:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.theme-row { display: flex; align-items: center; gap: 10px; font: 400 12px var(--font-mono); color: var(--text-2); white-space: nowrap; }
+@media (max-width: 860px) { .brand-name, .theme-row > span { display: none; } .topbar__panel { gap: 12px; padding: 8px 12px; } }
 
 /* ---------- cenas ---------- */
-section { position: relative; padding-block: 64px 88px; }
+section { position: relative; padding-block: 64px 88px; scroll-margin-top: 88px; }
+main > section:first-child { padding-top: 152px; }
 section > .in { max-width: 1120px; padding-left: max(48px, env(safe-area-inset-left, 0px)); padding-right: max(48px, env(safe-area-inset-right, 0px)); }
 @media (max-width: 900px) { section > .in { padding-left: max(24px, env(safe-area-inset-left, 0px)); padding-right: max(24px, env(safe-area-inset-right, 0px)); } }
 @media (max-width: 480px) { section > .in { padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); } }
@@ -112,7 +108,6 @@ section > .in { max-width: 1120px; padding-left: max(48px, env(safe-area-inset-l
 .surface { background: var(--surface); color: var(--text); --line: var(--border); --sub: var(--text-2); box-shadow: inset 0 1px 0 var(--seam); }
 .ink { background: #141414; color: #FFFFFF; --line: rgba(255,255,255,.13); --sub: #A8A8A8; --focus: #FFFFFF; color-scheme: dark; }
 .red { background: #C8102E; color: #FFFFFF; --line: rgba(255,255,255,.3); --sub: #FFFFFF; --focus: #FFFFFF; color-scheme: dark; }
-.grid-bg { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='192' height='192'%3E%3Cpath d='M0 0 H192 M0 0 V192' stroke='rgba(255,255,255,0.07)' stroke-width='1'/%3E%3Cpath d='M-7 0 H7 M0 -7 V7' stroke='rgba(255,255,255,0.4)' stroke-width='1.5'/%3E%3C/svg%3E"); }
 
 .red .labels, .red .family .mono, .red .dodont p { opacity: 1 !important; }
 .labels { display: flex; justify-content: space-between; gap: 16px; font: 400 12px var(--font-mono); letter-spacing: .1em; text-transform: uppercase; opacity: .8; margin-bottom: 40px; }
@@ -122,7 +117,7 @@ section > .in { max-width: 1120px; padding-left: max(48px, env(safe-area-inset-l
 .dot { color: #C8102E; }
 .paper .dot, .surface .dot { color: var(--accent-text); }
 .red .dot { color: #141414; }
-.block { margin-top: 64px; scroll-margin-top: 24px; }
+.block { margin-top: 64px; scroll-margin-top: 96px; }
 .block-head { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; flex-wrap: wrap; padding-bottom: 14px; margin-bottom: 28px; border-bottom: 1.5px solid currentColor; }
 .block-head h3 { font-size: clamp(28px, 3.4vw, 44px); font-weight: 300; }
 .block-head h3 b { font-weight: 700; }
@@ -326,42 +321,36 @@ footer.end h2 b { font-weight: 700; }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition-duration: 0s !important; animation-duration: 0s !important; } }
 </style>
 
-<div class="shell">
-  <aside class="side" aria-label="Navegação do design system">
-    <a class="brand" href="#primitives">
-      <svg width="30" height="30" viewBox="0 0 32 32" aria-hidden="true">
-        <path d="M16 4 C21 10 21 18 16 26 C11 18 11 10 16 4 Z" fill="none" stroke="#FFFFFF" stroke-width="1.6"/>
-        <path d="M15 25 C9 23 5 17 5 11 C10 13 13 17 15 25 Z" fill="none" stroke="#FFFFFF" stroke-width="1.6"/>
-        <path d="M17 25 C23 23 27 17 27 11 C22 13 19 17 17 25 Z" fill="none" stroke="#FFFFFF" stroke-width="1.6"/>
+<header class="topbar">
+  <div class="topbar__panel">
+    <a class="brand" href="#primitives" aria-label="IY Lotus, início">
+      <svg width="26" height="26" viewBox="0 0 32 32" aria-hidden="true">
+        <path d="M16 4 C21 10 21 18 16 26 C11 18 11 10 16 4 Z" fill="none" stroke-width="1.6"/>
+        <path d="M15 25 C9 23 5 17 5 11 C10 13 13 17 15 25 Z" fill="none" stroke-width="1.6"/>
+        <path d="M17 25 C23 23 27 17 27 11 C22 13 19 17 17 25 Z" fill="none" stroke-width="1.6"/>
         <circle cx="16" cy="28.5" r="2.2" fill="#C8102E"/>
       </svg>
-      <span>IY Lotus<small>Design system</small></span>
+      <span class="brand-name">IY Lotus</span>
     </a>
-    <nav>
+    <nav aria-label="Seções do design system">
       <ol class="nav" id="nav">
-        <li><a href="#primitives"><span class="n">01</span>Primitives</a>
-          <ul class="sub"><li><a href="#p-color">Color</a></li><li><a href="#p-space">Space</a></li><li><a href="#p-shape">Shape &amp; elevation</a></li><li><a href="#p-motion">Motion</a></li></ul></li>
-        <li><a href="#components"><span class="n">02</span>Components</a>
-          <ul class="sub"><li><a href="#c-button">Button</a></li><li><a href="#c-inputs">Inputs</a></li><li><a href="#c-cards">Cards</a></li><li><a href="#c-support">Support</a></li></ul></li>
-        <li><a href="#layouts"><span class="n">03</span>Layouts</a>
-          <ul class="sub"><li><a href="#l-grid">Grid</a></li><li><a href="#l-breakpoints">Breakpoints</a></li><li><a href="#l-patterns">Patterns</a></li></ul></li>
-        <li><a href="#foundations"><span class="n">04</span>Foundations</a>
-          <ul class="sub"><li><a href="#f-values">Values</a></li><li><a href="#f-layers">Layers</a></li><li><a href="#f-a11y">Accessibility</a></li><li><a href="#f-naming">Naming</a></li></ul></li>
-        <li><a href="#theme"><span class="n">05</span>Theme</a>
-          <ul class="sub"><li><a href="#t-tokens">Semantic tokens</a></li><li><a href="#t-modes">Light &amp; dark</a></li><li><a href="#t-scenes">Scenes</a></li></ul></li>
-        <li><a href="#typography"><span class="n">06</span>Typography</a>
-          <ul class="sub"><li><a href="#y-families">Families</a></li><li><a href="#y-scale">Scale</a></li><li><a href="#y-pairing">Pairing</a></li></ul></li>
+        <li><a href="#primitives"><span class="n">01</span>Primitives</a></li>
+        <li><a href="#components"><span class="n">02</span>Components</a></li>
+        <li><a href="#layouts"><span class="n">03</span>Layouts</a></li>
+        <li><a href="#foundations"><span class="n">04</span>Foundations</a></li>
+        <li><a href="#theme"><span class="n">05</span>Theme</a></li>
+        <li><a href="#typography"><span class="n">06</span>Typography</a></li>
       </ol>
     </nav>
-    <div class="side-foot">
-      <div class="theme-row"><span>theme: <span id="themeName">light</span></span><button class="switch" id="themeSwitch" role="switch" aria-checked="false" aria-label="Modo escuro"></button></div>
-      <span class="ver">v0 · draft</span>
-    </div>
-  </aside>
+  </div>
+  <div class="topbar__panel topbar__panel--end">
+    <div class="theme-row"><span>theme: <span id="themeName">light</span></span><button class="switch" id="themeSwitch" role="switch" aria-checked="false" aria-label="Modo escuro"></button></div>
+  </div>
+</header>
 
-  <main>
+<main>
     <!-- 01 PRIMITIVES -->
-    <section id="primitives" class="ink grid-bg">
+    <section id="primitives" class="ink">
       <div class="in">
         <div class="labels"><span>Primitives</span><span>01 / 06</span></div>
         <h1 class="headline"><span class="lt">Raw </span><b>values</b><span class="dot">.</span></h1>
@@ -645,7 +634,6 @@ footer.end h2 b { font-weight: 700; }
       </div>
     </footer>
   </main>
-</div>
 
 <script>
 (function () {
@@ -738,7 +726,7 @@ footer.end h2 b { font-weight: 700; }
   sw2.addEventListener('click', () => { const on = sw2.getAttribute('aria-checked') !== 'true'; sw2.setAttribute('aria-checked', String(on)); document.getElementById('sw2l').textContent = 'switch: ' + (on ? 'on' : 'off'); });
 
   // barra lateral: marca a seção visível
-  const links = [...document.querySelectorAll('.nav > li > a')];
+  const links = [...document.querySelectorAll('.nav a')];
   const sections = links.map((a) => document.querySelector(a.getAttribute('href')));
   const setCurrent = () => {
     const y = innerHeight * 0.35;
