@@ -16,6 +16,15 @@ export const metadata: Metadata = {
   metadataBase: new URL('https://isabelayukari.com'),
   title: 'Isabela Yukari — Design Engineer',
   description: 'Senior Design Engineer. I design in pixels and ship in code.',
+  // prévia do link no LinkedIn, WhatsApp e Slack (a imagem vem de opengraph-image.png nesta pasta)
+  openGraph: {
+    type: 'website',
+    siteName: 'Isabela Yukari',
+    title: 'Isabela Yukari — Design Engineer',
+    description: 'I design in pixels and ship in code. Strategy, design and engineering, in one loop.',
+    url: '/',
+  },
+  twitter: { card: 'summary_large_image', title: 'Isabela Yukari — Design Engineer', description: 'I design in pixels and ship in code.' },
   icons: { icon: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><circle cx='8' cy='8' r='6' fill='%23C8102E'/></svg>" },
 };
 
