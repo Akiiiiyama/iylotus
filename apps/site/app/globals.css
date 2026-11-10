@@ -121,7 +121,88 @@ h1, h2 { text-wrap: balance; letter-spacing: -0.035em; line-height: 1; }
 .project__video { width: 100%; height: 100%; object-fit: cover; display: block; }
 .project__body { font-size: 15px; line-height: 1.5; opacity: 0.85; }
 .art { width: 100%; height: 100%; display: grid; place-items: center; }
-.art--lotus { background: #141414; color: #FFFFFF; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: var(--space-4); }
+.art--lotus { background: #141414; color: #FFFFFF; display: flex; justify-content: center; align-items: center; gap: clamp(24px, 5vw, 72px); padding: 0 var(--space-6); }
+.art__mark { display: flex; flex-direction: column; align-items: center; gap: var(--space-4); flex: none; }
+.project--iylotus .project__media { height: clamp(260px, 24vw, 320px); }
+@media (max-width: 700px) { .art__mark { display: none; } }
+
+/* ---------- notebook: a documentação do IY Lotus rolando, e o tema trocando no switch ---------- */
+.laptop { --sw: 336px; --k: 0.3; flex: none; display: flex; flex-direction: column; align-items: center; }
+@media (max-width: 1100px) { .laptop { --sw: 288px; --k: 0.2571; } }
+.laptop__lid {
+  position: relative; padding: 8px; border-radius: 14px 14px 4px 4px; background: #1F1F1F;
+  box-shadow: inset 0 0 0 1px #3A3A3A, 0 24px 48px rgba(0, 0, 0, 0.45);
+}
+.laptop__lid::before { content: ""; position: absolute; top: 3px; left: 50%; width: 3px; height: 3px; margin-left: -1.5px; border-radius: 50%; background: #3A3A3A; }
+.laptop__screen { border-radius: 3px; overflow: hidden; background: #141414; }
+.laptop__viewport { position: relative; width: var(--sw); height: calc(var(--sw) * 0.625); overflow: hidden; }
+.laptop__base {
+  position: relative; width: calc(var(--sw) + 64px); height: 10px; margin-top: -1px;
+  border-radius: 2px 2px 12px 12px; background: linear-gradient(#4A4A4A, #262626);
+}
+.laptop__notch { position: absolute; left: 50%; top: 0; width: 56px; height: 4px; margin-left: -28px; border-radius: 0 0 6px 6px; background: #1A1A1A; }
+
+/* a página da documentação em tamanho real, reduzida para caber na tela */
+.lx-page {
+  position: absolute; left: 0; top: 0; width: 1120px; height: 700px; overflow: hidden;
+  transform: scale(var(--k)); transform-origin: 0 0;
+  background: var(--color-bg); color: var(--color-text-primary); font-family: var(--font-family-sans);
+}
+.lx-page--dark { clip-path: circle(0px at 1064px 44px); }
+.lx-band { height: 700px; padding: 132px 96px 0; display: flex; flex-direction: column; gap: 32px; }
+.lx-band--ink { background: #141414; color: #FFFFFF; }
+.lx-band--paper { background: var(--color-bg); color: var(--color-text-primary); }
+.lx-band--red { background: #C8102E; color: #FFFFFF; }
+.lx-labels { display: flex; justify-content: space-between; font: 400 13px var(--font-family-mono); letter-spacing: 0.1em; text-transform: uppercase; opacity: 0.8; }
+.lx-headline { margin: 0; font-size: 104px; font-weight: 300; letter-spacing: -0.035em; line-height: 1; }
+.lx-dot { color: var(--color-red-600); font-weight: 700; }
+.lx-band--paper .lx-dot { color: var(--color-text-accent); }
+.lx-band--red .lx-dot { color: #141414; }
+.lx-swatches { display: grid; grid-template-columns: repeat(11, 1fr); height: 120px; margin-top: 24px; }
+.lx-swatches--red { grid-template-columns: repeat(6, 1fr); height: 72px; margin-top: -30px; }
+.lx-row { display: flex; gap: 16px; margin-top: 24px; }
+.lx-field { display: flex; flex-direction: column; gap: 8px; width: 420px; }
+.lx-field__label { font-size: 15px; font-weight: 500; }
+.lx-field__control { height: 52px; display: flex; align-items: center; padding: 0 18px; border-radius: 8px; border: 1.5px solid var(--color-border-strong); background: var(--color-surface-raised); color: var(--color-text-secondary); font-size: 16px; }
+.lx-type { margin: 0; }
+.lx-type--h2 { font-size: 84px; letter-spacing: -0.03em; line-height: 1; margin-top: 24px; }
+.lx-type--label { font: 500 16px var(--font-family-mono); letter-spacing: 0.1em; text-transform: uppercase; }
+.lx-topbar { position: absolute; top: 16px; left: 16px; right: 16px; display: flex; justify-content: space-between; }
+.lx-panel {
+  display: flex; align-items: center; gap: 18px; height: 56px; padding: 0 20px; border-radius: 18px;
+  background: color-mix(in srgb, var(--color-surface) 88%, transparent); border: 1px solid var(--color-border);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.14); color: var(--color-text-primary);
+}
+.lx-panel--end { padding: 0 12px; }
+.lx-brand { font-weight: 700; font-size: 17px; letter-spacing: -0.02em; margin-right: 6px; }
+.lx-nav { font-size: 14px; font-weight: 500; color: var(--color-text-secondary); padding: 8px 10px; border-radius: 999px; }
+.lx-nav b { font: 400 11px var(--font-family-mono); margin-right: 6px; }
+.lx-nav--on { color: var(--color-text-primary); background: color-mix(in srgb, var(--color-text-primary) 8%, transparent); }
+.lx-switch { position: relative; width: 56px; height: 32px; border-radius: 999px; background: #2A2A2A; }
+.lx-switch::after { content: ""; position: absolute; left: 4px; top: 4px; width: 24px; height: 24px; border-radius: 50%; background: #FFFFFF; }
+.lx-page--dark .lx-switch::after { transform: translateX(24px); background: var(--color-red-600); }
+
+@media (prefers-reduced-motion: no-preference) {
+  /* 14 s: topo → Components → o tema vira escuro → Typography → volta ao topo e ao claro */
+  .lx-scroll { animation: lx-scroll 14s var(--ease-in-out) infinite; }
+  .lx-page--dark { animation: lx-dark 14s var(--ease-in-out) infinite; }
+  .lx-page--light .lx-switch::after { animation: lx-knob 14s var(--ease-out) infinite; }
+  @keyframes lx-scroll {
+    0%, 10% { transform: translateY(0); }
+    24%, 58% { transform: translateY(-700px); }
+    70%, 84% { transform: translateY(-1400px); }
+    96%, 100% { transform: translateY(0); }
+  }
+  @keyframes lx-dark {
+    0%, 36% { clip-path: circle(0px at 1064px 44px); }
+    48%, 88% { clip-path: circle(1400px at 1064px 44px); }
+    97%, 100% { clip-path: circle(0px at 1064px 44px); }
+  }
+  @keyframes lx-knob {
+    0%, 33%, 92%, 100% { transform: translateX(0); background: #FFFFFF; }
+    37%, 88% { transform: translateX(24px); background: var(--color-red-600); }
+  }
+}
 .art__wordmark { font-size: clamp(26px, 2.6vw, 38px); letter-spacing: -0.04em; line-height: 1; }
 /* a flor de lótus abrindo: cada pétala gira a partir da base, das do meio para as de fora */
 .lotus { width: clamp(90px, 9vw, 140px); height: auto; overflow: visible; }
@@ -145,9 +226,10 @@ h1, h2 { text-wrap: balance; letter-spacing: -0.035em; line-height: 1; }
 .art--skills span:first-child i { color: var(--color-red-300); }
 .art--site { background: var(--color-surface); font: 500 clamp(14px, 1.6vw, 18px) var(--font-family-mono); color: var(--color-text-primary); }
 .art__code { padding: 10px 16px; border: 1.5px solid var(--color-border-strong); border-radius: var(--radius-md); }
-.art--pills { background: var(--color-surface); display: flex; justify-content: center; align-items: center; gap: var(--space-2); flex-wrap: wrap; padding: var(--space-6); }
-.art--pills span { font: 500 13px var(--font-family-mono); letter-spacing: 0.08em; text-transform: uppercase; padding: 8px 14px; border-radius: var(--radius-pill); background: var(--color-action-primary); color: var(--color-text-inverse); }
-.art--pills span:nth-child(2) { background: var(--color-action-accent); color: #FFFFFF; }
+/* card AI Pills: constelação do mapa de estudos (recorte público do painel, formato Graphify) */
+.study-graph { position: relative; width: 100%; height: 100%; background: #141414; }
+.study-graph__canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.study-graph__label { position: absolute; left: 14px; top: 12px; font: 400 11px var(--font-family-mono); letter-spacing: 0.1em; text-transform: uppercase; color: #A8A8A8; }
 
 /* ---------- experiência ---------- */
 .jobs { list-style: none; margin: 0; padding: 0; border-top: 1.5px solid var(--color-border-strong); }
