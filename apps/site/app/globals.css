@@ -311,7 +311,7 @@ html.is-opening-out .topbar { opacity: 1; }
 .op-words { position: absolute; inset: 0; display: grid; place-items: center; will-change: opacity; }
 .op-w { grid-area: 1 / 1; margin: 0; font-size: clamp(52px, 13vw, 210px); letter-spacing: -0.045em; line-height: 1; white-space: nowrap; }
 .op-w-in { display: block; will-change: transform; }
-.op-period { color: transparent; } /* o ponto de verdade é o .op-dot, que viaja */
+.op-period { color: var(--color-text-accent); } /* entra com a palavra; com ela parada, o .op-dot assume o lugar */
 /* o nome usa a mesma classe do título do hero: mesmo tamanho, mesma quebra de linha */
 .op-name { position: fixed; margin: 0; color: #FFFFFF; }
 .op-name .iy-dot { color: transparent; }

@@ -8,8 +8,9 @@ import { useEffect, useRef, useState } from 'react';
  *
  * Roteiro (ms):
  *     0  Strategy → Design → Engineering, gigantes, uma por vez, cada uma entra inteira e sai antes da próxima
- *  2150  as palavras se dissolvem; fica o ponto vermelho de "Engineering.", que viaja até o ponto final do título
- *  2750  "Isabela Yukari" nasce do ponto: o nome se revela da direita para a esquerda, já no lugar final
+ *  2250  "Engineering." já parado: o ponto da palavra vira o ponto que viaja (mesmo lugar, mesma cor);
+ *        as palavras se dissolvem e o ponto viaja até o ponto final do título
+ *  2850  "Isabela Yukari" nasce do ponto: o nome se revela da direita para a esquerda, já no lugar final
  *  3600  a caixa de seleção do Figma se desenha em volta; o spec entra
  *  4100  rótulos, subtítulo, texto, botões e header entram em sequência
  *  5100  fim
@@ -92,7 +93,13 @@ export function Opening({ skipLabel }: { skipLabel: string }) {
       const nmDot = dotGeom(q('.op-name .iy-dot'));
       const dot = q('.op-dot');
       const D = nmDot.d;
+      // a cor é a do ponto do título real, para não haver troca de cor quando a abertura acaba
+      const heroDot = hero?.querySelector('.iy-dot');
+      const dotColor = heroDot ? getComputedStyle(heroDot).color : '';
       Object.assign(dot.style, { width: `${D}px`, height: `${D}px`, left: `${nmDot.cx - D / 2}px`, top: `${nmDot.cy - D / 2}px` });
+      if (dotColor) dot.style.background = dotColor;
+      const period = q('.op-w:last-child .op-period');
+      if (dotColor) period.style.color = dotColor;
       const at = (cx: number, cy: number, sc: number) => `translate(${cx - nmDot.cx}px, ${cy - nmDot.cy}px) scale(${sc})`;
 
       // ---- 1 · as três palavras, uma por vez, cada uma empurra a anterior para cima
@@ -106,18 +113,22 @@ export function Opening({ skipLabel }: { skipLabel: string }) {
         if (i < words.length - 1) anim(w, [{ opacity: 1, transform: 'translateY(0)' }, { opacity: 0, transform: 'translateY(-22%)' }], tIn + slot - 260, 260, 'cubic-bezier(.55, 0, 1, .45)', 'forwards');
       });
 
-      // ---- 2 · o ponto de "Engineering." aparece, as palavras se dissolvem e ele viaja até o ponto final do título
-      anim(dot, [{ transform: at(engDot.cx, engDot.cy, 0) }, { transform: at(engDot.cx, engDot.cy, engDot.d / D) }], 200 + 2 * slot + 380, 380);
-      anim('.op-words', [{ opacity: 1 }, { opacity: 0 }], 2150, 450, 'ease-out');
-      anim(dot, [{ transform: at(engDot.cx, engDot.cy, engDot.d / D) }, { transform: at(nmDot.cx, nmDot.cy, 1) }], 2200, 650, EASE_IN_OUT, 'forwards');
+      // ---- 2 · o ponto entra junto com "Engineering." (é parte da palavra). Com a palavra parada, ele é trocado
+      // pelo ponto que viaja, no mesmo lugar e na mesma cor (troca invisível); as palavras se dissolvem e ele viaja
+      const tSwap = 2250;
+      const eng = at(engDot.cx, engDot.cy, engDot.d / D);
+      anim(dot, [{ opacity: 0, transform: eng }, { opacity: 1, transform: eng }], tSwap, 1, 'linear');
+      anim(period, [{ opacity: 1 }, { opacity: 0 }], tSwap, 1, 'linear', 'forwards');
+      anim('.op-words', [{ opacity: 1 }, { opacity: 0 }], tSwap, 450, 'ease-out');
+      anim(dot, [{ transform: eng }, { transform: at(nmDot.cx, nmDot.cy, 1) }], tSwap + 50, 650, EASE_IN_OUT, 'forwards');
 
       // ---- 3 · o nome nasce do ponto: uma janela abre da direita para a esquerda, com o texto parado no lugar final
       const wpx = r ? r.width + 40 : innerWidth;
-      anim('.op-reveal', [{ transform: `translateX(${wpx}px)` }, { transform: 'translateX(0)' }], 2750, 900, EASE_IN_OUT);
-      anim('.op-reveal-in', [{ transform: `translateX(${-wpx}px)` }, { transform: 'translateX(0)' }], 2750, 900, EASE_IN_OUT);
+      anim('.op-reveal', [{ transform: `translateX(${wpx}px)` }, { transform: 'translateX(0)' }], 2850, 900, EASE_IN_OUT);
+      anim('.op-reveal-in', [{ transform: `translateX(${-wpx}px)` }, { transform: 'translateX(0)' }], 2850, 900, EASE_IN_OUT);
 
       // a cena escura sai e a página (já no lugar) aparece por trás; o nome copiado coincide com o título real
-      anim('.op-bg', [{ opacity: 1 }, { opacity: 0 }], 3550, 450, 'ease-out');
+      anim('.op-bg', [{ opacity: 1 }, { opacity: 0 }], 3650, 450, 'ease-out');
 
       // ---- 4 · a caixa de seleção do Figma se desenha em volta do nome
       const sel = document.querySelector<HTMLElement>('.hero .sel');
