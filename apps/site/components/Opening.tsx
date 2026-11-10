@@ -7,12 +7,12 @@ import { useEffect, useRef, useState } from 'react';
  * da abertura é o próprio hero. Uma cor (o preto da página), uma fonte, um momento de impacto.
  *
  * Roteiro (ms):
- *     0  Strategy → Design → Engineering, gigantes, uma por vez, cada uma empurra a anterior pela máscara
- *  1700  as palavras se dissolvem; fica o ponto vermelho de "Engineering.", que viaja até o ponto final do título
- *  2300  "Isabela Yukari" nasce do ponto: o nome se revela da direita para a esquerda, já no lugar final
- *  3200  a caixa de seleção do Figma se desenha em volta; o spec entra
- *  3700  rótulos, subtítulo, texto, botões e header entram em sequência
- *  4700  fim
+ *     0  Strategy → Design → Engineering, gigantes, uma por vez, cada uma entra inteira e sai antes da próxima
+ *  2150  as palavras se dissolvem; fica o ponto vermelho de "Engineering.", que viaja até o ponto final do título
+ *  2750  "Isabela Yukari" nasce do ponto: o nome se revela da direita para a esquerda, já no lugar final
+ *  3600  a caixa de seleção do Figma se desenha em volta; o spec entra
+ *  4100  rótulos, subtítulo, texto, botões e header entram em sequência
+ *  5100  fim
  *
  * Fluidez: Web Animations API, só transform e opacity (rodam no compositor, fora da thread principal).
  * As medidas são feitas uma vez, antes de começar.
@@ -20,7 +20,7 @@ import { useEffect, useRef, useState } from 'react';
  * TODO (voz): quando a gravação existir, "Welcome to my website" entra como áudio, a partir de um clique.
  */
 
-const DUR = 4700;
+const DUR = 5100;
 const WORDS: [string, 'iy-lt' | 'iy-bd'][] = [['Strategy', 'iy-lt'], ['Design', 'iy-lt'], ['Engineering', 'iy-bd']];
 
 const EASE_OUT = 'cubic-bezier(.16, 1, .3, 1)';
@@ -97,40 +97,42 @@ export function Opening({ skipLabel }: { skipLabel: string }) {
 
       // ---- 1 · as três palavras, uma por vez, cada uma empurra a anterior para cima
       const words = [...root.querySelectorAll<HTMLElement>('.op-w-in')];
-      const slot = 560;
+      // sem máscara: a palavra entra inteira (sobe um pouco e aparece) e só sai quando a próxima vai entrar,
+      // para nunca haver duas meias palavras na tela
+      const slot = 720;
       words.forEach((w, i) => {
-        const tIn = 150 + i * slot;
-        anim(w, [{ transform: 'translateY(130%)' }, { transform: 'translateY(0)' }], tIn, 650);
-        if (i < words.length - 1) anim(w, [{ transform: 'translateY(0)' }, { transform: 'translateY(-130%)' }], tIn + slot, 650, EASE_OUT, 'forwards');
+        const tIn = 200 + i * slot;
+        anim(w, [{ opacity: 0, transform: 'translateY(28%)' }, { opacity: 1, transform: 'translateY(0)' }], tIn, 620);
+        if (i < words.length - 1) anim(w, [{ opacity: 1, transform: 'translateY(0)' }, { opacity: 0, transform: 'translateY(-22%)' }], tIn + slot - 260, 260, 'cubic-bezier(.55, 0, 1, .45)', 'forwards');
       });
 
       // ---- 2 · o ponto de "Engineering." aparece, as palavras se dissolvem e ele viaja até o ponto final do título
-      anim(dot, [{ transform: at(engDot.cx, engDot.cy, 0) }, { transform: at(engDot.cx, engDot.cy, engDot.d / D) }], 150 + 2 * slot + 320, 380);
-      anim('.op-words', [{ opacity: 1 }, { opacity: 0 }], 1750, 450, 'ease-out');
-      anim(dot, [{ transform: at(engDot.cx, engDot.cy, engDot.d / D) }, { transform: at(nmDot.cx, nmDot.cy, 1) }], 1800, 650, EASE_IN_OUT, 'forwards');
+      anim(dot, [{ transform: at(engDot.cx, engDot.cy, 0) }, { transform: at(engDot.cx, engDot.cy, engDot.d / D) }], 200 + 2 * slot + 380, 380);
+      anim('.op-words', [{ opacity: 1 }, { opacity: 0 }], 2150, 450, 'ease-out');
+      anim(dot, [{ transform: at(engDot.cx, engDot.cy, engDot.d / D) }, { transform: at(nmDot.cx, nmDot.cy, 1) }], 2200, 650, EASE_IN_OUT, 'forwards');
 
       // ---- 3 · o nome nasce do ponto: uma janela abre da direita para a esquerda, com o texto parado no lugar final
       const wpx = r ? r.width + 40 : innerWidth;
-      anim('.op-reveal', [{ transform: `translateX(${wpx}px)` }, { transform: 'translateX(0)' }], 2350, 900, EASE_IN_OUT);
-      anim('.op-reveal-in', [{ transform: `translateX(${-wpx}px)` }, { transform: 'translateX(0)' }], 2350, 900, EASE_IN_OUT);
+      anim('.op-reveal', [{ transform: `translateX(${wpx}px)` }, { transform: 'translateX(0)' }], 2750, 900, EASE_IN_OUT);
+      anim('.op-reveal-in', [{ transform: `translateX(${-wpx}px)` }, { transform: 'translateX(0)' }], 2750, 900, EASE_IN_OUT);
 
       // a cena escura sai e a página (já no lugar) aparece por trás; o nome copiado coincide com o título real
-      anim('.op-bg', [{ opacity: 1 }, { opacity: 0 }], 3150, 450, 'ease-out');
+      anim('.op-bg', [{ opacity: 1 }, { opacity: 0 }], 3550, 450, 'ease-out');
 
       // ---- 4 · a caixa de seleção do Figma se desenha em volta do nome
       const sel = document.querySelector<HTMLElement>('.hero .sel');
       if (sel) {
-        anim(sel, [{ clipPath: 'inset(0 100% 100% 0)' }, { clipPath: 'inset(0 0 0 0)' }], 3200, 650, EASE_IN_OUT, 'both', '::before');
-        sel.querySelectorAll('.sel__h').forEach((h, i) => anim(h, [{ transform: 'scale(0)' }, { transform: 'scale(1)' }], 3400 + i * 70, 380));
-        sel.querySelectorAll('.sel__spec').forEach((sp, i) => anim(sp, [{ opacity: 0, transform: 'translateY(6px)' }, { opacity: 1, transform: 'translateY(0)' }], 3600 + i * 120, 450));
+        anim(sel, [{ clipPath: 'inset(0 100% 100% 0)' }, { clipPath: 'inset(0 0 0 0)' }], 3600, 650, EASE_IN_OUT, 'both', '::before');
+        sel.querySelectorAll('.sel__h').forEach((h, i) => anim(h, [{ transform: 'scale(0)' }, { transform: 'scale(1)' }], 3800 + i * 70, 380));
+        sel.querySelectorAll('.sel__spec').forEach((sp, i) => anim(sp, [{ opacity: 0, transform: 'translateY(6px)' }, { opacity: 1, transform: 'translateY(0)' }], 4000 + i * 120, 450));
       }
 
       // ---- 5 · o resto da primeira dobra entra em sequência
       ['.hero .labels', '.hero__subtitle', '.hero__line', '.hero .actions'].forEach((sl, i) => {
         const el = document.querySelector(sl);
-        if (el) anim(el, [{ opacity: 0, transform: 'translateY(14px)' }, { opacity: 1, transform: 'translateY(0)' }], 3700 + i * 110, 650);
+        if (el) anim(el, [{ opacity: 0, transform: 'translateY(14px)' }, { opacity: 1, transform: 'translateY(0)' }], 4100 + i * 110, 650);
       });
-      outTimer = window.setTimeout(() => html.classList.add('is-opening-out'), 3900);
+      outTimer = window.setTimeout(() => html.classList.add('is-opening-out'), 4300);
       timer = window.setTimeout(finish, DUR);
     };
 
