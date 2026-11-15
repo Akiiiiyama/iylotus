@@ -44,14 +44,39 @@ export function lerMarkdown(slug: string, lang: Lang) {
   return readFileSync(join(pasta, slug, `${lang}.md`), 'utf8');
 }
 
+type No = { type: string; tagName?: string; value?: string; properties?: Record<string, unknown>; children?: No[] };
+
+/**
+ * Imagem sozinha num parágrafo vira <figure>, e o título do markdown vira a legenda:
+ * ![texto alternativo](imagens/x.jpg "legenda"). As imagens carregam só quando chegam perto da tela.
+ */
+function figuras() {
+  const visitar = (no: No) => {
+    no.children?.forEach((filho, i) => {
+      const conteudo = filho.children?.filter((c) => !(c.type === 'text' && !c.value?.trim()));
+      if (filho.tagName === 'p' && conteudo?.length === 1 && conteudo[0].tagName === 'img') {
+        const img = conteudo[0];
+        const legenda = img.properties?.title as string | undefined;
+        delete img.properties!.title;
+        Object.assign(img.properties!, { loading: 'lazy', decoding: 'async' });
+        const filhos: No[] = [img];
+        if (legenda) filhos.push({ type: 'element', tagName: 'figcaption', properties: {}, children: [{ type: 'text', value: legenda }] });
+        no.children![i] = { type: 'element', tagName: 'figure', properties: {}, children: filhos };
+      } else visitar(filho);
+    });
+  };
+  return (arvore: No) => visitar(arvore);
+}
+
 /** Markdown para HTML no build. HTML cru dentro do markdown é descartado (o remark-rehype não deixa passar). */
 export async function paraHtml(md: string) {
-  const file = await unified().use(remarkParse).use(remarkGfm).use(remarkRehype).use(rehypeSlug).use(rehypeStringify).process(md);
+  const file = await unified().use(remarkParse).use(remarkGfm).use(remarkRehype).use(rehypeSlug).use(figuras).use(rehypeStringify, { characterReferences: { useNamedReferences: true } }).process(md);
   return String(file);
 }
 
 /** Minutos de leitura, contando 200 palavras por minuto. */
-export const minutosDeLeitura = (md: string) => Math.max(1, Math.round(md.split(/\s+/).filter(Boolean).length / 200));
+export const minutosDeLeitura = (md: string) =>
+  Math.max(1, Math.round(md.replace(/!\[[^\]]*\]\([^)]*\)/g, '').split(/\s+/).filter(Boolean).length / 200));
 
 /** Data curta, sem os "de" do português: "11 nov 2026" / "Nov 11, 2026". */
 export function formatarData(data: string, lang: Lang) {

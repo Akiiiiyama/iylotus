@@ -11,7 +11,7 @@
 //   node apps/site/scripts/export-escritos.mjs [caminho/para/pilulas-ia] [--rascunhos]
 // Padrões: ~/pilulas-ia e a lista em ~/IA_Studies/privado/palavras-bloqueadas.txt (ou ESCRITOS_BLOQUEIO=caminho).
 // --rascunhos inclui os textos com "rascunho: true", só para revisar localmente. Rode sem ele antes de commitar.
-import { existsSync, mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
+import { copyFileSync, existsSync, mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
 import { homedir } from 'node:os';
 import { join, posix } from 'node:path';
 
@@ -20,6 +20,8 @@ const comRascunhos = args.includes('--rascunhos');
 const src = args.find((a) => !a.startsWith('--')) || `${homedir()}/pilulas-ia`;
 const bloqueioPath = process.env.ESCRITOS_BLOQUEIO || `${homedir()}/IA_Studies/privado/palavras-bloqueadas.txt`;
 const out = new URL('../content/escritos/', import.meta.url).pathname;
+// imagens dos textos: servidas pelo próprio site, em /escritos/<slug>/<arquivo>
+const outImagens = new URL('../public/escritos/', import.meta.url).pathname;
 
 const REPO = 'https://github.com/Akiiiiyama/pilulas-ia';
 const LANGS = ['pt', 'en'];
@@ -111,13 +113,21 @@ for (const [pasta, tipo] of Object.entries(TIPOS)) {
 const porCaminho = new Map(textos.flatMap((t) => LANGS.map((l) => [`${t.pasta}/${t.slug}/${l}.md`, { slug: t.slug, lang: l }])));
 
 // ---------- links ----------
-function trocarLinks(md, arquivo) {
+const imagens = []; // [origem no pilulas-ia, destino em public/escritos]
+function trocarLinks(md, arquivo, slug) {
   const base = posix.dirname(arquivo);
-  return md.replace(/(!?)\[([^\]]*)\]\(([^)\s]+)\)/g, (todo, img, rotulo, alvo) => {
+  // aceita um título depois do endereço: ![alt](imagens/x.jpg "legenda")
+  return md.replace(/(!?)\[([^\]]*)\]\(([^)\s]+)(\s+"[^"]*")?\)/g, (todo, img, rotulo, alvo, titulo = '') => {
     if (/^(https?:|mailto:|#)/.test(alvo)) return todo;
     const [caminho, ancora = ''] = alvo.split('#');
     const resolvido = posix.normalize(posix.join(base, caminho));
-    if (img) return `![${rotulo}](${REPO.replace('github.com', 'raw.githubusercontent.com')}/main/${resolvido})`;
+    if (img) {
+      const origem = join(src, resolvido);
+      if (!existsSync(origem)) throw new Error(`${arquivo}: imagem não encontrada (${alvo})`);
+      const nome = posix.basename(resolvido);
+      imagens.push([origem, join(slug, nome)]);
+      return `![${rotulo}](/escritos/${slug}/${nome}${titulo})`;
+    }
     const destino = porCaminho.get(resolvido);
     if (destino) return `[${rotulo}](/${destino.lang}/escritos/${destino.slug}${ancora ? `#${ancora}` : ''})`;
     return `[${rotulo}](${REPO}/blob/main/${resolvido}${ancora ? `#${ancora}` : ''})`;
@@ -132,7 +142,7 @@ const arquivos = [];
 for (const t of textos) {
   const item = { slug: t.slug, tipo: t.tipo, data: t.data, temas: t.temas, ...(t.rascunho && { rascunho: true }), idiomas: {} };
   for (const [lang, x] of Object.entries(t.idiomas)) {
-    const md = trocarLinks(x.md, x.arquivo);
+    const md = trocarLinks(x.md, x.arquivo, t.slug);
     if (x.fonte && !x.fonte.link) throw new Error(`${x.arquivo}: "fonte" precisa de um link`);
     conferir(`${x.titulo}\n${x.resumo}\n${md}\n${JSON.stringify(x.fonte ?? '')}\n${x.linkedin ?? ''}`, x.arquivo);
     arquivos.push([join(t.slug, `${lang}.md`), md]);
@@ -153,5 +163,11 @@ for (const [rel, md] of arquivos) {
   writeFileSync(join(out, rel), md);
 }
 writeFileSync(join(out, 'index.json'), JSON.stringify({ fonte: REPO, textos: indice }, null, 2) + '\n');
+rmSync(outImagens, { recursive: true, force: true });
+for (const [origem, rel] of imagens) {
+  mkdirSync(join(outImagens, rel, '..'), { recursive: true });
+  copyFileSync(origem, join(outImagens, rel));
+}
+if (imagens.length) console.log(`${new Set(imagens.map(([, r]) => r)).size} imagens copiadas para apps/site/public/escritos/`);
 console.log(`${indice.length} textos exportados para apps/site/content/escritos/`);
 if (comRascunhos) console.warn('Atenção: rascunhos incluídos. Rode de novo sem --rascunhos antes de commitar.');

@@ -394,9 +394,16 @@ html.is-opening-out .topbar { opacity: 1; }
 .writing__foot { margin-top: 72px; padding-top: var(--space-8); border-top: 1px solid var(--color-border); }
 
 /* página de um texto: coluna de leitura estreita dentro da faixa */
-.article > .in > * { max-width: 72ch; margin-inline: auto; }
-.article__back { display: block; margin-bottom: var(--space-12); font: 400 13px var(--font-family-mono); letter-spacing: 0.06em; color: var(--color-text-secondary); text-decoration: none; }
+/* uma largura só para a coluna inteira: em ch, cada bloco media pelo próprio tamanho de fonte e o voltar, o texto e o rodapé saíam desalinhados */
+.article > .in > * { max-width: 46rem; margin-inline: auto; }
+/* voltar: a <nav> ocupa a coluna (e alinha com o título); o link só ocupa o próprio texto, com área de toque de 44px */
+.article__nav { margin-bottom: var(--space-8); }
+.article__back { display: inline-flex; align-items: center; gap: var(--space-2); min-height: 44px; font: 400 13px var(--font-family-mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-text-secondary); text-decoration: none; transition: color 160ms ease; }
+.article__back-arrow { display: inline-block; transition: transform 160ms ease; }
 .article__back:hover { color: var(--color-text-primary); }
+.article__back:hover .article__back-arrow { transform: translateX(-4px); }
+.article__back:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 3px; border-radius: 4px; }
+@media (prefers-reduced-motion: reduce) { .article__back, .article__back-arrow { transition: none; } }
 .article__head .labels { margin-bottom: var(--space-8); }
 .article__title { font-size: clamp(36px, 5.2vw, 64px); font-weight: 300; letter-spacing: -0.035em; line-height: 1.05; }
 .article__tags { margin-top: var(--space-6); }
@@ -435,6 +442,9 @@ html.is-opening-out .topbar { opacity: 1; }
 .prose th, .prose td { padding: var(--space-3) var(--space-4); border-bottom: 1px solid var(--color-border); text-align: left; vertical-align: top; min-width: 120px; }
 .prose th { font-weight: 700; border-bottom-color: var(--color-border-strong); }
 .prose img { max-width: 100%; height: auto; border-radius: var(--radius-md); }
+.prose figure { margin: var(--space-12) 0; }
+.prose figure img { display: block; width: 100%; border: 1px solid var(--color-border); }
+.prose figcaption { margin-top: var(--space-3); font-size: 14px; line-height: 1.5; color: var(--color-text-secondary); }
 @media (max-width: 480px) { .prose { font-size: 17px; } }
 /* texto que só existe no outro idioma: a faixa ocupa a tela, para o rodapé não subir até o meio */
 .article:has(.article__missing) { min-height: 78vh; }

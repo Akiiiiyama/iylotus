@@ -2,11 +2,15 @@ I watched "Design Will Never Be The Same", Meaghan Choi's talk at uxcon vienna. 
 
 The title sounds like a warning, but the last line of the talk flips it: design will never be the same because it's more than ever before. This text is what I took from it, mixed with what I've been feeling in practice.
 
+![Purple slide with the text Design will never be the same and, below, It’s more than ever before](/escritos/design-nunca-mais-o-mesmo/01-design-nunca-mais-o-mesmo.jpg "The title of the talk and the line that flips its meaning. The slides in this text are from Meaghan Choi’s talk at uxcon vienna.")
+
 ## From convincing people to nobody needing convincing
 
 Meaghan opens by sharing that, a year ago, a big part of her job was convincing designers and design teams to try AI coding. And when she succeeded, the second battle began: convincing engineering to let those designers into their codebases.
 
 Today, she says, nobody needs convincing anymore. The problem is the opposite. A Designer Fund study from early 2026 shows that 65% of designers say they're taking on more product or engineering responsibilities. The designer's role already goes way beyond design.
+
+![Slide with 65% highlighted and the text of designers said they’re taking on more product or engineering responsibilities, AI in Design 2026, Designer Fund](/escritos/design-nunca-mais-o-mesmo/02-65-por-cento.jpg "The number from the AI in Design 2026 study, by Designer Fund.")
 
 ## Stressful and fun at the same time
 
@@ -27,6 +31,10 @@ The second comes from the first: trying out a new idea is now basically free. We
 The third is the one that weighs on us emotionally: the expectation of speed. What used to take months can now, in theory, take days or hours. Even when that isn't true, the environment makes it feel like we should be moving faster.
 
 The result is that the process we learned (discover, define, explore, refine, build and ship) got compressed into something like build and ship. But it's not the same "build and ship" as before.
+
+![Slide with the stages Discover, Define, Explore, Refine, Build and Ship, and lines showing PM at the start, design in the middle and engineering at the end](/escritos/design-nunca-mais-o-mesmo/03-processo-antes.jpg "Before: each stage had a clear owner.")
+
+![Slide with only Build and Ship, and the PM, design and engineering lines tangled together](/escritos/design-nunca-mais-o-mesmo/04-construir-e-lancar.jpg "Now: everything becomes build and ship, with the roles mixed.")
 
 | Before | Now |
 |---|---|
@@ -50,6 +58,8 @@ That's why the usual questions still exist, and maybe they've never mattered mor
 - What problem does it solve? Is it a real problem?
 - Does it make sense within the product we're building?
 
+![Slide with the questions should this exist?, who is it for?, is that a real person?, what problem is this solving?, does this make sense? and is that a real problem?](/escritos/design-nunca-mais-o-mesmo/05-perguntas.jpg "The usual questions, which may never have mattered more.")
+
 She shares an example from Anthropic. Claude Design started as an engineer's demo showing that Claude could generate HTML. A designer on the team saw a tool for designers in it, built a functional prototype, noticed the results got much better when Claude had access to the design system and created a skill for that. Then came the brand, then slides, and the marketing and sales teams started using it. Every product decision along the way was made by design.
 
 That's where the new skills she puts on the table come from:
@@ -60,6 +70,8 @@ That's where the new skills she puts on the table come from:
 | Demos > mocks | Iterating on a product that actually works, not on docs or static screens |
 | M-LVU-P | Defining the first minimum lovable, viable or usable product |
 | Strategy | Understanding how the idea fits the roadmap: priority, headcount, launch plan |
+
+![Slide with Audience & Use cases, Demos > Mocks, M-LVU-P and Strategy, the last three marked as new](/escritos/design-nunca-mais-o-mesmo/06-novas-habilidades.jpg "Three of the four skills are marked as new.")
 
 For me, the most important new skill is the boldness to turn an idea into something that actually works. We're past the era of the static document. You have to use it and make sure it works.
 
@@ -91,6 +103,8 @@ Engineering teams have other responsibilities within their scope, and over years
 - **Reviewing PRs**, looking at the front end and the user experience.
 - **Turning design review into automated checks.**
 
+![Slide Coding is not enough, with Scoping implementation, Eng timelines, Reviewing PRs, Defining launch bar and Design review as CI checks](/escritos/design-nunca-mais-o-mesmo/07-programar-nao-basta.jpg "What engineering learned over years, and what we need to learn from them.")
+
 That last one deserves its own paragraph. Large companies have DevOps or DevX teams whose job is to make implementation faster for engineering. Now that designers are coding, we need the same: automations that check adherence to the design system, content guidelines and accessibility rules. Meaghan herself has a bot that reviews PRs, and admits AI isn't great at this yet, but it's already showing early signs that it works.
 
 She also reminds us that when you set the launch bar, you're not doing it just for yourself, but for the whole team that will help you implement the last mile.
@@ -100,6 +114,8 @@ In IY Lotus, my design system, I built a small version of this. Instead of eyeba
 ## It's not taste, it's judgment
 
 With everything blended and timelines compressed, you can't do it all. So she asks: what is it that only designers can do?
+
+![Slide with the word taste repeated in a column over a background full of AI terms](/escritos/design-nunca-mais-o-mesmo/08-taste.jpg "Taste, the trendy word, repeated until it loses its meaning.")
 
 Her answer is that it's not "taste", because that word is too vague. It's design judgment. And she goes further, naming what she sees designers doing that other functions don't:
 
@@ -128,8 +144,6 @@ The big change is that anyone can code. Our big challenge is figuring out what's
 Our process is much more hybrid, and we need to go after skills we didn't need before. But this moment is also opening up opportunities to build new and more creative things, and to shape an idea our own way, without depending on so many people to get it off the ground.
 
 Meaghan closes by saying this won't happen if we wait for it to happen to us. We have to be open, curious and take the time to learn. Those who do won't just be preparing themselves, they'll be helping define the role design plays from here on.
-
-And there's her advice to wait a few months for the dust to settle before adopting a new tool, great advice for someone who tries a new one every week 😅
 
 The full talk is on [YouTube](https://www.youtube.com/watch?v=na1OyJ3E7Kc).
 
