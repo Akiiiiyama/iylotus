@@ -2,11 +2,15 @@ Assisti à palestra "Design Will Never Be The Same", da Meaghan Choi, na uxcon v
 
 O título parece um alerta, mas a última frase da palestra vira o sentido: o design nunca mais vai ser o mesmo porque vai ser mais do que jamais foi. Este texto é o que eu tirei dessa conversa, misturado com o que eu venho sentindo na prática.
 
+![Slide roxo com o texto Design will never be the same e, embaixo, It’s more than ever before](/escritos/design-nunca-mais-o-mesmo/01-design-nunca-mais-o-mesmo.jpg "O título da palestra e a frase que vira o sentido dele. Os slides deste texto são da palestra da Meaghan Choi na uxcon vienna.")
+
 ## De convencer pessoas a ninguém precisar ser convencido
 
 A Meaghan abre contando que, há um ano, boa parte do trabalho dela era convencer designers e times de design a experimentar programar com IA. E quando conseguia, vinha a segunda batalha: convencer a engenharia a deixar esses designers acessarem os repositórios de código.
 
 Hoje, segundo ela, ninguém precisa mais ser convencido. O problema virou o oposto. Uma pesquisa da Designer Fund, do começo de 2026, mostra que 65% dos designers dizem estar assumindo mais responsabilidades de produto ou de engenharia. O papel do designer já vai muito além do design.
+
+![Slide com 65% em destaque e o texto of designers said they’re taking on more product or engineering responsibilities, AI in Design 2026, Designer Fund](/escritos/design-nunca-mais-o-mesmo/02-65-por-cento.jpg "O dado da pesquisa AI in Design 2026, da Designer Fund.")
 
 ## Estressante e divertido ao mesmo tempo
 
@@ -27,6 +31,10 @@ A segunda vem da primeira: testar uma ideia nova ficou praticamente de graça. T
 A terceira é a que pesa no emocional: a expectativa de velocidade. O que levava meses agora, na teoria, leva dias ou horas. Mesmo quando não é verdade, o ambiente faz parecer que a gente deveria estar mais rápido.
 
 O resultado é que o processo que a gente aprendeu (descobrir, definir, explorar, refinar, construir e lançar) foi comprimido em algo parecido com construir e lançar. Só que não é o mesmo "construir e lançar" de antes.
+
+![Slide com as etapas Discover, Define, Explore, Refine, Build e Ship, e linhas mostrando PM no começo, design no meio e engenharia no fim](/escritos/design-nunca-mais-o-mesmo/03-processo-antes.jpg "Antes: cada etapa tinha um dono claro.")
+
+![Slide com apenas Build e Ship, e as linhas de PM, design e engenharia emaranhadas](/escritos/design-nunca-mais-o-mesmo/04-construir-e-lancar.jpg "Agora: tudo vira construir e lançar, com os papéis misturados.")
 
 | Antes | Agora |
 |---|---|
@@ -50,6 +58,8 @@ Por isso as perguntas de sempre continuam existindo, e talvez nunca tenham sido 
 - Que problema resolve? É um problema real?
 - Faz sentido dentro do produto que estamos construindo?
 
+![Slide com as perguntas should this exist?, who is it for?, is that a real person?, what problem is this solving?, does this make sense? e is that a real problem?](/escritos/design-nunca-mais-o-mesmo/05-perguntas.jpg "As perguntas de sempre, que talvez nunca tenham sido tão importantes.")
+
 Ela dá um exemplo da Anthropic. O Claude Design começou como uma demo de um engenheiro mostrando que o Claude conseguia gerar HTML. Um designer do time viu ali uma ferramenta para designers, fez um protótipo funcional, percebeu que o resultado ficava muito melhor quando o Claude tinha acesso ao design system e criou uma skill pra isso. Depois veio a marca, depois os slides, e os times de marketing e vendas começaram a usar. Cada decisão de produto nesse caminho foi tomada pelo design.
 
 Daí saem as novas habilidades que ela coloca na mesa:
@@ -60,6 +70,8 @@ Daí saem as novas habilidades que ela coloca na mesa:
 | Demos > mocks | Iterar num produto que funciona de verdade, não em documento ou tela estática |
 | M-LVU-P | Definir o primeiro produto mínimo amável, viável ou usável |
 | Estratégia | Entender como a ideia entra no roadmap: prioridade, quantas pessoas, plano de lançamento |
+
+![Slide com Audience & Use cases, Demos > Mocks, M-LVU-P e Strategy, as três últimas marcadas como new](/escritos/design-nunca-mais-o-mesmo/06-novas-habilidades.jpg "Três das quatro habilidades vêm marcadas como novas.")
 
 Pra mim, a habilidade nova mais importante é a ousadia de transformar uma ideia em algo que realmente funciona. Já passamos da era do documento estático. Você precisa usar e garantir que aquilo funcione.
 
@@ -91,6 +103,8 @@ O time de engenharia tem outras responsabilidades dentro do escopo, e aprendeu a
 - **Revisar PRs**, olhando o front-end e a experiência do usuário.
 - **Transformar a revisão de design em checagem automática.**
 
+![Slide Coding is not enough, com Scoping implementation, Eng timelines, Reviewing PRs, Defining launch bar e Design review as CI checks](/escritos/design-nunca-mais-o-mesmo/07-programar-nao-basta.jpg "O que a engenharia aprendeu ao longo de anos e a gente precisa aprender com ela.")
+
 Esse último merece um parágrafo próprio. Empresas grandes têm times de DevOps ou DevX cuja função é deixar a implementação mais rápida pra engenharia. Agora que designers estão programando, a gente precisa do mesmo: automações que verificam aderência ao design system, ao guia de conteúdo e às regras de acessibilidade. A própria Meaghan tem um bot que revisa PRs, e admite que a IA ainda não é ótima nisso, mas já mostra os primeiros sinais de que dá certo.
 
 Ela lembra também que, quando você define a régua de lançamento, não está fazendo isso só pra você, e sim pro time inteiro que vai te ajudar a implementar a última milha.
@@ -100,6 +114,8 @@ No IY Lotus, o meu design system, eu fiz uma versão pequena disso. Em vez de co
 ## Não é "taste", é julgamento
 
 Com tudo misturado e os prazos comprimidos, não dá pra fazer tudo. Então ela pergunta: o que só o designer faz?
+
+![Slide com a palavra taste repetida em coluna sobre um fundo cheio de termos de IA](/escritos/design-nunca-mais-o-mesmo/08-taste.jpg "Taste, a palavra da moda, repetida até perder o sentido.")
 
 E responde que não é "taste", porque a palavra é vaga demais. É julgamento de design. E vai além, nomeando o que ela vê designers fazendo que outras funções não fazem:
 

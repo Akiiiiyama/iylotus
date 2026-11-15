@@ -53,7 +53,12 @@ export default async function Escrito({ params }: { params: Promise<{ lang: Lang
       <main id="main">
         <article className="band article" aria-labelledby="article-title">
           <div className="in">
-            <a href={`/${lang}/escritos`} className="article__back">← {w.back}</a>
+            <nav className="article__nav" aria-label={w.label}>
+              <a href={`/${lang}/escritos`} className="article__back">
+                <span className="article__back-arrow" aria-hidden="true">←</span>
+                {w.back}
+              </a>
+            </nav>
 
             {x ? (
               <>
