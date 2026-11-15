@@ -30,7 +30,7 @@ type Project = {
 type Job = { years: string; org: string; role: string; work: string };
 
 export type Dict = {
-  nav: { work: string; experience: string; about: string; contact: string; cv: string; cvLabel: string };
+  nav: { work: string; experience: string; about: string; contact: string; writing: string; cv: string; cvLabel: string };
   theme: string;
   langSwitch: string;
   skip: string;
@@ -43,6 +43,23 @@ export type Dict = {
   replay: string;
   /** Frase da cena presa na tela. Palavras entre *asteriscos* ficam em negrito. */
   statement: { label: string; text: string };
+  /** Seção Escritos: guias e artigos que vêm do repositório pilulas-ia. */
+  writing: {
+    label: string;
+    title: [string, string];
+    lede: string;
+    types: { artigo: string; guia: string };
+    basedOn: string;
+    watch: string;
+    linkedin: string;
+    readTime: string;
+    back: string;
+    onlyIn: string;
+    readIn: string;
+    draft: string;
+    source: string;
+    license: string;
+  };
 };
 
 const STACK_ITEMS = {
@@ -53,7 +70,7 @@ const STACK_ITEMS = {
 
 export const dict: Record<Lang, Dict> = {
   en: {
-    nav: { work: 'Work', experience: 'Experience', about: 'About', contact: 'Contact', cv: 'CV', cvLabel: 'Download my CV (PDF)' },
+    nav: { work: 'Work', experience: 'Experience', about: 'About', contact: 'Contact', writing: 'Writing', cv: 'CV', cvLabel: 'Download my CV (PDF)' },
     theme: 'Dark mode',
     langSwitch: 'Português',
     skip: 'Skip intro',
@@ -72,7 +89,7 @@ export const dict: Record<Lang, Dict> = {
         { id: 'site', tag: 'This website', title: ['Built with ', 'Lotus'], body: 'The first product made with IY Lotus. Next.js and React, a WebGL intro that runs at 60 fps, English and Portuguese, light and dark.', meta: 'Next.js · WebGL · TypeScript', href: LINKS.iylotus, cta: 'View the code' },
         { id: 'skill', tag: 'AI tooling', title: ['Motion in ', 'code'], body: 'A Claude Code skill that turns one sentence, a design system and a music track into a motion video, with every cut on the beat.', meta: 'Claude Code · Skill · Motion', href: LINKS.skill, cta: 'See the skill' },
         { id: 'skills', tag: 'Open source', title: ['Skills for ', 'designers'], body: 'A growing library of Claude Code skills that help designers ship better UI with AI. The first one makes motion videos; accessibility review and token checks are next.', meta: 'Claude Code · Skills · GitHub', href: LINKS.skills, cta: 'See the library' },
-        { id: 'pilulas', tag: 'Writing', title: ['AI ', 'pills'], body: 'Short guides for designers on prompts, agents and AI-made motion, in Portuguese and English.', meta: 'Guides · PT / EN', href: LINKS.pilulas, cta: 'Read the guides' },
+        { id: 'pilulas', tag: 'Writing', title: ['AI ', 'pills'], body: 'Short guides for designers on prompts, agents and AI-made motion, in Portuguese and English.', meta: 'Guides · PT / EN', href: '/en/escritos', cta: 'Read the guides' },
       ],
     },
     experience: {
@@ -114,10 +131,26 @@ export const dict: Record<Lang, Dict> = {
     },
     footer: 'Designed and built by Isabela Yukari with IY Lotus.',
     replay: 'Replay intro',
+    writing: {
+      label: 'Writing',
+      title: ['Things I ', 'write'],
+      lede: 'Articles and hands-on guides about AI, design engineering and front-end, for designers and product people.',
+      types: { artigo: 'Articles', guia: 'AI pills' },
+      basedOn: 'Based on',
+      watch: 'Watch',
+      linkedin: 'Discuss on LinkedIn',
+      readTime: 'min read',
+      back: 'All writing',
+      onlyIn: 'This text is only available in Portuguese for now.',
+      readIn: 'Read in Portuguese',
+      draft: 'Draft',
+      source: 'View on GitHub',
+      license: 'Text under CC BY 4.0: share and adapt, crediting the source.',
+    },
     statement: { label: 'Manifesto', text: 'I design in *pixels* and ship in *code.* Strategy, design and engineering, in one loop.' },
   },
   pt: {
-    nav: { work: 'Projetos', experience: 'Experiência', about: 'Sobre', contact: 'Contato', cv: 'CV', cvLabel: 'Baixar meu currículo (PDF)' },
+    nav: { work: 'Projetos', experience: 'Experiência', about: 'Sobre', contact: 'Contato', writing: 'Escritos', cv: 'CV', cvLabel: 'Baixar meu currículo (PDF)' },
     theme: 'Modo escuro',
     langSwitch: 'English',
     skip: 'Pular abertura',
@@ -136,7 +169,7 @@ export const dict: Record<Lang, Dict> = {
         { id: 'site', tag: 'Este site', title: ['Feito com ', 'Lotus'], body: 'O primeiro produto feito com o IY Lotus. Next.js e React, uma abertura em WebGL a 60 quadros por segundo, português e inglês, claro e escuro.', meta: 'Next.js · WebGL · TypeScript', href: LINKS.iylotus, cta: 'Ver o código' },
         { id: 'skill', tag: 'Ferramenta de IA', title: ['Motion em ', 'código'], body: 'Uma skill do Claude Code que transforma uma frase, um design system e uma música num vídeo de motion, com cada corte na batida.', meta: 'Claude Code · Skill · Motion', href: LINKS.skill, cta: 'Ver a skill' },
         { id: 'skills', tag: 'Código aberto', title: ['Skills para ', 'designers'], body: 'Uma biblioteca de skills do Claude Code que ajudam designers a entregar interfaces melhores com IA. A primeira faz vídeos de motion; revisão de acessibilidade e checagem de tokens vêm a seguir.', meta: 'Claude Code · Skills · GitHub', href: LINKS.skills, cta: 'Ver a biblioteca' },
-        { id: 'pilulas', tag: 'Escrita', title: ['Pílulas de ', 'IA'], body: 'Guias curtos para designers sobre prompts, agentes e motion feito com IA, em português e inglês.', meta: 'Guias · PT / EN', href: LINKS.pilulas, cta: 'Ler os guias' },
+        { id: 'pilulas', tag: 'Escrita', title: ['Pílulas de ', 'IA'], body: 'Guias curtos para designers sobre prompts, agentes e motion feito com IA, em português e inglês.', meta: 'Guias · PT / EN', href: '/pt/escritos', cta: 'Ler os guias' },
       ],
     },
     experience: {
@@ -178,6 +211,22 @@ export const dict: Record<Lang, Dict> = {
     },
     footer: 'Desenhado e construído por Isabela Yukari com o IY Lotus.',
     replay: 'Rever abertura',
+    writing: {
+      label: 'Escritos',
+      title: ['O que eu ', 'escrevo'],
+      lede: 'Artigos e guias práticos sobre IA, design engineering e front-end, para designers e pessoas de produto.',
+      types: { artigo: 'Artigos', guia: 'Pílulas de IA' },
+      basedOn: 'Baseado em',
+      watch: 'Assistir',
+      linkedin: 'Conversa no LinkedIn',
+      readTime: 'min de leitura',
+      back: 'Todos os escritos',
+      onlyIn: 'Por enquanto este texto só existe em inglês.',
+      readIn: 'Ler em inglês',
+      draft: 'Rascunho',
+      source: 'Ver no GitHub',
+      license: 'Texto sob CC BY 4.0: pode compartilhar e adaptar, citando a fonte.',
+    },
     statement: { label: 'Manifesto', text: 'Desenho em *pixels* e entrego em *código.* Estratégia, design e engenharia, num ciclo só.' },
   },
 };

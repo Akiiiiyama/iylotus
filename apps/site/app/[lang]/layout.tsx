@@ -25,8 +25,9 @@ export function generateStaticParams() {
 export const dynamicParams = false;
 
 // Roda antes da página aparecer: aplica o tema (escuro por padrão, ou o salvo) e decide se a abertura toca (na primeira visita da aba, ou sempre com ?intro no endereço).
+// A abertura só existe na home (/en e /pt): nas páginas internas a classe nunca é posta, senão o header sumiria e a rolagem travaria.
 const BOOT = `(function(){try{var d=document.documentElement;var t=localStorage.getItem('iy-theme');d.setAttribute('data-theme',t==='light'?'light':'dark');
-var r=matchMedia('(prefers-reduced-motion: reduce)').matches;var f=/[?&]intro/.test(location.search);if(f||(!r&&!sessionStorage.getItem('iy-opening-seen')))d.classList.add('is-opening');}catch(e){}})();`;
+var h=location.pathname.split('/').filter(Boolean).length<2;var r=matchMedia('(prefers-reduced-motion: reduce)').matches;var f=/[?&]intro/.test(location.search);if(h&&(f||(!r&&!sessionStorage.getItem('iy-opening-seen'))))d.classList.add('is-opening');}catch(e){}})();`;
 
 export default async function RootLayout({ children, params }: { children: React.ReactNode; params: Promise<{ lang: string }> }) {
   const { lang } = await params;

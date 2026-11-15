@@ -7,6 +7,7 @@ import { LotusBloom } from '@/components/LotusBloom';
 import { StudyGraph } from '@/components/StudyGraph';
 import { LaptopDocs } from '@/components/LaptopDocs';
 import { ScrollWords } from '@/components/ScrollWords';
+import { Footer } from '@/components/Footer';
 
 // Página única: abertura → hero → projetos → experiência → sobre → contato.
 // Cada seção é uma "cena" com cor própria, como os cortes do reel.
@@ -74,7 +75,7 @@ export default async function Home({ params }: { params: Promise<{ lang: Lang }>
             <SectionHead id="work-title" label={t.work.label} counter="01 / 05" title={t.work.title} lede={t.work.lede} />
             <CardGroup spotlight className="projects">
               {t.work.projects.map((p) => (
-                <Card key={p.id} href={p.href} target="_blank" rel="noopener noreferrer" tone={p.id === 'iylotus' ? 'red' : p.id === 'skill' ? 'ink' : 'raised'} className={`project project--${p.id}`}>
+                <Card key={p.id} href={p.href} {...(!p.href.startsWith('/') && { target: '_blank', rel: 'noopener noreferrer' })} tone={p.id === 'iylotus' ? 'red' : p.id === 'skill' ? 'ink' : 'raised'} className={`project project--${p.id}`}>
                   <CardMedia aria-hidden="true" className="project__media">
                     {p.id === 'skill' ? (
                       <video className="project__video" src="/work/reel.mp4" poster="/work/reel.jpg" autoPlay muted loop playsInline />
@@ -96,7 +97,7 @@ export default async function Home({ params }: { params: Promise<{ lang: Lang }>
                     <CardTag>{p.tag}</CardTag>
                     <CardTitle><span className="iy-lt">{p.title[0]}</span><span className="iy-bd">{p.title[1]}</span></CardTitle>
                     <p className="project__body">{p.body}</p>
-                    <CardMeta>{p.meta} · {p.cta} ↗</CardMeta>
+                    <CardMeta>{p.meta} · {p.cta} {p.href.startsWith('/') ? '→' : '↗'}</CardMeta>
                   </CardBody>
                 </Card>
               ))}
@@ -172,13 +173,7 @@ export default async function Home({ params }: { params: Promise<{ lang: Lang }>
         </section>
       </main>
 
-      <footer className="band band--grid footer" data-theme="dark">
-        <div className="in footer__in">
-          <span>{t.footer}</span>
-          <a href="?intro" className="footer__replay">{t.replay} ↺</a>
-          <span>05 / 05</span>
-        </div>
-      </footer>
+      <Footer t={t} lang={lang} counter="05 / 05" />
     </>
   );
 }
