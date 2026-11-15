@@ -129,8 +129,6 @@ Our process is much more hybrid, and we need to go after skills we didn't need b
 
 Meaghan closes by saying this won't happen if we wait for it to happen to us. We have to be open, curious and take the time to learn. Those who do won't just be preparing themselves, they'll be helping define the role design plays from here on.
 
-And there's her advice to wait a few months for the dust to settle before adopting a new tool, great advice for someone who tries a new one every week 😅
-
 The full talk is on [YouTube](https://www.youtube.com/watch?v=na1OyJ3E7Kc).
 
 ## Read next

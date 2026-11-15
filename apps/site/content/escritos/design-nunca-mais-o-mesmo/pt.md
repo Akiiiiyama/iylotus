@@ -129,8 +129,6 @@ Nosso processo está muito mais híbrido, e a gente precisa ir atrás de habilid
 
 A Meaghan termina dizendo que isso não vai acontecer se a gente esperar que aconteça com a gente. É preciso ser aberto, curioso e tirar tempo pra aprender. Quem fizer isso não vai só se preparar, vai ajudar a definir o papel que o design vai ter daqui pra frente.
 
-E fica o conselho dela de esperar uns meses a poeira baixar antes de adotar ferramenta nova, ótimo pra quem testa uma por semana 😅
-
 A palestra completa está no [YouTube](https://www.youtube.com/watch?v=na1OyJ3E7Kc).
 
 ## Leia também
