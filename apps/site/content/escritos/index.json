@@ -1,0 +1,183 @@
+{
+  "fonte": "https://github.com/Akiiiiyama/pilulas-ia",
+  "textos": [
+    {
+      "slug": "design-nunca-mais-o-mesmo",
+      "tipo": "artigo",
+      "data": "2026-11-15",
+      "temas": [
+        "design-engineering",
+        "processo"
+      ],
+      "idiomas": {
+        "pt": {
+          "titulo": "O design nunca mais vai ser o mesmo",
+          "resumo": "O que aprendi com a palestra da Meaghan Choi sobre o novo papel do designer",
+          "fonte": {
+            "titulo": "Design Will Never Be The Same",
+            "quem": "Meaghan Choi",
+            "onde": "uxcon vienna, 20/10/2026",
+            "link": "https://www.youtube.com/watch?v=na1OyJ3E7Kc"
+          }
+        },
+        "en": {
+          "titulo": "Design will never be the same",
+          "resumo": "What I learned from Meaghan Choi's talk about the new role of the designer",
+          "fonte": {
+            "titulo": "Design Will Never Be The Same",
+            "quem": "Meaghan Choi",
+            "onde": "uxcon vienna, Oct 20, 2026",
+            "link": "https://www.youtube.com/watch?v=na1OyJ3E7Kc"
+          }
+        }
+      }
+    },
+    {
+      "slug": "do-artefato-ao-pr",
+      "tipo": "artigo",
+      "data": "2026-11-15",
+      "temas": [
+        "design-engineering",
+        "processo",
+        "prototipacao"
+      ],
+      "idiomas": {
+        "pt": {
+          "titulo": "Do artefato ao PR: como a Meaghan Choi desenha o Claude Code",
+          "resumo": "O que aprendi com a conversa da design lead do Claude Code no podcast Dive Club sobre prototipar, decidir e entregar sem o handoff no meio",
+          "fonte": {
+            "titulo": "Designing Claude Code (and what's coming next)",
+            "quem": "Meaghan Choi",
+            "onde": "Podcast Dive Club, com Michael Riddering (Ridd)",
+            "link": "https://www.youtube.com/watch?v=jEEbjiC4JE0"
+          }
+        },
+        "en": {
+          "titulo": "From artifact to PR: how Meaghan Choi designs Claude Code",
+          "resumo": "What I learned from Claude Code's design lead on the Dive Club podcast about prototyping, deciding and shipping without the handoff in the middle",
+          "fonte": {
+            "titulo": "Designing Claude Code (and what's coming next)",
+            "quem": "Meaghan Choi",
+            "onde": "Dive Club podcast, with Michael Riddering (Ridd)",
+            "link": "https://www.youtube.com/watch?v=jEEbjiC4JE0"
+          }
+        }
+      }
+    },
+    {
+      "slug": "prototipo-como-prompt",
+      "tipo": "guia",
+      "data": "2026-11-11",
+      "temas": [
+        "figma",
+        "design-to-code"
+      ],
+      "idiomas": {
+        "pt": {
+          "titulo": "Protótipo como prompt: testando o design to code com code layers no Figma",
+          "resumo": "Um experimento com a atualização do Figma que passa as conexões do protótipo como contexto para os code layers: o que muda no código, como repetir o teste e o que ainda depende da gente."
+        },
+        "en": {
+          "titulo": "Prototype as prompt: testing design to code with Figma code layers",
+          "resumo": "An experiment with the Figma update that passes prototype connections as context to code layers: what changes in the code, how to repeat the test and what still depends on us."
+        }
+      }
+    },
+    {
+      "slug": "variaveis-figma-e-css",
+      "tipo": "guia",
+      "data": "2026-11-11",
+      "temas": [
+        "figma",
+        "design-system",
+        "front-end"
+      ],
+      "idiomas": {
+        "pt": {
+          "titulo": "Variáveis do Figma e CSS variables: como saber se o seu design system chegou no código",
+          "resumo": "Complemento do guia Protótipo como prompt: o que são CSS variables, como eu descobri que o código gerado pela IA ignorou os tokens do meu design system e onde você mesma pode conferir isso."
+        },
+        "en": {
+          "titulo": "Figma variables and CSS variables: how to tell if your design system made it into the code",
+          "resumo": "A follow-up to the Prototype as prompt guide: what CSS variables are, how I found out that AI-generated code ignored my design system's tokens, and where you can check this yourself."
+        }
+      }
+    },
+    {
+      "slug": "reel-design-engineer",
+      "tipo": "guia",
+      "data": "2026-11-03",
+      "temas": [
+        "motion",
+        "claude-code"
+      ],
+      "idiomas": {
+        "pt": {
+          "titulo": "Reel de Design Engineer com tipografia cinética",
+          "resumo": "Como criar com o Claude Code um reel de 14 segundos que apresenta o seu papel, com tipografia que muda a cada batida, cortes de fundo secos e pequenos artefatos do seu trabalho, em vertical (Reels) e horizontal (portfólio)."
+        },
+        "en": {
+          "titulo": "Design Engineer reel with kinetic type",
+          "resumo": "How to create with Claude Code a 14-second reel that presents your role, with type that changes on every beat, hard background cuts and small artifacts of your work, in vertical (Reels) and horizontal (portfolio)."
+        }
+      }
+    },
+    {
+      "slug": "agentes-e-modelos",
+      "tipo": "guia",
+      "data": "2026-10-27",
+      "temas": [
+        "agentes",
+        "prompts",
+        "claude"
+      ],
+      "idiomas": {
+        "pt": {
+          "titulo": "Agentes e modelos do Claude, para designers",
+          "resumo": "Complemento do guia de engenharia de prompts: o que muda quando a IA não só responde, mas age, e como escolher o modelo certo para cada tarefa."
+        },
+        "en": {
+          "titulo": "Claude agents and models, for designers",
+          "resumo": "A follow-up to the prompt engineering guide: what changes when AI doesn't just answer but acts, and how to pick the right model for each task."
+        }
+      }
+    },
+    {
+      "slug": "video-motion-com-ia",
+      "tipo": "guia",
+      "data": "2026-10-27",
+      "temas": [
+        "motion",
+        "claude-code"
+      ],
+      "idiomas": {
+        "pt": {
+          "titulo": "Vídeo de marca em motion com IA",
+          "resumo": "Como criar, com o Claude Code, um vídeo curto de apresentação pessoal (10 a 20 segundos) no estilo motion design, com a sua identidade visual e cada transição caindo na batida da música."
+        },
+        "en": {
+          "titulo": "Brand motion video with AI",
+          "resumo": "How to create, with Claude Code, a short personal intro video (10 to 20 seconds) in a motion design style, with your visual identity and every transition landing on the beat of the music."
+        }
+      }
+    },
+    {
+      "slug": "engenharia-de-prompts",
+      "tipo": "guia",
+      "data": "2026-10-25",
+      "temas": [
+        "prompts"
+      ],
+      "idiomas": {
+        "pt": {
+          "titulo": "Engenharia de prompts para designers",
+          "resumo": "O que é, por que importa e como escrever prompts que não deixam nada para a IA adivinhar."
+        },
+        "en": {
+          "titulo": "Prompt engineering for designers",
+          "resumo": "What it is, why it matters, and how to write prompts that leave nothing for the AI to guess."
+        }
+      }
+    }
+  ]
+}
