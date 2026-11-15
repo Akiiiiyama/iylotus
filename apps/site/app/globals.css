@@ -394,7 +394,8 @@ html.is-opening-out .topbar { opacity: 1; }
 .writing__foot { margin-top: 72px; padding-top: var(--space-8); border-top: 1px solid var(--color-border); }
 
 /* página de um texto: coluna de leitura estreita dentro da faixa */
-.article > .in > * { max-width: 72ch; margin-inline: auto; }
+/* uma largura só para a coluna inteira: em ch, cada bloco media pelo próprio tamanho de fonte e o voltar, o texto e o rodapé saíam desalinhados */
+.article > .in > * { max-width: 46rem; margin-inline: auto; }
 .article__back { display: block; margin-bottom: var(--space-12); font: 400 13px var(--font-family-mono); letter-spacing: 0.06em; color: var(--color-text-secondary); text-decoration: none; }
 .article__back:hover { color: var(--color-text-primary); }
 .article__head .labels { margin-bottom: var(--space-8); }
