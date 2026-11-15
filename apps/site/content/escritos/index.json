@@ -2,6 +2,37 @@
   "fonte": "https://github.com/Akiiiiyama/pilulas-ia",
   "textos": [
     {
+      "slug": "design-nunca-mais-o-mesmo",
+      "tipo": "artigo",
+      "data": "2026-11-15",
+      "temas": [
+        "design-engineering",
+        "processo"
+      ],
+      "idiomas": {
+        "pt": {
+          "titulo": "O design nunca mais vai ser o mesmo",
+          "resumo": "O que aprendi com a palestra da Meaghan Choi sobre o novo papel do designer",
+          "fonte": {
+            "titulo": "Design Will Never Be The Same",
+            "quem": "Meaghan Choi",
+            "onde": "uxcon vienna, 20/10/2026",
+            "link": "https://www.youtube.com/watch?v=na1OyJ3E7Kc"
+          }
+        },
+        "en": {
+          "titulo": "Design will never be the same",
+          "resumo": "What I learned from Meaghan Choi's talk about the new role of the designer",
+          "fonte": {
+            "titulo": "Design Will Never Be The Same",
+            "quem": "Meaghan Choi",
+            "onde": "uxcon vienna, Oct 20, 2026",
+            "link": "https://www.youtube.com/watch?v=na1OyJ3E7Kc"
+          }
+        }
+      }
+    },
+    {
       "slug": "do-artefato-ao-pr",
       "tipo": "artigo",
       "data": "2026-11-15",
