@@ -25,7 +25,7 @@ function Page() {
           <div className="lx-labels"><span>Components</span><span>02 / 06</span></div>
           <p className="lx-headline"><span className="iy-lt">I design in </span><span className="iy-bd">pixels</span><span className="lx-dot">.</span></p>
           <div className="lx-row">
-            <span className="iy-button iy-button--accent iy-button--lg">View work</span>
+            <span className="iy-button iy-button--accent iy-button--lg">Explore work</span>
             <span className="iy-button iy-button--primary iy-button--lg">Primary</span>
             <span className="iy-button iy-button--secondary iy-button--lg">Secondary</span>
           </div>
