@@ -9,6 +9,9 @@ html {
   --font-family-mono: var(--font-jetbrains-mono), ui-monospace, 'SF Mono', Menlo, monospace;
   scroll-behavior: smooth;
   scroll-padding-top: 96px;
+  /* o espaço da barra de rolagem fica sempre reservado: a abertura trava a rolagem e, ao terminar, a barra volta;
+     sem isso, nas telas com barra visível, a página toda (nome, ponto e caixa de seleção) pula para o lado */
+  scrollbar-gutter: stable;
 }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
 

@@ -5,6 +5,7 @@ import '@iylotus/styles';
 import '@iylotus/react/styles.css';
 import '../globals.css';
 import { Analytics } from '@vercel/analytics/next';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 import { LANGS, type Lang } from '@/content/site';
 
 // As fontes do IY Lotus, servidas pelo próprio Next (sem pedir nada ao Google no navegador).
@@ -41,6 +42,8 @@ export default async function RootLayout({ children, params }: { children: React
         {children}
         {/* contador de visitantes da Vercel: sem cookies, os números ficam no painel do projeto */}
         <Analytics />
+        {/* desempenho real de quem visita (Core Web Vitals por aparelho e país), no painel da Vercel */}
+        <SpeedInsights />
       </body>
     </html>
   );
