@@ -2,6 +2,26 @@
   "fonte": "https://github.com/Akiiiiyama/pilulas-ia",
   "textos": [
     {
+      "slug": "github-para-designers",
+      "tipo": "guia",
+      "data": "2026-11-22",
+      "temas": [
+        "github",
+        "design-engineering",
+        "colaboracao"
+      ],
+      "idiomas": {
+        "pt": {
+          "titulo": "GitHub para designers: main, branch, commit, push, PR, merge e tag sem medo de quebrar o código",
+          "resumo": "O que cada etapa do GitHub faz, como uma mudança sai do seu computador e chega no ar, como trabalhar com o time e com a IA, e por que, seguindo o processo, você não quebra o código de ninguém."
+        },
+        "en": {
+          "titulo": "GitHub for designers: main, branch, commit, push, PR, merge and tag without the fear of breaking the code",
+          "resumo": "What each GitHub step does, how a change leaves your computer and goes live, how to work with your team and with AI, and why, if you follow the process, you won't break anyone's code."
+        }
+      }
+    },
+    {
       "slug": "design-nunca-mais-o-mesmo",
       "tipo": "artigo",
       "data": "2026-11-15",
