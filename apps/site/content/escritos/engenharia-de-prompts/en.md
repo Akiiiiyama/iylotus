@@ -69,6 +69,8 @@ AI generates fast, but it doesn't decide what is good. Judging whether an answer
 
 ## 5. The 5 elements of a good prompt
 
+![Five layers stacked in isometric view, from top to bottom: Instruction, in red, Context, Example, Data and Format, each linked to its label](/escritos/engenharia-de-prompts/01-anatomy-of-a-prompt.jpg "The five layers of a prompt. Each one answers a question the AI can’t guess on its own.")
+
 | Element | What it is | Example (UX research) |
 |---|---|---|
 | **Instruction** | The task, direct and unambiguous | "Synthesize the interviews below into main themes." |
