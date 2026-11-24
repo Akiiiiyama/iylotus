@@ -10,8 +10,8 @@ import { useEffect, useRef, useState } from 'react';
  *   300  Strategy → Design → Engineering, gigantes, uma por vez: cada uma surge devagar (sobe pouco, sai do
  *        desfoque) e se dissolve antes da próxima; ~1,1 s por palavra
  *  3650  "Engineering." parado: o ponto da palavra vira o ponto que viaja (mesmo lugar, mesma cor);
- *        a palavra se dissolve e o ponto fica sozinho um instante
- *  4000  o ponto desliza, sem tranco, até o ponto final do título (1 s)
+ *        a palavra se dissolve e, enquanto some, o ponto encolhe parado até o tamanho do ponto do nome
+ *  4100  o ponto desliza, sem tranco e já no tamanho final, até o ponto final do título (0,9 s)
  *  4950  "Isabela Yukari" nasce do ponto, já pousado: o nome se revela da direita para a esquerda
  *  5700  a caixa de seleção do Figma se desenha em volta; o spec entra
  *  6200  rótulos, subtítulo, texto, botões e header entram em sequência
@@ -127,9 +127,16 @@ export function Opening({ skipLabel }: { skipLabel: string }) {
       anim(dot, [{ opacity: 0, transform: eng }, { opacity: 1, transform: eng }], tSwap, 1, 'linear');
       anim(period, [{ opacity: 1 }, { opacity: 0 }], tSwap, 1, 'linear', 'forwards');
       anim('.op-words', [{ opacity: 1, filter: 'blur(0)' }, { opacity: 0, filter: 'blur(6px)' }], tSwap, 500, EASE_FADE);
-      // o ponto fica sozinho um instante e então desliza até o fim do nome, diminuindo junto, sem tranco
-      const tGlide = tSwap + 350, glide = 1000;
-      anim(dot, [{ transform: eng }, { transform: at(nmDot.cx, nmDot.cy, 1) }], tGlide, glide, EASE_GLIDE, 'forwards');
+      // enquanto a palavra se dissolve, o ponto já encolhe, parado, até o tamanho do ponto do nome; depois desliza
+      // inteiro no tamanho final. Assim ele nunca muda de tamanho perto do nome (antes ele encolhia no caminho e,
+      // quando o nome aparecia ao lado, parecia ter diminuído de repente)
+      // (uma animação só, com duas etapas, para não haver emenda entre encolher e deslizar)
+      const tShrink = tSwap + 150, shrink = 300, tGlide = tShrink + shrink, glide = 900;
+      anim(dot, [
+        { transform: eng, easing: EASE_SOFT },
+        { transform: at(engDot.cx, engDot.cy, 1), offset: shrink / (shrink + glide), easing: EASE_GLIDE },
+        { transform: at(nmDot.cx, nmDot.cy, 1) },
+      ], tShrink, shrink + glide, 'linear', 'forwards');
       const tName = tGlide + glide - 50; // o nome só começa a nascer com o ponto pousado
       const shift = tName - 2850; // o resto do roteiro, que antes começava em 2850, anda junto
 

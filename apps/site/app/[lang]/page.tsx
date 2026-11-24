@@ -7,6 +7,7 @@ import { LotusBloom } from '@/components/LotusBloom';
 import { StudyGraph } from '@/components/StudyGraph';
 import { LaptopDocs } from '@/components/LaptopDocs';
 import { ScrollWords } from '@/components/ScrollWords';
+import { LazyVideo } from '@/components/LazyVideo';
 import { Footer } from '@/components/Footer';
 
 // Página única: abertura → hero → projetos → experiência → sobre → contato.
@@ -78,7 +79,7 @@ export default async function Home({ params }: { params: Promise<{ lang: Lang }>
                 <Card key={p.id} href={p.href} {...(!p.href.startsWith('/') && { target: '_blank', rel: 'noopener noreferrer' })} tone={p.id === 'iylotus' ? 'red' : p.id === 'skill' ? 'ink' : 'raised'} className={`project project--${p.id}`}>
                   <CardMedia aria-hidden="true" className="project__media">
                     {p.id === 'skill' ? (
-                      <video className="project__video" src="/work/reel.mp4" poster="/work/reel.jpg" autoPlay muted loop playsInline />
+                      <LazyVideo className="project__video" src="/work/reel.mp4" poster="/work/reel.jpg" />
                     ) : p.id === 'iylotus' ? (
                       <div className="art art--lotus"><div className="art__mark"><LotusBloom /><span className="art__wordmark"><span className="iy-lt">IY </span><span className="iy-bd">Lotus</span><span className="art__dot">.</span></span></div><LaptopDocs /></div>
                     ) : p.id === 'skills' ? (
