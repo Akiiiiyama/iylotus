@@ -35,7 +35,7 @@ export const escritos: Escrito[] = (dados.textos as Escrito[]).filter((e) => mos
 
 export const porSlug = (slug: string) => escritos.find((e) => e.slug === slug);
 
-/** Caminho do arquivo original no GitHub, para o link "ver no GitHub". */
+/** Caminho do arquivo original no GitHub, para o link "Abrir no GitHub". */
 export const pastaNoRepo = (e: Escrito) => ({ artigo: 'artigos', guia: 'guias' })[e.tipo] + '/' + e.slug;
 
 const pasta = join(process.cwd(), 'content', 'escritos');
