@@ -16,13 +16,15 @@ import type { Lang } from '@/content/site';
 export type Tipo = 'artigo' | 'guia';
 /** De onde veio um artigo sobre o conteúdo de outra pessoa (vídeo, palestra, podcast). */
 export type Fonte = { titulo: string; quem?: string; onde?: string; link: string };
+/** Vídeo que abre o texto, logo depois do cabeçalho. Sem som: a legenda descreve o que ele mostra. */
+export type Video = { src: string; capa?: string; legenda?: string };
 export type Escrito = {
   slug: string;
   tipo: Tipo;
   data: string;
   temas: string[];
   rascunho?: boolean;
-  idiomas: Partial<Record<Lang, { titulo: string; resumo: string; fonte?: Fonte; linkedin?: string }>>;
+  idiomas: Partial<Record<Lang, { titulo: string; resumo: string; fonte?: Fonte; linkedin?: string; video?: Video }>>;
 };
 
 export const FONTE = dados.fonte;

@@ -13,11 +13,21 @@
       "idiomas": {
         "pt": {
           "titulo": "GitHub para designers: main, branch, commit, push, PR, merge e tag sem medo de quebrar o código",
-          "resumo": "O que cada etapa do GitHub faz, como uma mudança sai do seu computador e chega no ar, como trabalhar com o time e com a IA, e por que, seguindo o processo, você não quebra o código de ninguém."
+          "resumo": "O que cada etapa do GitHub faz, como uma mudança sai do seu computador e chega no ar, como trabalhar com o time e com a IA, e por que, seguindo o processo, você não quebra o código de ninguém.",
+          "video": {
+            "src": "/escritos/github-para-designers/github-em-8-palavras.mp4",
+            "capa": "/escritos/github-para-designers/github-em-8-palavras.jpg",
+            "legenda": "O GitHub em 8 palavras, em 30 segundos e sem som: a main, a branch, os commits na sua máquina, o push para o GitHub, o pull request com revisão, o merge e a tag."
+          }
         },
         "en": {
           "titulo": "GitHub for designers: main, branch, commit, push, PR, merge and tag without the fear of breaking the code",
-          "resumo": "What each GitHub step does, how a change leaves your computer and goes live, how to work with your team and with AI, and why, if you follow the process, you won't break anyone's code."
+          "resumo": "What each GitHub step does, how a change leaves your computer and goes live, how to work with your team and with AI, and why, if you follow the process, you won't break anyone's code.",
+          "video": {
+            "src": "/escritos/github-para-designers/github-em-8-palavras.mp4",
+            "capa": "/escritos/github-para-designers/github-em-8-palavras.jpg",
+            "legenda": "GitHub in 8 words, in 30 seconds and without sound: main, the branch, the commits on your machine, the push to GitHub, the pull request with a review, the merge and the tag. The words in the video are in Portuguese."
+          }
         }
       }
     },
