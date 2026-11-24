@@ -420,6 +420,9 @@ html.is-opening-out .topbar { opacity: 1; }
 .article__source a { justify-self: start; margin-top: var(--space-2); font-size: 15px; color: var(--color-text-primary); text-decoration: underline; text-decoration-color: var(--color-action-accent); text-underline-offset: 4px; }
 
 /* .prose: texto longo vindo do markdown. Só tokens do IY Lotus; candidato a subir para o @iylotus/styles. */
+.article__video { margin: 0 0 var(--space-12); }
+.article__video video { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; border-radius: var(--radius-md); border: 1px solid var(--color-border); background: #141414; }
+.article__video figcaption { margin-top: var(--space-3); font-size: 14px; line-height: 1.5; color: var(--color-text-secondary); }
 .prose { font-size: 18px; line-height: 1.7; color: var(--color-text-primary); }
 .prose > * + * { margin-top: var(--space-6); }
 .prose h2 { margin-top: var(--space-16); font-size: clamp(26px, 3vw, 34px); font-weight: 700; letter-spacing: -0.025em; line-height: 1.15; }

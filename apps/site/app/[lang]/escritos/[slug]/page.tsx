@@ -81,6 +81,14 @@ export default async function Escrito({ params }: { params: Promise<{ lang: Lang
                   </aside>
                 )}
 
+                {x.video && (
+                  // sem autoplay: quem lê escolhe quando assistir (e quem prefere menos movimento não é pego de surpresa)
+                  <figure className="article__video">
+                    <video src={x.video.src} poster={x.video.capa} controls muted loop playsInline preload="none" aria-label={x.video.legenda} />
+                    {x.video.legenda && <figcaption>{x.video.legenda}</figcaption>}
+                  </figure>
+                )}
+
                 <div className="prose" dangerouslySetInnerHTML={{ __html: html }} />
 
                 <footer className="article__foot">

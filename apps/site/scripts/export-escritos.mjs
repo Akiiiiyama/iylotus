@@ -2,7 +2,8 @@
 // O site nunca lê o repositório direto: ele usa a cópia em content/escritos/, versionada como o study-graph.json.
 //
 // O que o script faz em cada texto:
-//   - lê o cabeçalho (data, temas, rascunho, fonte, linkedin), o título (#) e o resumo (primeira citação >);
+//   - lê o cabeçalho (data, temas, rascunho, fonte, linkedin, video), o título (#) e o resumo (primeira citação >);
+//   - copia o vídeo do cabeçalho (video: arquivo, capa, legenda) junto com as imagens;
 //   - tira do corpo o título, o resumo e a linha "Read in English / Leia em português" (o site tem a troca de idioma);
 //   - troca os links entre textos por links do site (/pt/escritos/<slug>) e os outros links relativos pelo GitHub;
 //   - confere tudo contra a lista privada de palavras bloqueadas e para se encontrar alguma.
@@ -101,7 +102,7 @@ for (const [pasta, tipo] of Object.entries(TIPOS)) {
       const { meta: m, corpo } = lerCabecalho(readFileSync(f, 'utf8'));
       meta ??= m;
       // fonte e linkedin podem mudar de um idioma para o outro (a data do evento, o post em inglês)
-      idiomas[lang] = { arquivo: `${pasta}/${slug}/${lang}.md`, fonte: m.fonte, linkedin: m.linkedin, ...separar(corpo, f) };
+      idiomas[lang] = { arquivo: `${pasta}/${slug}/${lang}.md`, fonte: m.fonte, linkedin: m.linkedin, video: m.video, ...separar(corpo, f) };
     }
     if (!meta) continue;
     if (meta.rascunho && !comRascunhos) { console.log(`pulado (rascunho): ${pasta}/${slug}`); continue; }
@@ -134,6 +135,22 @@ function trocarLinks(md, arquivo, slug) {
   });
 }
 
+// ---------- vídeo ----------
+// No cabeçalho de cada idioma:  video:  /  arquivo: video/x.mp4  /  capa: video/x.jpg  /  legenda: ...
+// O markdown não tem um jeito de mostrar vídeo que funcione no GitHub e no site, por isso ele vai no cabeçalho.
+function copiarVideo(v, arquivo, slug) {
+  if (!v.arquivo) throw new Error(`${arquivo}: "video" precisa de "arquivo"`);
+  const base = posix.dirname(arquivo);
+  const servir = (rel) => {
+    const origem = join(src, posix.normalize(posix.join(base, rel)));
+    if (!existsSync(origem)) throw new Error(`${arquivo}: arquivo do vídeo não encontrado (${rel})`);
+    const nome = posix.basename(rel);
+    imagens.push([origem, join(slug, nome)]);
+    return `/escritos/${slug}/${nome}`;
+  };
+  return { src: servir(v.arquivo), ...(v.capa && { capa: servir(v.capa) }), ...(v.legenda && { legenda: v.legenda }) };
+}
+
 // ---------- conferência e escrita ----------
 // Primeiro monta tudo e confere; só depois apaga a cópia antiga e escreve a nova.
 // Se a trava encontrar algo, a cópia que já estava no site fica como estava.
@@ -144,9 +161,10 @@ for (const t of textos) {
   for (const [lang, x] of Object.entries(t.idiomas)) {
     const md = trocarLinks(x.md, x.arquivo, t.slug);
     if (x.fonte && !x.fonte.link) throw new Error(`${x.arquivo}: "fonte" precisa de um link`);
-    conferir(`${x.titulo}\n${x.resumo}\n${md}\n${JSON.stringify(x.fonte ?? '')}\n${x.linkedin ?? ''}`, x.arquivo);
+    const video = x.video && copiarVideo(x.video, x.arquivo, t.slug);
+    conferir(`${x.titulo}\n${x.resumo}\n${md}\n${JSON.stringify(x.fonte ?? '')}\n${x.linkedin ?? ''}\n${JSON.stringify(x.video ?? '')}`, x.arquivo);
     arquivos.push([join(t.slug, `${lang}.md`), md]);
-    item.idiomas[lang] = { titulo: x.titulo, resumo: semMarkdown(x.resumo), ...(x.fonte && { fonte: x.fonte }), ...(x.linkedin && { linkedin: x.linkedin }) };
+    item.idiomas[lang] = { titulo: x.titulo, resumo: semMarkdown(x.resumo), ...(x.fonte && { fonte: x.fonte }), ...(x.linkedin && { linkedin: x.linkedin }), ...(video && { video }) };
   }
   indice.push(item);
 }
@@ -168,6 +186,6 @@ for (const [origem, rel] of imagens) {
   mkdirSync(join(outImagens, rel, '..'), { recursive: true });
   copyFileSync(origem, join(outImagens, rel));
 }
-if (imagens.length) console.log(`${new Set(imagens.map(([, r]) => r)).size} imagens copiadas para apps/site/public/escritos/`);
+if (imagens.length) console.log(`${new Set(imagens.map(([, r]) => r)).size} imagens e vídeos copiados para apps/site/public/escritos/`);
 console.log(`${indice.length} textos exportados para apps/site/content/escritos/`);
 if (comRascunhos) console.warn('Atenção: rascunhos incluídos. Rode de novo sem --rascunhos antes de commitar.');
