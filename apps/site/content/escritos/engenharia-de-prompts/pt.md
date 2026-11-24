@@ -69,6 +69,8 @@ A IA gera rápido, mas não decide o que é bom. Avaliar se a resposta atende ao
 
 ## 5. Os 5 elementos de um bom prompt
 
+![Cinco camadas empilhadas em vista isométrica, de cima para baixo: Instrução, em vermelho, Contexto, Exemplo, Dados e Formato, cada uma ligada ao seu rótulo](/escritos/engenharia-de-prompts/01-estrutura-do-prompt.jpg "As cinco camadas de um prompt. Cada uma responde a uma pergunta que a IA não consegue adivinhar sozinha.")
+
 | Elemento | O que é | Exemplo (pesquisa de UX) |
 |---|---|---|
 | **Instrução** | A tarefa, direta e sem ambiguidade | "Sintetize as entrevistas abaixo em temas principais." |
